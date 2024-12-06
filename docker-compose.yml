@@ -1,0 +1,30 @@
+
+
+services:
+  backend:
+    build: ./site_sae
+    container_name: backend_cpn_dev
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_HOST=db_cpn_dev
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+    depends_on:
+      - db
+
+
+  db:
+    image: mysql:5.7
+    container_name: db_cpn_dev
+    restart: unless-stopped
+    tty: true
+    environment:
+      MYSQL_DATABASE: db_cpn_dev
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./db_dev_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
