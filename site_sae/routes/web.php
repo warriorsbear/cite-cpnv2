@@ -50,3 +50,7 @@ Route::get('/monCompte', function () {
 Route::get('/PageMentionsLegales', function () {
     return Inertia::render('PageMentionsLegales');
 })->middleware(['auth', 'verified'])->name('PageMentionsLegales');
+
+Route::get('/NousContacter', function () {
+    return Inertia::render('NousContacter');
+})->middleware(['auth', 'verified'])->name('NousContacter');

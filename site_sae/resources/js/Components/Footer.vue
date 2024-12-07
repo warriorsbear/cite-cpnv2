@@ -9,6 +9,9 @@
         <div class="footer-section contact">
           <h3>CONTACT</h3>
           <p>05 59 57 43 03<br />clubphotonailloux@gmail.com</p>
+            <NavLink :href="route('NousContacter')" class="legal-link">
+                Nous contacter
+            </NavLink>
         </div>
         <div class="footer-section follow-us">
           <h3>SUIVEZ-NOUS</h3>
