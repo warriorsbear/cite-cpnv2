@@ -12,16 +12,16 @@ export default {
     data() {
         return {
             utilisateur: {
-                photo: "/images/avatar.jpg",
-                banner: "/images/baniere.png",
+                photo: "http://[::1]:5173/resources/js/public/images/avatar.jpg",
+                banner: "http://[::1]:5173/resources/js/public/images/baniere.png",
                 nom: "Dupont",
                 prenom: "Bertrand",
                 description: "Ceci est la description du profil.",
                 photos: [
-                    {id: 1, url: "/images/image1.jpg", description: "Photo 1"},
-                    {id: 2, url: "/images/image2.jpg", description: "Photo 2"},
-                    {id: 3, url: "/images/image3.jpg", description: "Photo 3"},
-                    {id: 4, url: "/images/image4.png", description: "Photo 4"},
+                    {id: 1, url: "http://[::1]:5173/resources/js/public/images/image1.jpg", description: "Photo 1"},
+                    {id: 2, url: "http://[::1]:5173/resources/js/public/images/image2.jpg", description: "Photo 2"},
+                    {id: 3, url: "http://[::1]:5173/resources/js/public/images/image3.jpg", description: "Photo 3"},
+                    {id: 4, url: "http://[::1]:5173/resources/js/public/images/image4.png", description: "Photo 4"},
                     // Add more photos as needed
                 ]
             },
@@ -106,7 +106,7 @@ export default {
             <div v-if="activeMenu === 'evenements'" class="posted-events">
                 <h2>Événements</h2>
                 <!-- Add your events display logic here -->
-                <box_even titre_even="Exemple" image-path="../public/images/photoEvent.png" description="Description de l'événement" />
+                <box_even titre_even="Exemple" image-path="http://[::1]:5173/resources/js/public/images/baniere.png" description="Description de l'événement" />
 
             </div>
 

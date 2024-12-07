@@ -23,9 +23,9 @@
         Toutes les photographies des membres du ClubPhoto publiées sur ce site sont soumises aux droits de publications de leurs auteurs.
       </p>
       <p class="footer-legal">
-        <nuxt-link to="/PageMentionsLegales" class="legal-link">
-          Mentions Légales et Politique de Confidentialité
-        </nuxt-link>
+          <NavLink :href="route('PageMentionsLegales')" class="legal-link">
+              Mentions Légales et Politique de Confidentialité
+          </NavLink>
       </p>
       <p class="footer-copyright">
         © 2024 Club Photo Nailloux. Tous droits réservés.
@@ -131,3 +131,6 @@ h3 {
   }
 }
 </style>
+<script setup lang="ts">
+import NavLink from "@/Components/NavLink.vue";
+</script>

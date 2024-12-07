@@ -46,3 +46,7 @@ require __DIR__.'/auth.php';
 Route::get('/monCompte', function () {
     return Inertia::render('MonCompte');
 })->middleware(['auth', 'verified'])->name('monCompte');
+
+Route::get('/PageMentionsLegales', function () {
+    return Inertia::render('PageMentionsLegales');
+})->middleware(['auth', 'verified'])->name('PageMentionsLegales');
