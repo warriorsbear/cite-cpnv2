@@ -1,7 +1,8 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-
+import ModalPhoto from '@/Components/MainApp/ModalPhoto.vue';
+import MainApp from '@/Components/MainApp/MainApp.vue';
 </script>
 
 <template>
@@ -17,6 +18,8 @@ import { Head } from '@inertiajs/vue3';
             </h2>
         </template>
 
+        <MainApp/>
+        <ModalPhoto/>
 
     </AuthenticatedLayout>
 </template>
