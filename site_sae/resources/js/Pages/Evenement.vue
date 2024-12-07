@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Box_even from "@/Components/box_even.vue";
+import Footer from "@/Components/Footer.vue";
 
 const Evenement = {
     id_evenement: Number,
@@ -67,7 +68,7 @@ onMounted(() => {
                                 :Officiel_even="evenement.officiel"
                             />
                         </div>
-
+        <Footer />
 
 
     </AuthenticatedLayout>

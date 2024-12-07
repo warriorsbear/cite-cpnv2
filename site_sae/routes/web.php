@@ -35,3 +35,14 @@ Route::middleware('auth')->group(function () {
 
 
 require __DIR__.'/auth.php';
+
+/**
+ * Route ajoutée par Florian
+ *
+ * J'ai enlever ces lignes (fichier AuthenticatedLayout.vue, ligne 55) :
+ * :href="route('profile.edit')"
+ * :active="route().current('profile.edit')"
+ */
+Route::get('/monCompte', function () {
+    return Inertia::render('MonCompte');
+})->middleware(['auth', 'verified'])->name('monCompte');

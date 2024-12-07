@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ModalPhoto from '@/Components/MainApp/ModalPhoto.vue';
 import MainApp from '@/Components/MainApp/MainApp.vue';
+import Footer from "@/Components/Footer.vue";
 </script>
 
 <template>
@@ -20,6 +21,6 @@ import MainApp from '@/Components/MainApp/MainApp.vue';
 
         <MainApp/>
         <ModalPhoto/>
-
+        <Footer />
     </AuthenticatedLayout>
 </template>

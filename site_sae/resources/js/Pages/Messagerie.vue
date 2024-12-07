@@ -2,6 +2,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { ref, onMounted, computed } from 'vue';
+import Footer from "@/Components/Footer.vue";
 
 /**
  * permet de stocker les informations d'un utilisateur pour éviter les erreur dans le code
@@ -115,6 +116,7 @@ const CliqueFonction = (utilisateur) => {
                 </div>
             </div>
         </main>
+        <Footer />
     </AuthenticatedLayout>
 </template>
 
@@ -125,6 +127,7 @@ const CliqueFonction = (utilisateur) => {
     box-sizing: border-box;
 }
 main {
+    height: 61.75vh;
     flex-grow: 1;
     display: flex;
     flex-direction: column;

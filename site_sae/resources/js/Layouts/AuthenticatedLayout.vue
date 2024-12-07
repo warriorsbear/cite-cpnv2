@@ -52,8 +52,8 @@ const showingNavigationDropdown = ref(false);
                                     Messagerie
                                 </NavLink>
                                 <NavLink
-                                    :href="route('profile.edit')"
-                                    :active="route().current('profile.edit')"
+                                    :href="route('monCompte')"
+                                    :active="route().current('monCompte')"
                                 >
                                     Mon compte
                                 </NavLink>
