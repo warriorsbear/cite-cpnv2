@@ -1,9 +1,7 @@
-
-
 services:
-  backend:
+  site:
     build: ./site_sae
-    container_name: backend_cpn_dev
+    container_name: site_cpn_dev
     ports:
       - "8000:8000"
     environment:
@@ -13,9 +11,8 @@ services:
     depends_on:
       - db
 
-
   db:
-    image: mysql:5.7
+    image: mysql:latest
     container_name: db_cpn_dev
     restart: unless-stopped
     tty: true
@@ -28,3 +25,14 @@ services:
       - ./db_dev_data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_cpn_dev
+    environment:
+      PMA_HOST: db_cpn_dev
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "8080:80"
+    depends_on:
+      - db

@@ -1,4 +1,2 @@
-
-db_dev_data/mysql.sock
-
 .idea/
+db_dev_data/
