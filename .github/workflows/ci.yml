@@ -1,0 +1,58 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - '**'  # Run on all branches
+    paths:
+      - 'frontend/**'
+      - 'backend/**'
+      - '.github/workflows/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # Tests
+  site-cpn-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Installation de PHP 8.2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_mysql
+          coverage: none
+
+      # Installation des dépendances avec Composer
+      - name: Install Composer dependencies
+        run: cd site_sae && composer install
+
+      # Exécuter les tests backend
+      - name: Run tests
+        run: cd site_sae && php artisan test
+    env:
+      DB_USERNAME: user
+      DB_PASSWORD: password
+
+  # Deployment to Production (runs only on push to main and after tests succeed)
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: [frontend-tests, backend-tests]  # Ensures tests must pass before deploying
+#    if: github.ref == 'refs/heads/main'
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v2
+#      - name: Build and deploy frontend
+#        run: |
+#          cd frontend
+#          npm install
+#          npm run build
+#          scp -r ./dist user@your-server:/path/to/frontend
+#      - name: Deploy backend
+#        run: |
+#          scp -r ./backend user@your-server:/path/to/backend

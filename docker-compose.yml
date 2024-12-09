@@ -12,7 +12,7 @@ services:
       - db
 
   db:
-    image: mysql:latest
+    image: mysql:5.7
     container_name: db_cpn_dev
     restart: unless-stopped
     tty: true
