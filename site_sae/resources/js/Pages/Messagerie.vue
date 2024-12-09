@@ -93,41 +93,45 @@ const CliqueFonction = (utilisateur) => {
                 Messagerie
             </h2>
         </template>
-        <main>
-            <h1>Messagerie</h1>
-            <form class="search-bar" @submit.prevent>
-                <input type="search" v-model="recherche" placeholder="Rechercher..." />
-                <button type="submit">🔍</button>
-            </form>
-            <div id="principale">
-                <!-- Afficher l'icône de chargement si les données sont en cours de chargement -->
-                <div v-if="entrainDeCharger" class="loading-icon">
-                    <h1>Recherche d'utilisateurs ...</h1>
-                    <img src="../public/images/loading.gif" alt="Loading..." />
-                </div>
-                <!-- Créer une balise div pour chaque utilisateur filtré -->
-                <div v-else v-for="utilisateur in UtilisateurFiltre" :key="utilisateur.id_utilisateur" @click="CliqueFonction(utilisateur)" class="user">
-                    <img v-if="utilisateur.photo_de_profile" :src="utilisateur.photo_de_profile" alt="logo" id="pp" width="100" height="100">
-                    <div class="infoUtilisateur">
-                        <p id="pseudo">{{ utilisateur.pseudo }}</p>
-                        <p>{{ utilisateur.nom }} {{ utilisateur.prenom }}</p>
+            <main>
+                <h1>Messagerie</h1>
+                <form class="search-bar" @submit.prevent>
+                    <input type="search" v-model="recherche" placeholder="Rechercher..." />
+                    <button type="submit">🔍</button>
+                </form>
+                <div id="principale">
+                    <!-- Afficher l'icône de chargement si les données sont en cours de chargement -->
+                    <div v-if="entrainDeCharger" class="loading-icon">
+                        <h1>Recherche d'utilisateurs ...</h1>
+                        <img src="../public/images/loading.gif" alt="Loading..." />
                     </div>
-                    <img id="logo" src="\public\images\enveloppe.ico" alt="logo envoyer" width="60" height="60">
+                    <!-- Créer une balise div pour chaque utilisateur filtré -->
+                    <div v-else v-for="utilisateur in UtilisateurFiltre" :key="utilisateur.id_utilisateur" @click="CliqueFonction(utilisateur)" class="user">
+                        <img v-if="utilisateur.photo_de_profile" :src="utilisateur.photo_de_profile" alt="logo" id="pp" width="100" height="100">
+                        <div class="infoUtilisateur">
+                            <p id="pseudo">{{ utilisateur.pseudo }}</p>
+                            <p>{{ utilisateur.nom }} {{ utilisateur.prenom }}</p>
+                        </div>
+                        <img id="logo" src="../public/images/enveloppe.ico" alt="logo envoyer" width="60" height="60">
+                    </div>
                 </div>
-            </div>
-        </main>
-        <Footer />
+            </main>
+            <Footer />
     </AuthenticatedLayout>
 </template>
 
 <style scoped>
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 main {
-    height: 61.75vh;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
