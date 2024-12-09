@@ -16,6 +16,22 @@ jobs:
   # Tests
   site-cpn-tests:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: test_database
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -27,15 +43,36 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, pdo, pdo_mysql
           coverage: none
+            
+      # Attendre que MySQL soit prêt
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..10}; do
+            if mysqladmin ping -h 127.0.0.1 --silent; then
+              echo "MySQL is ready";
+              exit 0;
+            fi
+            echo "Waiting for MySQL...";
+            sleep 5;
+          done
+          exit 1
 
       # Installation des dépendances avec Composer
       - name: Install Composer dependencies
         run: cd site_sae && composer install
+          
+      # Exécuter les migrations
+      - name: Run migrations
+        run: cd site_sae && php artisan migrate
 
       # Exécuter les tests backend
       - name: Run tests
         run: cd site_sae && php artisan test
     env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: test_database
       DB_USERNAME: user
       DB_PASSWORD: password
 
