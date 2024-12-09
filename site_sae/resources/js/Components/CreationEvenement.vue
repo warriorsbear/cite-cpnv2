@@ -6,18 +6,22 @@ export default defineComponent( {
     visible: {
       type: Boolean,
       default: false
+    },
+    user_id : {
+      type: Number,
+      required: true
     }
   },
   data() {
     return {
       event: {
-        titre_even: '',
-        date_even: '',
-        description_even: '',
-        Lieu_even: '',
-        id_utilisateur: '',
-        Officiel_even: true,
-        Type_even: ''
+        titre: '',
+        date_heure: '',
+        descriptif: '',
+        lieu: '',
+        type: '',
+        officiel: true,
+
       },
       Date_even: '',
       heure_even: ''
@@ -55,6 +59,7 @@ export default defineComponent( {
   <div v-if="visible" class="modal-overlay" @click.self="close">
     <div class="modal-content">
       <h1>Créer un Événement</h1>
+        {{user_id}}
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="name">Titre de l'événement :</label>
