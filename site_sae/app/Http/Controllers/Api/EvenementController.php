@@ -36,7 +36,22 @@ class EvenementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Valider les données de la requête
+        $validatedData = $request->validate([
+            'titre' => 'required|string|max:50',
+            'date_heure' => 'required|date',
+            'lieu' => 'required|string|max:50',
+            'type' => 'required|string|max:50',
+            'descriptif' => 'nullable|string',
+            'officiel' => 'nullable|string',
+            'id_utilisateur'=> 'required|integer'
+        ]);
+
+        // Créer un nouvel événement
+        $evenement = Evenement::create($validatedData);
+
+        // Retourner une réponse appropriée
+        return new EvenementResource($evenement);
     }
 
     /**

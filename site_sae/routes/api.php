@@ -16,3 +16,5 @@ Route::get('/test', function () {
 
 Route::apiResource('evenements', EvenementController::class);
 Route::apiResource('utilisateurs', UserController::class);
+
+Route::post('/evenements', [EvenementController::class, 'store']);
