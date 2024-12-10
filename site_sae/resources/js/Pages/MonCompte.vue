@@ -7,6 +7,7 @@ import Footer from "@/Components/Footer.vue";
 
 <script>
 import Box_even from "@/Components/box_even.vue";
+import {usePage} from "@inertiajs/vue3";
 export default {
     components: {Box_even},
     data() {
@@ -14,23 +15,41 @@ export default {
             utilisateur: {
                 photo: "http://[::1]:5173/resources/js/public/images/avatar.jpg",
                 banner: "http://[::1]:5173/resources/js/public/images/baniere.png",
-                nom: "Dupont",
-                prenom: "Bertrand",
+                nom: usePage().props.auth.user.nom.split(' ')[1] || '',
+                prenom: usePage().props.auth.user.prenom.split(' ')[0] || '',
                 description: "Ceci est la description du profil.",
                 photos: [
-                    {id: 1, url: "http://[::1]:5173/resources/js/public/images/image1.jpg", description: "Photo 1"},
-                    {id: 2, url: "http://[::1]:5173/resources/js/public/images/image2.jpg", description: "Photo 2"},
-                    {id: 3, url: "http://[::1]:5173/resources/js/public/images/image3.jpg", description: "Photo 3"},
-                    {id: 4, url: "http://[::1]:5173/resources/js/public/images/image4.png", description: "Photo 4"},
-                    // Add more photos as needed
                 ]
             },
             activeMenu: 'photos',
             showDescriptionInput: false,
             newDescription: ''
         };
+
+    },
+    mounted() {
+        this.fetchUserPhotos();
     },
     methods: {
+        async fetchUserPhotos() {
+            try {
+                const response = await axios.get('/user/photos', {
+                    params: {
+                        userId: usePage().props.auth.user.id
+                    }
+                });
+
+                // Transformez les données de la réponse
+                this.utilisateur.photos = response.data.data.map(photo => ({
+                    id: photo.id,
+                    url: `/storage/app/public/photos/${photo.nom}`, // Assurez-vous que le chemin est correct
+                    description: photo.legende || 'Sans légende'
+                }));
+            } catch (error) {
+                console.error('Erreur lors de la récupération des photos:', error);
+                // Optionnel : gérer l'erreur (message à l'utilisateur, etc.)
+            }
+        },
         toggleMenu(menu) {
             this.activeMenu = menu;
         },
@@ -73,6 +92,8 @@ export default {
                 <h1>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h1>
 
             </div>
+
+
 
 
             <!-- Profile Description -->

@@ -1,297 +1,218 @@
 <template>
-  <div>
-    <!-- Modal trigger button -->
-    <BoutonPlus class="btn-primary" @click="showModal = true" />
+    <div>
+        <!-- Bouton d'ouverture du modal -->
+        <button
+            @click="openModal"
+            class="fixed bottom-6 right-6 bg-orange-500 text-white rounded-full p-4 shadow-lg hover:bg-orange-600 transition-colors"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+        </button>
 
-    <!-- Modal structure for uploading a photo -->
-    <div v-if="showModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="uploadPhotoModalLabel"
-         aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="uploadPhotoModalLabel">Publier une photo</h5>
-            <button type="button" class="close" @click="showModal = false" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="modal-scroll">
-              <form @submit.prevent="uploadPhoto">
-                <!-- Dropzone pour l'upload de photo -->
-                <div class="form-group dropzone" @drop.prevent="handleDrop" @dragover.prevent @click="triggerFileInput">
-                  <p v-if="!photoFile" class="dropzone-placeholder">
-                    Cliquez pour ajouter des photos<br>ou faites glisser-déposer
-                  </p>
-                  <p v-else class="dropzone-file">
-                    {{ photoFile.name }}
-                  </p>
-                  <input type="file" class="form-control-file" @change="handleFileUpload" ref="fileInput"
-                         accept="image/*" hidden>
-                </div>
+        <!-- Modal d'upload de photo -->
+        <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg w-[500px] max-h-[90vh] overflow-y-auto p-6 relative">
+                <!-- Bouton de fermeture -->
+                <button
+                    @click="closeModal"
+                    class="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
 
-                <!-- Author name -->
-                <div class="form-group">
-                  <label for="authorName">Nom de l'auteur</label>
-                  <input type="text" class="form-control" v-model="authorName" placeholder="Entrez votre nom" required>
-                </div>
+                <h2 class="text-2xl font-bold mb-6 text-center">Ajouter une nouvelle photo</h2>
 
-                <!-- Photo title -->
-                <div class="form-group">
-                  <label for="photoTitle">Titre de la photo</label>
-                  <input type="text" class="form-control" v-model="photoTitle" placeholder="Entrez le nom de la photo" required>
-                </div>
+                <form @submit.prevent="submitPhoto" class="space-y-4">
+                    <!-- Zone de drop/upload -->
+                    <!-- Zone de drop/upload -->
+                    <div
+                        @dragover.prevent="dragOver"
+                        @dragleave.prevent="dragLeave"
+                        @drop.prevent="handleDrop"
+                        @click="triggerFileInput"
+                        class="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors"
+                        :class="isDragging ? 'border-orange-500 bg-orange-50' : 'border-gray-300 hover:border-orange-500'"
+                    >
+                        <input
+                            type="file"
+                            ref="fileInput"
+                            @change="handleFileSelect"
+                            accept="image/*"
+                            class="hidden"
+                        />
 
-                <!-- Capture date -->
-                <div class="form-group">
-                  <label for="captureDate">Date de la prise de vue</label>
-                  <input type="date" class="form-control" v-model="captureDate" required>
-                </div>
+                        <div v-if="!selectedFile" class="flex flex-col items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <p class="text-gray-600">Glissez et déposez une photo ou cliquez pour sélectionner</p>
+                        </div>
 
-                <!-- Keywords -->
-                <div class="form-group">
-                  <label for="keywords">Mots-clé (séparés par , )</label>
-                  <input type="text" class="form-control" v-model="keywords" placeholder="e.g. montagne, sunset"
-                         required>
-                </div>
+                        <div v-else class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                                </svg>
+                                <span class="text-gray-800">{{ selectedFile.name }}</span>
+                            </div>
+                            <button
+                                type="button"
+                                @click.stop="clearFile"
+                                class="text-red-500 hover:text-red-700"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
 
-                <!-- Description -->
-                <div class="form-group">
-                  <label for="photoDescription">Description</label>
-                  <br>
-                  <textarea class="form-control" v-model="photoDescription" rows="3"
-                            placeholder="Décrivez votre photo..."
-                            required></textarea>
-                </div>
+                    <!-- Champs de formulaire -->
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Légende</label>
+                            <input
+                                type="text"
+                                v-model="form.legende"
+                                class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                placeholder="Décrivez votre photo..."
+                            />
+                        </div>
 
-                <!-- Visibility options -->
-                <div class="form-group">
-                  <label for="visibility">Visibilité</label>
-                  <select class="form-control" v-model="visibility" required>
-                    <option value="public">Privée</option>
-                    <option value="private">Publique</option>
-                    <option value="visionnage">Visionnage</option>
-                  </select>
-                </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Date de prise de vue</label>
+                            <input
+                                type="date"
+                                v-model="form.date_prise_vue"
+                                class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            />
+                        </div>
+                    </div>
 
-                <!-- Watermark option -->
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" v-model="addWatermark">
-                  <label class="form-check-label" for="addWatermark">Ajouter un watermak sur la photo</label>
-                </div>
-
-              </form>
+                    <!-- Boutons d'action -->
+                    <div class="flex justify-end space-x-4 mt-6">
+                        <button
+                            type="button"
+                            @click="closeModal"
+                            class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors"
+                        >
+                            Annuler
+                        </button>
+                        <button
+                            type="submit"
+                            :disabled="!isFormValid"
+                            class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors disabled:opacity-50"
+                        >
+                            Publier
+                        </button>
+                    </div>
+                </form>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="showModal = false">Annuler</button>
-            <button type="submit" class="btn btn-upload" @click="uploadPhoto">Publier</button>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
-<script>
-import BoutonPlus from "@/Components/MainApp/BoutonPlus.vue";
-export default {
-  components: {BoutonPlus},
-  data() {
-    return {
-      showModal: false,
-      photoFile: null,
-      authorName: '',
-      photoTitle: '',
-      captureDate: '',
-      keywords: '',
-      photoDescription: '',
-      visibility: 'public',
-      addWatermark: false
-    };
-  },
-  methods: {
-    handleFileUpload(event) {
-      this.photoFile = event.target.files[0];
-    },
-    handleDrop(event) {
-      this.photoFile = event.dataTransfer.files[0];
-    },
-    triggerFileInput() {
-      this.$refs.fileInput.click();
-    },
-    uploadPhoto() {
-      // Handle photo upload logic here
-      console.log({
-        photoFile: this.photoFile,
-        authorName: this.authorName,
-        photoTitle: this.photoTitle,
-        captureDate: this.captureDate,
-        keywords: this.keywords,
-        photoDescription: this.photoDescription,
-        visibility: this.visibility,
-        addWatermark: this.addWatermark
-      });
-      this.showModal = false;
+<script setup>
+import { ref, computed } from 'vue'
+import { useForm, usePage } from '@inertiajs/vue3'
+
+// Récupérer l'utilisateur connecté
+const user = usePage().props.auth.user
+
+// États du composant
+const isModalOpen = ref(false)
+const selectedFile = ref(null)
+const isDragging = ref(false)
+const fileInput = ref(null)
+
+// Formulaire
+const form = useForm({
+    nom: null,
+    legende: '',
+    date_prise_vue: '',
+    id_utilisateur: user.id
+})
+
+// Méthodes
+const openModal = () => {
+    isModalOpen.value = true
+}
+
+const closeModal = () => {
+    isModalOpen.value = false
+    resetForm()
+}
+
+const resetForm = () => {
+    selectedFile.value = null
+    form.reset()
+    if (fileInput.value) {
+        fileInput.value.value = null
     }
-  }
-};
+}
+// Nouvelle méthode pour déclencher l'input de fichier
+const triggerFileInput = () => {
+    if (fileInput.value) {
+        fileInput.value.click()
+    }
+}
+
+const handleFileSelect = (event) => {
+    const file = event.target.files[0]
+    if (file && file.type.startsWith('image/')) {
+        selectedFile.value = file
+        form.nom = file
+    } else {
+        alert('Veuillez sélectionner un fichier image valide.')
+    }
+}
+
+const handleDrop = (event) => {
+    isDragging.value = false
+    const file = event.dataTransfer.files[0]
+    if (file && file.type.startsWith('image/')) {
+        selectedFile.value = file
+        form.nom = file
+    } else {
+        alert('Veuillez déposer un fichier image valide.')
+    }
+}
+
+const dragOver = () => {
+    isDragging.value = true
+}
+
+const dragLeave = () => {
+    isDragging.value = false
+}
+
+const clearFile = () => {
+    selectedFile.value = null
+    form.nom = null
+    if (fileInput.value) {
+        fileInput.value.value = null
+    }
+}
+
+const submitPhoto = () => {
+    form.post(route('photo.create'), {
+        forceFormData: true,
+        onSuccess: () => {
+            closeModal()
+        },
+        onError: (errors) => {
+            console.error('Erreurs de validation :', errors)
+        }
+    })
+}
+
+// Validation du formulaire
+const isFormValid = computed(() => {
+    return selectedFile.value &&
+        form.legende.trim() !== '' &&
+        form.date_prise_vue !== ''
+})
 </script>
-
-<style scoped>
-.modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1050;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #dee2e6;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-.modal-header span {
-  font-size: 1rem;
-  cursor: pointer;
-  padding: 0 0.3rem;
-}
-
-.close {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.close span {
-  font-size: 1.5rem;
-}
-
-.modal-scroll {
-  max-height: 65vh;
-  overflow-y: auto;
-  padding: 1rem;
-  scrollbar-width: none;
-}
-
-.modal-scroll:hover {
-  scrollbar-width: thin;
-}
-
-.modal-body {
-  /* padding: 1rem; */
-}
-
-.modal-dialog {
-  max-width: 32rem;
-  margin: auto;
-  padding: 1rem;
-  border-radius: 10px;
-  background-color: white;
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 1rem 0.5rem 1rem;
-  border-top: 1px solid #dee2e6;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-.btn {
-  cursor: pointer;
-  background-color: #bbb;
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: large;
-}
-
-.btn-primary {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-}
-
-.btn-upload {
-  background-color: #d79026;
-  color: white;
-
-}
-
-.btn-primary img {
-  width: 4rem;
-  height: 4rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  font-weight: 500;
-  padding-right: 0.5rem;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #000;
-  resize: none;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: #d79026;
-  outline: none;
-}
-
-.dropzone {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 150px;
-  border: 2px dashed #ccc;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  background-color: #f9f9f9;
-  cursor: pointer;
-}
-
-.dropzone:hover {
-  background-color: #f1f1f1;
-}
-
-.dropzone-placeholder {
-  text-align: center;
-  color: #888;
-}
-
-.dropzone-file {
-  text-align: center;
-  color: #444;
-}
-
-.form-check {
-  display: flex;
-  font-size: small;
-  input {
-    width: auto;
-    margin-right: 0.5rem;
-  }
-}
-</style>
