@@ -48,7 +48,7 @@ export default defineComponent({
 
   methods: {
     returnimagePath(type: string): string {
-      const basePath = 'http://[::1]:5174/resources/js/public/images/evenement/';
+      const basePath = 'http://[::1]:5173/resources/js/public/images/evenement/';
       switch (type.toLowerCase()) {
         case 'collaboration':
           return `${basePath}collaboration.jpeg`;
