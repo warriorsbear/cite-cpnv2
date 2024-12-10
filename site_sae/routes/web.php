@@ -54,3 +54,7 @@ Route::get('/PageMentionsLegales', function () {
 Route::get('/NousContacter', function () {
     return Inertia::render('NousContacter');
 })->middleware(['auth', 'verified'])->name('NousContacter');
+
+Route::get('/AdminGestion', function () {
+    return Inertia::render('AdminGestion');
+})->middleware(['auth', 'verified'])->name('AdminGestion');
