@@ -43,7 +43,7 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, pdo, pdo_mysql
           coverage: none
-            
+
       # Attendre que MySQL soit prêt
       - name: Wait for MySQL to be ready
         run: |
@@ -57,10 +57,14 @@ jobs:
           done
           exit 1
 
-      # Installation des dépendances avec Composer
+      # Vérifie que la base de données existe
+      - name: Verify database exists
+        run: mysql -h 127.0.0.1 -u user -ppassword -e "SHOW DATABASES;"
+
+    # Installation des dépendances avec Composer
       - name: Install Composer dependencies
         run: cd site_sae && composer install
-          
+
       # Exécuter les migrations
       - name: Run migrations
         run: cd site_sae && php artisan migrate:fresh --seed
