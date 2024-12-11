@@ -27,6 +27,14 @@ Route::get('/messagerie', function () {
     return Inertia::render('Messagerie');
 })->middleware(['auth', 'verified'])->name('messagerie');
 
+Route::get('/contact', function () {
+    return Inertia::render('Contact');
+})->middleware(['auth', 'verified'])->name('contact');
+
+Route::get('/mentionslegales', function () {
+    return Inertia::render('MentionsLegales');
+})->middleware(['auth', 'verified'])->name('mentionslegales');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

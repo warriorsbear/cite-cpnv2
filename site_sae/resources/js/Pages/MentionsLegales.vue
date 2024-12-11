@@ -1,3 +1,12 @@
+<script setup >
+import { Head, Link } from '@inertiajs/vue3';
+import Footer from "@/Components/Footer.vue";
+import guest from "@/Layouts/GuestLayout.vue";
+import newheaderauthentifie from "@/Layouts/newheaderauthentifie.vue";
+import NavLink from "@/Components/NavLink.vue";
+import Header from "@/Components/Header.vue";
+</script>
+
 <template>
     <Head title="Mentions légales" />
     <AuthenticatedLayout>
