@@ -74,7 +74,7 @@ export default {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Fil d'actu
+                Mon Compte
             </h2>
         </template>
 
@@ -99,9 +99,9 @@ export default {
             <!-- Profile Description -->
             <div class="profile-description">
                 <p>{{ utilisateur.description }}</p> <br>
-                <router-link to="/pageMesInformations">
-                    <button class="edit-button">Modifier mes informations</button>
-                </router-link>
+
+                <button class="edit-button" :href="route('profile.edit')">Modifier mes informations</button>
+
                 <button class="edit-button" @click="showDescriptionInput = true">Changer votre description</button>
                 <div v-if="showDescriptionInput" class="description-input">
                     <textarea v-model="newDescription" placeholder="Entrez une nouvelle description"></textarea>
