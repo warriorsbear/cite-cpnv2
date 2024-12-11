@@ -139,7 +139,7 @@ onMounted(() => {
 
             <div class="profile-header">
                 <img src="../public/images/avatar.jpg" alt="Profile Picture" class="profile-picture"/>
-                <h1>{{ user.nom }} {{ user.prenom }} {{user.id}}</h1>
+                <h1>{{ user.nom }} {{ user.prenom }} </h1>
 
             </div>
 
@@ -170,7 +170,7 @@ onMounted(() => {
                 <div class="photos-grid">
                     <div v-for="photo in photos.data" :key="photo.id_photo" class="photo-item">
                         <div>
-                            <img :src="`/storage/${photo.nom}`" alt="Photo" />
+                            <img :src="`/storage/${photo.nom}`" alt="Photo" class="photo_user"/>
                             <p>{{ photo.legende }}</p>
                         </div>
                     </div>
@@ -240,6 +240,13 @@ html, body {
     padding: 20px;
 
 }
+.photo_user {
+    width: 300px; /* Set a fixed width */
+    height: 200px; /* Set a fixed height */
+    object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
+    border-radius: 8px;
+}
+
 
 .profile-header h1 {
     text-align: left;
