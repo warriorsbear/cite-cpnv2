@@ -27,14 +27,6 @@ Route::get('/messagerie', function () {
     return Inertia::render('Messagerie');
 })->middleware(['auth', 'verified'])->name('messagerie');
 
-Route::get('/contact', function () {
-    return Inertia::render('Contact');
-})->middleware(['auth', 'verified'])->name('contact');
-
-Route::get('/mentionslegales', function () {
-    return Inertia::render('MentionsLegales');
-})->middleware(['auth', 'verified'])->name('mentionslegales');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -57,9 +49,9 @@ Route::get('/monCompte', function () {
     return Inertia::render('MonCompte');
 })->middleware(['auth', 'verified'])->name('monCompte');
 
-Route::get('/PageMentionsLegales', function () {
-    return Inertia::render('PageMentionsLegales');
-})->middleware(['auth', 'verified'])->name('PageMentionsLegales');
+Route::get('/MentionsLegales', function () {
+    return Inertia::render('MentionsLegales');
+})->middleware(['auth', 'verified'])->name('MentionsLegales');
 
 Route::get('/NousContacter', function () {
     return Inertia::render('NousContacter');

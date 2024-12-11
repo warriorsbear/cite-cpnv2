@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import NavLink from "@/Components/NavLink.vue";
+</script>
+
 <template>
     <footer class="footer">
         <div class="container">
@@ -9,6 +13,9 @@
                 <div class="footer-section contact">
                     <h3>CONTACT</h3>
                     <p>05 59 57 43 03<br />clubphotonailloux@gmail.com</p>
+                    <NavLink :href="route('NousContacter')" class="legal-link">
+                        Nous contacter
+                    </NavLink>
                 </div>
                 <div class="footer-section follow-us">
                     <h3>SUIVEZ-NOUS</h3>
@@ -23,40 +30,14 @@
                 Toutes les photographies des membres du ClubPhoto publiées sur ce site sont soumises aux droits de publications de leurs auteurs.
             </p>
             <p class="footer-legal">
-                <a href="{{ route('mentionslegales') }}" class="legal-link">
+                <NavLink :href="route('MentionsLegales')" class="legal-link">
                     Mentions Légales et Politique de Confidentialité
-                </a>
+                </NavLink>
             </p>
             <p class="footer-copyright">
                 © 2024 Club Photo Nailloux. Tous droits réservés.
             </p>
         </div>
-        <div class="footer-section contact">
-          <h3>CONTACT</h3>
-          <p>05 59 57 43 03<br />clubphotonailloux@gmail.com</p>
-            <NavLink :href="route('NousContacter')" class="legal-link">
-                Nous contacter
-            </NavLink>
-        </div>
-        <div class="footer-section follow-us">
-          <h3>SUIVEZ-NOUS</h3>
-          <div class="social-media">
-            <a href="https://www.facebook.com/clubphotonailoux" target="_blank">
-              <img src="../public/images/logo-CPN-Noir.png" alt="ha bon">
-            </a>
-          </div>
-        </div>
-      <p class="footer-legal">
-        Toutes les photographies des membres du ClubPhoto publiées sur ce site sont soumises aux droits de publications de leurs auteurs.
-      </p>
-      <p class="footer-legal">
-          <NavLink :href="route('PageMentionsLegales')" class="legal-link">
-              Mentions Légales et Politique de Confidentialité
-          </NavLink>
-      </p>
-      <p class="footer-copyright">
-        © 2024 Club Photo Nailloux. Tous droits réservés.
-      </p>
   </footer>
 </template>
 
@@ -164,3 +145,4 @@ h3 {
     }
 }
 </style>
+
