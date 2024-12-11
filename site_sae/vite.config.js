@@ -17,4 +17,13 @@ export default defineConfig({
             },
         }),
     ],
+    assetsInclude: ['**/*.PNG', '**/*.JPG'],
+    test: {
+        include: ['**/*Test.test.js'],
+    },
+    resolve: {
+        alias: {
+            '@vue/test-utils': '@vue/test-utils/dist/vue-test-utils.esm-bundler.js',
+        },
+    },
 });

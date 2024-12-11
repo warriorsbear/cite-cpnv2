@@ -37,7 +37,7 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
-                                    accueil
+                                    Accueil
                                 </NavLink>
                                 <NavLink
                                     :href="route('evenement')"

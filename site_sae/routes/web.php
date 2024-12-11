@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\EvenementController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/evenement', [EvenementController::class, 'store'])->name('evenement.create');
 });
 
 
@@ -47,10 +49,14 @@ Route::get('/monCompte', function () {
     return Inertia::render('MonCompte');
 })->middleware(['auth', 'verified'])->name('monCompte');
 
-Route::get('/PageMentionsLegales', function () {
-    return Inertia::render('PageMentionsLegales');
-})->middleware(['auth', 'verified'])->name('PageMentionsLegales');
+Route::get('/MentionsLegales', function () {
+    return Inertia::render('MentionsLegales');
+})->middleware(['auth', 'verified'])->name('MentionsLegales');
 
 Route::get('/NousContacter', function () {
     return Inertia::render('NousContacter');
 })->middleware(['auth', 'verified'])->name('NousContacter');
+
+Route::get('/AdminGestion', function () {
+    return Inertia::render('AdminGestion');
+})->middleware(['auth', 'verified'])->name('AdminGestion');

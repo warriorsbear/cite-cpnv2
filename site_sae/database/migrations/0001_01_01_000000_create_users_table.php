@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('adresse')->nullable();
             $table->string('pseudo');
             $table->string('prenom');
+            $table->string('photo_de_profil')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

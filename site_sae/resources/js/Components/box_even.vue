@@ -50,12 +50,12 @@ export default defineComponent({
 
   methods: {
     returnimagePath(type: string): string {
-      const basePath = 'http://[::1]:5174/resources/js/public/images/evenement/';
+      const basePath = '../public/images/evenement/';
       switch (type.toLowerCase()) {
         case 'collaboration':
-          return `${basePath}collaboration.jpeg`;
+          return `../public/images/evenement/collaboration.jpeg`;
         case 'cours':
-          return `${basePath}cours.PNG`;
+          return `../public/images/evenement/cours.PNG`;
         case 'exposition':
           return `${basePath}exposition.jpg`;
         case 'information':
@@ -115,8 +115,22 @@ export default defineComponent({
 
 <template>
   <div class="main_box" @click="togglePopup">
+    <img v-if="Type_even=='collaboration'" src="../public/images/evenement/collaboration.jpeg" alt="image" class="event_image">
 
-    <img :src="path" alt="image" class="event_image">
+      <img v-if="Type_even=='cours'" src="../public/images/evenement/cours.PNG" alt="image" class="event_image">
+
+        <img v-if="Type_even=='exposition'" src="../public/images/evenement/exposition.jpg" alt="image" class="event_image">
+
+            <img v-if="Type_even=='information'" src="../public/images/evenement/information.jpg" alt="image" class="event_image">
+
+                <img v-if="Type_even=='reunion'" src="../public/images/evenement/reunion.jpg" alt="image" class="event_image">
+
+                <img v-if="Type_even=='sortie_a_theme'" src="../public/images/evenement/sortie_a_theme.jpg" alt="image" class="event_image">
+
+                    <img v-if="Type_even=='visionnage'" src="../public/images/evenement/Visionnage.jpg" alt="image" class="event_image">
+
+
+
     <div class="event_titre">
       <h4> {{titre_even}} </h4>
       <p>{{ formatDate(Date_even) }}</p>

@@ -1,11 +1,11 @@
 <template>
-    <Head title="Mentions légales" />
+    <Head title="Nous contacter" />
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Mentions Légales
+                Nous contacter
             </h2>
         </template>
 

@@ -3,22 +3,18 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import {Head, useForm, usePage} from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Box_even from "@/Components/box_even.vue";
-import Footer from "@/Components/Footer.vue";
+import CreationEvenement from "@/Components/CreationEvenement.vue";
+import Test_creation from "@/Components/test_creation.vue";
 
 
-const Evenement = {
-    id_evenement: Number,
-    titre: String,
-    descriptif: String,
-    date_heure: String,
-    lieu: String,
-    type: String,
-    officiel: Boolean,
-    id_utilisateur: Number
-}
 
 const evenements = ref([]);
 const loading = ref(true);
+const montrerBoutonCreer = ref(false);
+const montrerTestCreation = ref(false);
+
+const user = usePage().props.auth.user;
+
 
 const fetchEvenements = async () => {
     try {
@@ -31,7 +27,10 @@ const fetchEvenements = async () => {
         loading.value = false;
     }
 };
-
+const handleFormSubmit = () => {
+    montrerTestCreation.value = false;
+    fetchEvenements();
+};
 
 onMounted(() => {
     fetchEvenements();
@@ -50,6 +49,8 @@ onMounted(() => {
                 Evenement
             </h2>
         </template>
+
+
 
                         <div v-if="loading" class="loading-icon">
                             <h1>Chargement des événements...</h1>
@@ -82,14 +83,7 @@ onMounted(() => {
     height: 100%;
 }
 
-.titre{
-    padding: 40px;
-    background-color: rgb(255, 255, 255);
-    color: rgba(0, 0, 0, 0.87);
-    font-family: 'Poppins', sans-serif;
 
-
-}
 
 .buttons {
     padding: 10px 15px;
