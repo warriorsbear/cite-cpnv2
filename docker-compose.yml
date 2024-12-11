@@ -36,3 +36,15 @@ services:
       - "8080:80"
     depends_on:
       - db
+
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube_cpn_dev
+    ports:
+      - "9000:9000"
+    environment:
+      - SONARQUBE_JDBC_URL=jdbc:mysql://db_cpn_dev:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useConfigs=maxPerformance
+      - SONARQUBE_JDBC_USERNAME=user
+      - SONARQUBE_JDBC_PASSWORD=password
+    depends_on:
+      - db
