@@ -1,69 +1,119 @@
 <script setup>
 
-import {Head} from "@inertiajs/vue3";
+import {Head, Link, useForm} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Footer from "@/Components/Footer.vue";
-</script>
-
-<script>
-import Box_even from "@/Components/box_even.vue";
 import {usePage} from "@inertiajs/vue3";
-export default {
-    components: {Box_even},
-    data() {
-        return {
-            utilisateur: {
-                photo: "http://[::1]:5173/resources/js/public/images/avatar.jpg",
-                banner: "http://[::1]:5173/resources/js/public/images/baniere.png",
-                nom: usePage().props.auth.user.nom.split(' ')[1] || '',
-                prenom: usePage().props.auth.user.prenom.split(' ')[0] || '',
-                description: "Ceci est la description du profil.",
-                photos: [
-                ]
-            },
-            activeMenu: 'photos',
-            showDescriptionInput: false,
-            newDescription: ''
-        };
+import {onMounted, ref} from "vue";
 
-    },
-    mounted() {
-        this.fetchUserPhotos();
-    },
-    methods: {
-        async fetchUserPhotos() {
-            try {
-                const response = await axios.get('/user/photos', {
-                    params: {
-                        userId: usePage().props.auth.user.id
-                    }
-                });
+const photos = ref([]);
+const loading = ref(true);
 
-                // Transformez les données de la réponse
-                this.utilisateur.photos = response.data.data.map(photo => ({
-                    id: photo.id,
-                    url: `/storage/app/public/photos/${photo.nom}`, // Assurez-vous que le chemin est correct
-                    description: photo.legende || 'Sans légende'
-                }));
-            } catch (error) {
-                console.error('Erreur lors de la récupération des photos:', error);
-                // Optionnel : gérer l'erreur (message à l'utilisateur, etc.)
-            }
-        },
-        toggleMenu(menu) {
-            this.activeMenu = menu;
-        },
-        changeDescription(newDescription) {
-            this.utilisateur.description = newDescription;
-        },
-        updateDescription() {
-            this.changeDescription(this.newDescription);
-            this.showDescriptionInput = false;
-            this.newDescription = '';
-        }
+const user = usePage().props.auth.user;
+
+const form = useForm({
+    id: user.id,
+    nom: user.nom,
+    prenom: user.prenom,
+    pseudo: user.pseudo,
+    email: user.email,
+    photo: user.photo_de_profil,
+});
+const activeMenu = ref('photos');
+const showDescriptionInput= ref(false);
+const newDescription= ref('');
+const description = ref('Ceci est la description du profil.');
+
+
+const fetchPhotos = async () => {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/photos/', {
+        });
+        photos.value = await response.json();
+        console.log("Les evenements ont été récupérés :", photos.value);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+    } finally {
+        loading.value = false;
     }
 };
+
+const toggleMenu = (menu) => {
+    activeMenu.value = menu;
+};
+
+const changeDescription = (newDescription) => {
+    description.value = newDescription;
+};
+
+const updateDescription = () => {
+    changeDescription(newDescription);
+    showDescriptionInput.value = false;
+    newDescription.value = '';
+};
+
+onMounted(() => {
+    fetchPhotos();
+});
 </script>
+
+<!--<script>-->
+<!--export default {-->
+<!--    components: {Box_even},-->
+<!--    data() {-->
+<!--        return {-->
+<!--            utilisateur: {-->
+<!--                photo: "http://[::1]:5173/resources/js/public/images/avatar.jpg",-->
+<!--                banner: "http://[::1]:5173/resources/js/public/images/baniere.png",-->
+<!--                nom: usePage().props.auth.user.nom.split(' ')[1] || '',-->
+<!--                prenom: usePage().props.auth.user.prenom.split(' ')[0] || '',-->
+<!--                description: "Ceci est la description du profil.",-->
+<!--                photos: [-->
+<!--                ]-->
+<!--            },-->
+<!--            activeMenu: 'photos',-->
+<!--            showDescriptionInput: false,-->
+<!--            newDescription: ''-->
+<!--        };-->
+
+<!--    },-->
+<!--    mounted() {-->
+<!--        this.fetchUserPhotos();-->
+<!--    },-->
+<!--    methods: {-->
+<!--        async fetchUserPhotos() {-->
+<!--            try {-->
+<!--                const response = await axios.get('/user/photos', {-->
+<!--                    params: {-->
+<!--                        userId: usePage().props.auth.user.id-->
+<!--                    }-->
+<!--                });-->
+
+<!--                // Transformez les données de la réponse-->
+<!--                this.utilisateur.photos = response.data.data.map(photo => ({-->
+<!--                    id: photo.id,-->
+<!--                    url: `/storage/app/public/photos/${photo.nom}`, // Assurez-vous que le chemin est correct-->
+<!--                    description: photo.legende || 'Sans légende'-->
+<!--                }));-->
+<!--            } catch (error) {-->
+<!--                console.error('Erreur lors de la récupération des photos:', error);-->
+<!--                // Optionnel : gérer l'erreur (message à l'utilisateur, etc.)-->
+<!--            }-->
+<!--        },-->
+<!--        toggleMenu(menu) {-->
+<!--            this.activeMenu = menu;-->
+<!--        },-->
+<!--        changeDescription(newDescription) {-->
+<!--            this.utilisateur.description = newDescription;-->
+<!--        },-->
+<!--        updateDescription() {-->
+<!--            this.changeDescription(this.newDescription);-->
+<!--            this.showDescriptionInput = false;-->
+<!--            this.newDescription = '';-->
+<!--        }-->
+<!--    }-->
+<!--};-->
+<!--</script>-->
 
 <template>
     <Head title="Mon compte" />
@@ -88,8 +138,8 @@ export default {
             <!-- Profile Picture and Name -->
 
             <div class="profile-header">
-                <img :src="utilisateur.photo" alt="Profile Picture" class="profile-picture"/>
-                <h1>{{ utilisateur.nom }} {{ utilisateur.prenom }}</h1>
+                <img src="../public/images/avatar.jpg" alt="Profile Picture" class="profile-picture"/>
+                <h1>{{ user.nom }} {{ user.prenom }} {{user.id}}</h1>
 
             </div>
 
@@ -98,9 +148,9 @@ export default {
 
             <!-- Profile Description -->
             <div class="profile-description">
-                <p>{{ utilisateur.description }}</p> <br>
+                <p>{{ description }}</p> <br>
 
-                <button class="edit-button" :href="route('profile.edit')">Modifier mes informations</button>
+                <Link :href="route('profile.edit')" class="edit-button" >Modifier les informations</Link>
 
                 <button class="edit-button" @click="showDescriptionInput = true">Changer votre description</button>
                 <div v-if="showDescriptionInput" class="description-input">
@@ -118,8 +168,11 @@ export default {
             <div v-if="activeMenu === 'photos'" class="posted-photos">
                 <h2>Photos</h2>
                 <div class="photos-grid">
-                    <div v-for="photo in utilisateur.photos" :key="photo.id" class="photo-item">
-                        <img :src="photo.url" :alt="photo.description"/>
+                    <div v-for="photo in photos.data" :key="photo.id_photo" class="photo-item">
+                        <div>
+                            <img :src="`/storage/${photo.nom}`" alt="Photo" />
+                            <p>{{ photo.legende }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -127,7 +180,6 @@ export default {
             <div v-if="activeMenu === 'evenements'" class="posted-events">
                 <h2>Événements</h2>
                 <!-- Add your events display logic here -->
-                <box_even titre_even="Exemple" image-path="http://[::1]:5173/resources/js/public/images/baniere.png" description="Description de l'événement" />
 
             </div>
 
@@ -200,13 +252,7 @@ html, body {
     border: 3px solid white;
 }
 
-.profile-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex: 1;
-    justify-content: space-between;
-}
+
 
 .profile-description {
     margin-left: 10px;
@@ -276,7 +322,7 @@ h2 {
     transition: background-color 0.5s;
 }
 
-edit-button:hover {
+.edit-button:hover {
     background-color: #ff9900;
 }
 </style>

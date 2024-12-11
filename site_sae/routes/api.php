@@ -17,7 +17,8 @@ Route::get('/test', function () {
 
 Route::apiResource('evenements', EvenementController::class);
 Route::apiResource('utilisateurs', UserController::class);
-Route::apiResource('photos', PhotoController::class);
 
 Route::post('/evenements', [EvenementController::class, 'store']);
+Route::get('/photos/', [PhotoController::class, 'index']);
 Route::post('/photos', [PhotoController::class, 'store']);
+Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);
