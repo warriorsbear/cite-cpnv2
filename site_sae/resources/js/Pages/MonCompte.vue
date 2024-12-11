@@ -47,7 +47,7 @@ export default {
 </script>
 
 <template>
-    <Head title="Fil d'actu" />
+    <Head title="Mon compte" />
 
     <AuthenticatedLayout>
 
@@ -55,7 +55,7 @@ export default {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Fil d'actu
+                Mon compte
             </h2>
         </template>
 
