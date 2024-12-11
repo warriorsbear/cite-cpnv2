@@ -1,9 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import {Head, useForm, usePage} from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Box_even from "@/Components/box_even.vue";
 import Footer from "@/Components/Footer.vue";
+
 
 const Evenement = {
     id_evenement: Number,
@@ -49,8 +50,6 @@ onMounted(() => {
                 Evenement
             </h2>
         </template>
-
-
 
                         <div v-if="loading" class="loading-icon">
                             <h1>Chargement des événements...</h1>

@@ -1,5 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 
 export default defineComponent({
   name: "box_even",
@@ -75,7 +77,35 @@ export default defineComponent({
     formatTime(dateString: string): string {
       const date = new Date(dateString);
       return date.toLocaleTimeString('fr-FR'); // Format de l'heure en français
-    }
+    },
+      async joinEvent() {
+          const user = usePage().props.auth.user;
+          const eventId = this.$props.id; // Assurez-vous que l'ID de l'événement est passé en tant que prop
+
+          try {
+              const response = await fetch('/api/participations', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      id_utilisateur: user.id,
+                      id_evenement: eventId,
+                      presence: true
+                  })
+              });
+
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+
+              const data = await response.json();
+              console.log('Join event response:', data);
+          } catch (error) {
+              console.error('Error joining event:', error.message);
+          }
+      }
+
   },
     mounted() {
       this.path = this.returnimagePath(this.Type_even);
@@ -103,7 +133,7 @@ export default defineComponent({
       <h3>Lieu : {{Lieu_even}}</h3>
       <p> Description : {{ description_even}}</p>
       <p>Officiel :{{Officiel_even}}</p>
-      <button class="button_rejoindre">Rejoindre</button>
+      <button class="button_rejoindre" @click="joinEvent">Rejoindre</button>
       <button class="button_rejoindre">Voir commentaire</button>
     </div>
   </div>
