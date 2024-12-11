@@ -17,7 +17,7 @@ const Utilisateur = {
     cp: String,
     ville: String,
     telephone: String,
-    mail: String,
+    email: String,
     mdp: String,
     role: String,
     statut: Boolean,
@@ -73,7 +73,7 @@ onMounted(() => {
  * @param utilisateur - L'objet utilisateur
  */
 const CliqueFonction = (utilisateur) => {
-    const email = utilisateur.mail;
+    const email = utilisateur.email;
     const subject = `Message de ${utilisateur.pseudo}`;
     const body = 'Salut ! Comment vas-tu ? \n Je t\'envoie ce mail depuis le site du Club Photo Nailloux ! \n';
 
