@@ -37,7 +37,7 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
-                                    accueil
+                                    Accueil
                                 </NavLink>
                                 <NavLink
                                     :href="route('evenement')"
@@ -52,8 +52,8 @@ const showingNavigationDropdown = ref(false);
                                     Messagerie
                                 </NavLink>
                                 <NavLink
-                                    :href="route('profile.edit')"
-                                    :active="route().current('profile.edit')"
+                                    :href="route('monCompte')"
+                                    :active="route().current('monCompte')"
                                 >
                                     Mon compte
                                 </NavLink>

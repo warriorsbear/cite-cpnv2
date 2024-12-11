@@ -48,19 +48,19 @@ class DatabaseSeeder extends Seeder
 
         // Crée 10 posts avec un utilisateur aléatoire
         Post::factory()->count(10)->create([
-            'id_utilisateur' => fn() => Utilisateur::all()->random()->id_utilisateur
+            'id_utilisateur' => fn() => User::all()->random()->id
         ]);
 
         // Crée 10 commentaires de post avec un utilisateur aléatoire et un post spécifique
         CommentairePost::factory()->count(10)->create([
-            'id_utilisateur' => fn() => Utilisateur::all()->random()->id_utilisateur,
+            'id_utilisateur' => fn() => User::all()->random()->id,
             'id_post' => fn() => Post::all()->random()->id_post
         ]);
 
         // Crée 10 photos avec un utilisateur aléatoire, un autre utilisateur aléatoire et un post aléatoire
         Photo::factory(10)->create([
             'id_utilisateur' => function () use (&$idUtilisateur) {
-                $idUtilisateur = Utilisateur::all()->random()->id_utilisateur;
+                $idUtilisateur = User::all()->random()->id;
                 return $idUtilisateur;
             },
             'id_utilisateur_1' => function () use (&$idUtilisateur) {
@@ -75,24 +75,24 @@ class DatabaseSeeder extends Seeder
 
         // Crée 10 commentaires de photo avec un utilisateur aléatoire et une photo spécifique
         CommentairePhoto::factory(10)->create([
-            'id_utilisateur' => fn() => Utilisateur::all()->random()->id_utilisateur,
+            'id_utilisateur' => fn() => User::all()->random()->id,
             'id_photo' => fn() => Photo::all()->random()->id_photo
         ]);
 
         // Crée 10 événements
         Evenement::factory(10)->create([
-            'id_utilisateur' => fn() => Utilisateur::all()->random()->id_utilisateur
+            'id_utilisateur' => fn() => User::all()->random()->id
         ]);
 
         // Crée 10 commentaires d'événement avec un utilisateur aléatoire et un événement spécifique
         CommentaireEvent::factory(10)->create([
-            'id_utilisateur' => fn() => Utilisateur::all()->random()->id_utilisateur,
+            'id_utilisateur' => fn() => User::all()->random()->id,
             'id_evenement' => fn() => Evenement::all()->random()->id_evenement
         ]);
 
         // Crée 10 documents
         Document::factory(10)->create([
-            'id_utilisateur' => fn() => Utilisateur::all()->random()->id_utilisateur,
+            'id_utilisateur' => fn() => User::all()->random()->id,
             'id_evenement' => fn() => Evenement::all()->random()->id_evenement,
             // 'chemin' => 'http://127.0.0.1:8000/storage/documents/inoxtag.pdf'
         ]);
@@ -114,10 +114,10 @@ class DatabaseSeeder extends Seeder
         // Si l'utilisateur est déjà inscrit à l'événement, on passe à l'événement suivant
         // mais l'utilisateur ne doit pas être inscrit à tous les évènements
         $evenements = Evenement::all();
-        $utilisateurs = Utilisateur::all();
+        $utilisateurs = User::all();
         foreach ($evenements as $evenement) {
             $idEvenement = $evenement->id_evenement;
-            $idUtilisateur = $utilisateurs->random()->id_utilisateur;
+            $idUtilisateur = $utilisateurs->random()->id;
             if (Participation::where('id_evenement', $idEvenement)->where('id_utilisateur', $idUtilisateur)->exists()) {
                 continue;
             }
