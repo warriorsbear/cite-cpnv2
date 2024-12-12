@@ -79,6 +79,11 @@ class Photo extends Model
 		'id_visionnage'
 	];
 
+    public function setDatePriseVueAttribute($value)
+    {
+        $this->attributes['date_prise_vue'] = \Carbon\Carbon::parse($value)->format('Y-m-d');
+    }
+
     public function evenement()
 	{
 		return $this->belongsTo(Evenement::class, 'id_evenement');

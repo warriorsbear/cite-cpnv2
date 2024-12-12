@@ -28,7 +28,7 @@ return new class extends Migration
             $table->integer('id_evenement')->nullable()->index('id_evenement');
             $table->integer('id_post')->nullable()->index('id_post');
             $table->integer('id_utilisateur')->index('id_utilisateur');
-            $table->integer('id_utilisateur_1')->index('id_utilisateur_1');
+            $table->integer('id_utilisateur_1')->nullable()->index('id_utilisateur_1');
             $table->integer('id_visionnage')->nullable()->index('id_visionnage');
         });
     }

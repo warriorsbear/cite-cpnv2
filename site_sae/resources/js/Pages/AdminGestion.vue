@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Head} from "@inertiajs/vue3";
+import {Head, useForm, usePage} from "@inertiajs/vue3";
 
 const utilisateurs = ref([]); //variable réactive pour stocker les utilisateurs
 const recherche = ref(''); //variable réactive qui stock la recherche
 const entrainDeCharger = ref(true); //variable réactive pour savoir si on est en train de charger les utilisateurs
-
+const UtilisateurConnecter = usePage().props.auth.user; //variable pour stocker les informations de l'utilisateur connecté
 const RecuperationUtilisateurs = async () => {
   try {
     let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
@@ -62,7 +62,7 @@ onMounted(() => {
             </h2>
         </template>
           <main>
-            <h1>Bienvenue sur votre tableau de bord {{nom}} !</h1>
+            <h1>Bienvenue sur votre tableau de bord {{UtilisateurConnecter.nom}} !</h1>
             <!-- Afficher l'icône de chargement si les données sont en cours de chargement -->
             <div v-if="entrainDeCharger" class="loading-icon">
               <img src="\public\images\loading.gif" alt="Loading..." />

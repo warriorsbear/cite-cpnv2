@@ -41,7 +41,7 @@ class Participation extends Model
 
 	public function utilisateur()
 	{
-		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+		return $this->belongsTo(User::class, 'id_utilisateur');
 	}
 
 	public function evenement()
