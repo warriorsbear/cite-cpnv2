@@ -55,7 +55,7 @@ onMounted(() => {
         <test_creation v-if="montrerTestCreation" @submit="handleFormSubmit" @close="montrerTestCreation = false"/>
 
         <!-- Inclure le modal de création d'événement -->
-        <CreationEvenement :visible="montrerBoutonCreer" :user_id=user.id @close="montrerBoutonCreer = false"/>
+
 
 
 
