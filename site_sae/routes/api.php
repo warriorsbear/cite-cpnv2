@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\EvenementController;
+use App\Http\Controllers\Api\PhotoController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ParticipationController;
 use Illuminate\Http\Request;
@@ -22,3 +23,6 @@ Route::apiResource('evenements', EvenementController::class);
 Route::apiResource('utilisateurs', UserController::class);
 
 Route::post('/evenements', [EvenementController::class, 'store']);
+Route::get('/photos/', [PhotoController::class, 'index']);
+Route::post('/photos', [PhotoController::class, 'store']);
+Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);

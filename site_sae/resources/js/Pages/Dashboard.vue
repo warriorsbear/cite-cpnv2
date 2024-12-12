@@ -15,7 +15,7 @@ import Footer from "@/Components/Footer.vue";
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Fil d'actu
+                Fil d'actualité
             </h2>
         </template>
 
