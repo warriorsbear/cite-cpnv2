@@ -9,6 +9,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Seld\PharUtils\Timestamps;
 
 /**
  * Class Post
@@ -16,8 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id_post
  * @property string|null $Légende
  * @property int $id_utilisateur
+ * @property timestamps created_at
  *
- * @property Utilisateur $utilisateur
+ * @property User $utilisateur
  * @property Collection|CommentairePost[] $commentaire_posts
  * @property Collection|Photo[] $photos
  *
@@ -37,12 +39,13 @@ class Post extends Model
 
 	protected $fillable = [
 		'Légende',
-		'id_utilisateur'
+		'id_utilisateur',
+        'created_at'
 	];
 
-	public function utilisateur()
+	public function user()
 	{
-		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+		return $this->belongsTo(User::class, 'id_utilisateur');
 	}
 
 	public function commentaire_posts()
