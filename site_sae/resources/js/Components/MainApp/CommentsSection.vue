@@ -1,197 +1,198 @@
 <template>
-  <div class="comments-section">
-    <h4 class="comments-title">Commentaires</h4>
-    <div class="comments-docker">
-      <hr>
-      <div v-for="comment in comments" :key="comment.id" class="comment">
-        <div class="user-info-comment">
-          <div class="user-info-left">
-            <img src="../../public/images/avatar.jpg" alt="Avatar commentaire" class="avatar-comments">
-            <p class="user-comments"><strong>{{ comment.user }}</strong></p>
-          </div>
-          <p class="date-comments">{{ comment.comDate }}</p>
+    <div class="comments-section">
+        <h4 class="comments-title">Commentaires</h4>
+        <div class="comments-docker">
+            <hr>
+            <div v-for="comment in comments" :key="comment.id" class="comment">
+                <div class="user-info-comment">
+                    <div class="user-info-left">
+                        <img src="../../public/images/avatar.jpg" alt="Avatar commentaire" class="avatar-comments">
+                        <p class="user-comments"><strong>{{ comment.user }}</strong></p>
+                    </div>
+                    <p class="date-comments">{{ comment.comDate }}</p>
+                </div>
+                <p class="text-comments">{{ comment.text }}</p>
+            </div>
         </div>
-        <p class="text-comments">{{ comment.text }}</p>
-      </div>
+        <div class="add-comment">
+            <input v-model="newComment" placeholder="Ajouter un commentaire..."/>
+            <button @click="addComment">Commenter</button>
+        </div>
     </div>
-    <div class="add-comment">
-      <input v-model="newComment" placeholder="Ajouter un commentaire..."/>
-      <button @click="addComment">Commenter</button>
-    </div>
-  </div>
 </template>
 
 <script>
 import {nextTick} from "vue";
 
 export default {
-  props: {
-    comments: Array,
-  },
-  data() {
-    return {
-      newComment: '',
-    };
-  },
-  methods: {
-    addComment() {
-      if (this.newComment.trim() !== '') {
-        this.$emit('add-comment', this.newComment);
-        this.newComment = '';
-      }
+    props: {
+        comments: Array,
     },
-  },
+    data() {
+        return {
+            newComment: '',
+        };
+    },
+    methods: {
+        addComment() {
+            if (this.newComment.trim() !== '') {
+                this.$emit('add-comment', this.newComment);
+                this.newComment = '';
+            }
+        },
+    },
 };
 </script>
 
 <style scoped>
 * {
-  font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .comments-section {
-  /* Ajoute ici les styles pour les commentaires */
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  font-size: small;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
-  height: 100%;
-  position: relative;
+    /* Ajoute ici les styles pour les commentaires */
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    font-size: small;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 12px;
+    height: 100%;
+    position: relative;
+    background-color: white;
 }
 
 .comments-docker {
-  /* Styles pour la section des commentaires */
-  overflow-y: auto;
-  scrollbar-width: none;
-  padding-bottom: 20px;
+    /* Styles pour la section des commentaires */
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-bottom: 20px;
 }
 
 .comments-docker:hover {
-  scrollbar-width: thin;
+    scrollbar-width: thin;
 }
 
 .comments-title {
-  font-size: larger;
-  margin-bottom: 12px;
-  margin-left: 8px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: start;
+    font-size: larger;
+    margin-bottom: 12px;
+    margin-left: 8px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
 }
 
 hr {
-  margin: 0;
-  border: none;
-  background: #ddd;
-  width: calc(100% - 0.5rem * 2);
-  margin-inline: auto;
-  border-radius: 15px;
-  height: 2px;
-  margin-bottom: 12px;
+    margin: 0;
+    border: none;
+    background: #ddd;
+    width: calc(100% - 0.5rem * 2);
+    margin-inline: auto;
+    border-radius: 15px;
+    height: 2px;
+    margin-bottom: 12px;
 }
 
 .comment {
-  /* Styles pour chaque commentaire */
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px;
+    /* Styles pour chaque commentaire */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
 }
 
 .comment:nth-child(1) {
-  padding-top: 0;
-  margin-top: 0;
+    padding-top: 0;
+    margin-top: 0;
 }
 
 .user-info-comment {
-  /* Styles pour les informations de l'utilisateur */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+    /* Styles pour les informations de l'utilisateur */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
 .user-info-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .avatar-comments {
-  /* Styles pour l'avatar */
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
+    /* Styles pour l'avatar */
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
 }
 
 .date-comments {
-  /* Styles pour la date du commentaire */
-  color: #777;
-  font-size: small;
-  justify-self: flex-end;
+    /* Styles pour la date du commentaire */
+    color: #777;
+    font-size: small;
+    justify-self: flex-end;
 }
 
 .text-comments {
-  /* Styles pour le texte du commentaire */
-  padding: 8px 16px;
-  background-color: #eee;
-  border: none;
-  border-radius: 12px;
+    /* Styles pour le texte du commentaire */
+    padding: 8px 16px;
+    background-color: #eee;
+    border: none;
+    border-radius: 12px;
 }
 
 .add-comment {
-  /* Styles pour le formulaire d'ajout de commentaire */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  width: 100%;
-  background: none;
-  position: relative;
-  gap: 12px;
-  padding-top: 12px;
+    /* Styles pour le formulaire d'ajout de commentaire */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    width: 100%;
+    background: none;
+    position: relative;
+    gap: 12px;
+    padding-top: 12px;
 }
 
 .add-comment::before {
-  content: '';
-  position: absolute;
-  top: -30px;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 .add-comment input {
-  /* Styles pour le formulaire d'ajout de commentaire */
-  padding: 8px;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+    /* Styles pour le formulaire d'ajout de commentaire */
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
 .add-comment input:focus {
-  border-color: #d79026;
-  outline: none;
+    border-color: #d79026;
+    outline: none;
 }
 
 .add-comment button {
-  padding: 0.5rem 1rem;
-  background-color: #d79026;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+    padding: 0.5rem 1rem;
+    background-color: #d79026;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .add-comment button:active {
-  background-color: #b37e1f;
+    background-color: #b37e1f;
 }
 
 </style>
