@@ -102,9 +102,9 @@ export default defineComponent({
 
 
     <div class="event_titre">
-      <h4> {{titre_even}} </h4>
-      <p>{{ formatDate(Date_even) }}</p>
-      <p>{{ formatTime(Date_even) }}</p>
+      <h4> <b>{{titre_even}}</b> </h4>
+      <p><b>{{ formatDate(Date_even) }}</b></p>
+      <p><b>{{ formatTime(Date_even) }}</b></p>
     </div>
 
   </div>
@@ -168,7 +168,7 @@ export default defineComponent({
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,12 +178,13 @@ export default defineComponent({
 
 .popup_content {
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 30px;
+  border-radius: 18px;
   max-width: 900px;
-  width: 80%;
+  width: 90%;
   text-align: left;
   position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close_button {
@@ -192,25 +193,33 @@ export default defineComponent({
   right: 10px;
   font-size: 24px;
   cursor: pointer;
+  color: #333;
 }
 
 .button_rejoindre {
-  padding: 10px 15px;
-  margin:5px;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.5s;
+    padding: 10px 20px; /* Adjusted padding */
+    margin: 10px 5px; /* Adjusted margin */
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Faster transition */
+    background-color: #333; /* Primary color */
+    color: white; /* White text */
+    border: none; /* Removed border */
 }
 
 button:hover{
   background-color: #ff9900;
 }
 
+.button_rejoindre:hover {
+    background-color: #2a2a2a; /* Darker hover color */
+}
+
 
 .mid {
-  text-align: center;
-
+    text-align: center;
+    margin-bottom: 20px; /* Added margin */
 }
 
 
