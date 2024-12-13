@@ -4,81 +4,63 @@ import { Head } from '@inertiajs/vue3';
 import { ref, onMounted, computed } from 'vue';
 import Footer from "@/Components/Footer.vue";
 
-/**
- * permet de stocker les informations d'un utilisateur pour éviter les erreur dans le code
- * @type {{ville: StringConstructor, role: StringConstructor, mail: StringConstructor, photo_de_profile: StringConstructor, telephone: StringConstructor, notif_mail: BooleanConstructor, nom: StringConstructor, cp: StringConstructor, statut_cotisation: BooleanConstructor, id_utilisateur: NumberConstructor, adresse: StringConstructor, mdp: StringConstructor, pseudo: StringConstructor, prenom: StringConstructor, statut: BooleanConstructor}}
- */
-const Utilisateur = {
-    id_utilisateur: Number,
-    pseudo: String,
-    nom: String,
-    prenom: String,
-    adresse: String,
-    cp: String,
-    ville: String,
-    telephone: String,
-    email: String,
-    mdp: String,
-    role: String,
-    statut: Boolean,
-    notif_mail: Boolean,
-    statut_cotisation: Boolean,
-    photo_de_profile: String,
-}
 // Variable réactive pour stocker les utilisateurs
-const utilisateurs = ref([]);
+        const utilisateurs = ref([]);
+
+// Définir utilisateurs sur l'objet window (pour les test cypress)
+window.utilisateurs = utilisateurs;
 
 // Variable réactive pour stocker la recherche
-const recherche = ref('');
+        const recherche = ref('');
 
 // Variable réactive pour indiquer si les utilisateurs sont en cours de chargement
-const entrainDeCharger = ref(true);
+        const entrainDeCharger = ref(true);
 
-/**
- * Récupère les utilisateurs depuis l'API et les stocke dans la variable `utilisateurs`.
- */
-const creationBalisesUtilisateurs = async () => {
-    try {
-        let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
-        utilisateurs.value = await response.json(); // Lit le corps en tant que JSON et le stocke dans `users`
-        console.log("Les utilisateurs ont été récupérés :", utilisateurs.value);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des utilisateurs:', error);
-    } finally {
-        if (utilisateurs.value.length !== 0) {
-            entrainDeCharger.value = false;
+        /**
+         * Récupère les utilisateurs depuis l'API et les stocke dans la variable `utilisateurs`.
+         */
+        const creationBalisesUtilisateurs = async () => {
+            try {
+                let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
+                utilisateurs.value = await response.json(); // Lit le corps en tant que JSON et le stocke dans `users`
+                console.log("Les utilisateurs ont été récupérés :", utilisateurs.value);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des utilisateurs:', error);
+            } finally {
+                if (utilisateurs.value.length !== 0) {
+                    entrainDeCharger.value = false;
+                }
+            }
         }
-    }
-}
 
 // Propriété calculée pour filtrer les utilisateurs en fonction de la recherche
-const UtilisateurFiltre = computed(() => {
-    if (!recherche.value) {
-        return utilisateurs.value;
-    }
-    return utilisateurs.value.filter(utilisateur =>
-        utilisateur.pseudo.toLowerCase().includes(recherche.value.toLowerCase()) ||
-        utilisateur.nom.toLowerCase().includes(recherche.value.toLowerCase()) ||
-        utilisateur.prenom.toLowerCase().includes(recherche.value.toLowerCase())
-    );
-});
+        const UtilisateurFiltre = computed(() => {
+            if (!recherche.value) {
+                return utilisateurs.value;
+            }
+            return utilisateurs.value.filter(utilisateur =>
+                utilisateur.pseudo.toLowerCase().includes(recherche.value.toLowerCase()) ||
+                utilisateur.nom.toLowerCase().includes(recherche.value.toLowerCase()) ||
+                utilisateur.prenom.toLowerCase().includes(recherche.value.toLowerCase())
+            );
+        });
 
 // Appelle la fonction lorsque le composant est monté (complètement chargé dans le DOM)
-onMounted(() => {
-    creationBalisesUtilisateurs();
-});
+        onMounted(() => {
+            creationBalisesUtilisateurs();
+        });
 
-/**
- * Gère l'événement de clic sur un utilisateur et redirige vers un lien mailto.
- * @param utilisateur - L'objet utilisateur
- */
-const CliqueFonction = (utilisateur) => {
-    const email = utilisateur.email;
-    const subject = `Message de ${utilisateur.pseudo}`;
-    const body = 'Salut ! Comment vas-tu ? \n Je t\'envoie ce mail depuis le site du Club Photo Nailloux ! \n';
+        /**
+         * Gère l'événement de clic sur un utilisateur et redirige vers un lien mailto.
+         * @param utilisateur - L'objet utilisateur
+         */
+        const CliqueFonction = (utilisateur) => {
+            const email = utilisateur.email;
+            const subject = `Message de ${utilisateur.pseudo}`;
+            const body = 'Salut ! Comment vas-tu ? \n Je t\'envoie ce mail depuis le site du Club Photo Nailloux ! \n';
 
-    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-};
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        };
 </script>
 
 <template>
@@ -106,8 +88,8 @@ const CliqueFonction = (utilisateur) => {
                         <img src="../public/images/loading.gif" alt="Loading..." />
                     </div>
                     <!-- Créer une balise div pour chaque utilisateur filtré -->
-                    <div v-else v-for="utilisateur in UtilisateurFiltre" :key="utilisateur.id_utilisateur" @click="CliqueFonction(utilisateur)" class="user">
-                        <img v-if="utilisateur.photo_de_profile" :src="utilisateur.photo_de_profile" alt="logo" id="pp" width="100" height="100">
+                    <div v-else v-for="utilisateur in UtilisateurFiltre" :key="utilisateur.id_utilisateur" @click="CliqueFonction(utilisateur)" class="user" >
+                        <img v-if="utilisateur.photo_de_profil" :src="utilisateur.photo_de_profil" alt="logo" id="pp" width="100" height="100">
                         <div class="infoUtilisateur">
                             <p id="pseudo">{{ utilisateur.pseudo }}</p>
                             <p>{{ utilisateur.nom }} {{ utilisateur.prenom }}</p>

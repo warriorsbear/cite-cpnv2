@@ -1,0 +1,36 @@
+[
+    {
+    "id": 1,
+    "nom": "User",
+    "email": "meda93@example.net",
+    "email_verified_at": "2024-12-13T14:46:39.000000Z",
+    "created_at": "2024-12-13T14:46:40.000000Z",
+    "updated_at": "2024-12-13T14:46:40.000000Z",
+    "cp": "76272",
+    "statut_cotisation": 1,
+    "notif_mail": 0,
+    "role": "user",
+    "telephone": "(762) 255-8022",
+    "adresse": "67831 Matilda Courts Apt. 234\nHettingertown, MI 60165",
+    "pseudo": "janiya03",
+    "prenom": "Ibrahim Conn",
+    "photo_de_profil": "storage/images/avatar.jpg"
+    },
+    {
+        "id": 2,
+        "nom": "User",
+        "email": "barton.name@example.org",
+        "email_verified_at": "2024-12-13T14:46:40.000000Z",
+        "created_at": "2024-12-13T14:46:40.000000Z",
+        "updated_at": "2024-12-13T14:46:40.000000Z",
+        "cp": "93084",
+        "statut_cotisation": 0,
+        "notif_mail": 0,
+        "role": "user",
+        "telephone": "1-831-562-4477",
+        "adresse": "933 Marcel Rest Suite 832\nSouth Jarod, ID 56242",
+        "pseudo": "maxie97",
+        "prenom": "Herta Hahn",
+        "photo_de_profil": "storage/images/avatar.jpg"
+    }
+]
