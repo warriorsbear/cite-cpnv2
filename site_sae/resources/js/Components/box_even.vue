@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import {useForm, usePage} from '@inertiajs/vue3';
 import axios from 'axios';
 
 export default defineComponent({
@@ -81,19 +81,18 @@ export default defineComponent({
       async joinEvent() {
           const user = usePage().props.auth.user;
           const eventId = this.$props.id; // Assurez-vous que l'ID de l'événement est passé en tant que prop
-
           try {
-              const response = await fetch('/api/participations', {
+              const response = await fetch('http://127.0.0.1:8000/api/participations', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'
                   },
                   body: JSON.stringify({
                       id_utilisateur: user.id,
-                      id_evenement: eventId,
-                      presence: true
+                      id_evenement: eventId
                   })
               });
+              console.log('API Response:', response);
 
               if (!response.ok) {
                   throw new Error('Network response was not ok');
@@ -111,6 +110,21 @@ export default defineComponent({
       this.path = this.returnimagePath(this.Type_even);
     }
 });
+const submit = () => {
+    const user = usePage().props.auth.user;
+    const eventId = this.$props.id;
+    const form = useForm({
+        id_evenement: eventId,
+        id_utilisateur: user,
+        presence: true
+    });
+    form.post(route('participation.create'), {
+        onSuccess: () => {
+            form.reset();
+            emit('submit');
+        }
+    });
+};
 </script>
 
 <template>

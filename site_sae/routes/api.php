@@ -17,11 +17,12 @@ Route::get('/test', function () {
 })->middleware(['auth', 'verified']);
 
 
-Route::get('participations', [ParticipationController::class, 'index']);
-Route::post('participations', [ParticipationController::class, 'store']);
+
 Route::apiResource('evenements', EvenementController::class);
 Route::apiResource('utilisateurs', UserController::class);
 
+Route::get('/participations',[ParticipationController::class, 'index']);
+Route::post('/participations', [ParticipationController::class, 'store']);
 Route::post('/evenements', [EvenementController::class, 'store']);
 Route::get('/photos/', [PhotoController::class, 'index']);
 Route::post('/photos', [PhotoController::class, 'store']);

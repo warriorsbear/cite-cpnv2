@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id_utilisateur
  * @property int $id_evenement
- * @property bool|null $presence
+ * @property int $presence
  *
  * @property Utilisateur $utilisateur
  * @property Evenement $evenement
@@ -32,12 +32,17 @@ class Participation extends Model
 	protected $casts = [
 		'id_utilisateur' => 'int',
 		'id_evenement' => 'int',
-		'presence' => 'bool'
-	];
+        'presence' => 'int'
+    ];
 
 	protected $fillable = [
 		'presence'
 	];
+
+    public static function create(array $data)
+    {
+        return self::query()->create($data);
+    }
 
 	public function utilisateur()
 	{
