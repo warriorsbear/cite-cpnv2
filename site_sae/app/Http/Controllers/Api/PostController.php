@@ -10,7 +10,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('user')->latest()->get(); // Exemple de relations
+        $posts = Post::with('user', 'photos')->latest()->get(); // Exemple de relations
         return response()->json($posts);
     }
 }
