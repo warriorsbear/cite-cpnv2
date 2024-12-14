@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CommentairePostController;
 use App\Http\Controllers\Api\EvenementController;
 use App\Http\Controllers\Api\PhotoController;
 use App\Http\Controllers\Api\PostController;
@@ -39,3 +40,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/posts', [PostController::class, 'index']);
+Route::get('/commentaires', [CommentairePostController::class, 'index']);

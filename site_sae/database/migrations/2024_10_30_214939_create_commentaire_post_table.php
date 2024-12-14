@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('commentaire_post', function (Blueprint $table) {
             $table->integer('id_commentaire_p', true);
             $table->text('texte')->nullable();
-            $table->dateTime('date_heure')->nullable();
+            $table->timestamp('created_at')->useCurrent();
             $table->integer('id_utilisateur')->index('id_utilisateur');
             $table->integer('id_post')->index('id_post');
         });

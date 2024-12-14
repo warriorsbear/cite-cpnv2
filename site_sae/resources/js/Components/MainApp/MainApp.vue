@@ -18,6 +18,7 @@
 <script>
 import PhotoPost from './PhotoPost.vue';
 import {fetchPosts} from "@/Services/postService.js";
+import {fetchCommentairesPosts} from "@/Services/commentairePostService.js";
 
 export default {
     components: {
@@ -26,13 +27,15 @@ export default {
     data() {
         return {
             posts: [],
+            commentaires: [],
         };
     },
     async mounted() {
         try {
             this.posts = await fetchPosts(); // Appel de l'API
+            this.commentaires = await fetchCommentairesPosts(); // Appel de l'API
         } catch (error) {
-            console.error("Erreur lors du chargement des posts :", error);
+            console.error("Erreur lors du chargement des données :", error);
         }
     },
     methods: {

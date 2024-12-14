@@ -15,11 +15,11 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id_commentaire_p
  * @property string|null $texte
- * @property Carbon|null $date_heure
+ * @property Carbon|null $created_at
  * @property int $id_utilisateur
  * @property int $id_post
  *
- * @property Utilisateur $utilisateur
+ * @property User $utilisateur
  * @property Post $post
  *
  * @package App\Models
@@ -33,21 +33,21 @@ class CommentairePost extends Model
     use HasFactory;
 
 	protected $casts = [
-		'date_heure' => 'datetime',
 		'id_utilisateur' => 'int',
-		'id_post' => 'int'
+		'id_post' => 'int',
+        'created_at' => 'timestamp'
 	];
 
 	protected $fillable = [
 		'texte',
-		'date_heure',
+		'created_at',
 		'id_utilisateur',
 		'id_post'
 	];
 
-	public function utilisateur()
+	public function user()
 	{
-		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+		return $this->belongsTo(User::class, 'id_utilisateur');
 	}
 
 	public function post()

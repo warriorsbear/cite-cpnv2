@@ -4,7 +4,6 @@
             <div class="post-header">
                 <img src="../../public/images/avatar.jpg" alt="Avatar" class="avatar"/>
                 <div class="user-info">
-                    <!--          <h4 class="username">{{ users[0]?.pseudo || "nop"}}</h4>-->
                     <h4 class="username">{{ username }}</h4>
                     <p class="post-time">{{ postTime }}</p>
                 </div>
@@ -18,7 +17,7 @@
             </div>
         </div>
         <div class="comments">
-            <CommentsSection :comments="comments"/>
+            <CommentsSection :comments="commentaires"/>
         </div>
     </div>
 </template>
@@ -26,8 +25,15 @@
 <script>
 import CommentsSection from './CommentsSection.vue';
 import {ref, onMounted, nextTick} from 'vue';
+import {fetchCommentairesPosts} from "@/Services/commentairePostService.js";
+import {fetchPosts} from "@/Services/postService.js";
 
 export default {
+    data() {
+        return {
+            commentaires: [],
+        };
+    },
     props: {
         username: String,
         userAvatar: String,
@@ -40,26 +46,12 @@ export default {
     components: {
         CommentsSection,
     },
-    setup() {
-        const users = ref([]);
-
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch('http://localhost:8000/api/utilisateurs');
-                users.value = await response.json();
-                console.log("Les utilisateurs ont été récupérés :", users.value);
-            } catch (e) {
-                console.log("Erreur lors de la récupération des utilisateurs", e);
-            }
-        };
-
-        onMounted(fetchUsers);
-
-        return {
-            users,
-        };
-    },
-    mounted() {
+    async mounted() {
+        try {
+            this.commentaires = await fetchCommentairesPosts(); // Appel de l'API
+        } catch (error) {
+            console.error("Erreur lors du chargement des données :", error);
+        }
         nextTick(() => {
             this.setHeight();
         });
