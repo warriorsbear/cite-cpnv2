@@ -19,6 +19,7 @@ class PostFactory extends Factory
         return [
             'Légende' => $this->faker->text(),
             'id_utilisateur' => $this->faker->numberBetween(1, 10),
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now')
         ];
     }
 }
