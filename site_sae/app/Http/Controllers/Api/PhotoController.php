@@ -7,6 +7,8 @@ use App\Http\Resources\EvenementResource;
 use App\Http\Resources\PhotoResource;
 use App\Models\Photo;
 use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image;
+use Mckenziearts\Notify\Facades\LaravelNotify;
 
 class PhotoController extends Controller
 {
@@ -52,10 +54,12 @@ class PhotoController extends Controller
                 // Génération d'un nom de fichier unique
                 $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
 
+                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+
                 // Stockage du fichier dans le dossier public/photos
                 $path = $file->storeAs('photos', $fileName, 'public');
-
                 // Création de l'entrée dans la base de données
+
                 $photo = Photo::create([
                     'nom' => $path,
                     'legende' => $request->input('legende', 'Sans légende'),
@@ -64,13 +68,21 @@ class PhotoController extends Controller
                     'id_utilisateur_1' => 1
                 ]);
 
-                return response()->json([
-                    'message' => 'Photo uploadee avec succes',
-                    'data' => new PhotoResource($photo)
-                ], 201);
+
+//                return response()->json([
+//                    'message' => 'Photo uploadee avec succes'
+//                ], 201);
+//            }
+
+//            return response()->json(['error' => 'Aucun fichier uploade'], 400);
+                LaravelNotify::success('Photo uploadée avec succès');
+
+            } else {
+                // Notification d'erreur
+                LaravelNotify::error('Aucun fichier uploadé');
             }
 
-            return response()->json(['error' => 'Aucun fichier uploade'], 400);
+            return redirect()->back();
         } catch (\Exception $e) {
             // Log de l'erreur complète
             \Log::error('Upload error: ' . $e->getMessage());
