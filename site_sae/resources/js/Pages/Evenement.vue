@@ -5,6 +5,7 @@ import { ref, onMounted } from 'vue';
 import Box_even from "@/Components/box_even.vue";
 import CreationEvenement from "@/Components/CreationEvenement.vue";
 import Test_creation from "@/Components/test_creation.vue";
+import Footer from "@/Components/Footer.vue";
 
 
 

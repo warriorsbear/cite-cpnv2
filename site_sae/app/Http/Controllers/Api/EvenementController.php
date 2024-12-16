@@ -24,6 +24,12 @@ class EvenementController extends Controller
 
     }
 
+    public function listEvents()
+    {
+        $events = Evenement::select('id', 'titre')->get();
+        return response()->json(['events' => $events]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

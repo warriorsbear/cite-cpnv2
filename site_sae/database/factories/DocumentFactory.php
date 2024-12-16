@@ -21,7 +21,6 @@ class DocumentFactory extends Factory
             'id_evenement' => $this->faker->numberBetween(1, 10),
             'nom' => $this->faker->word(),
             'chemin' => $this->faker->url(),
-            'date_depot' => $this->faker->dateTimeThisYear(),
         ];
     }
 }

@@ -116,9 +116,13 @@ export default defineComponent({
       <h3 >Type : {{Type_even}}</h3>
       <h3>Lieu : {{Lieu_even}}</h3>
       <p> Description : {{ description_even}}</p>
-      <p>Officiel :{{Officiel_even}}</p>
+
+      <p v-if="Officiel_even"> Evenement officel</p>
+        <p v-else> Evenement non officel</p>
       <button class="button_rejoindre">Rejoindre</button>
       <button class="button_rejoindre">Voir commentaire</button>
+        <button v-if="Type_even === 'visionnage'" class="button_rejoindre">Ajouter une photo</button>
+
     </div>
   </div>
 

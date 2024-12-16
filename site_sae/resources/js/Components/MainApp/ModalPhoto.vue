@@ -204,9 +204,11 @@ const submitPhoto = () => {
         forceFormData: true,
         onSuccess: () => {
             closeModal()
+            showSuccessNotification();
             console.log('Photo uploadée avec succès');
         },
         onError: (errors) => {
+            showErrorNotification(errors.message);
             console.error('Erreurs de validation :', errors)
         }
     })

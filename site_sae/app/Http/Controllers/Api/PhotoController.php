@@ -38,7 +38,7 @@ class PhotoController extends Controller
             ]);
 
             // Log pour déboguer
-            \Log::info('Request data:', $request->all());
+
 
             // Vérification que le fichier a bien été uploadé
             if ($request->hasFile('nom')) {
@@ -52,7 +52,7 @@ class PhotoController extends Controller
                 ]);
 
                 // Génération d'un nom de fichier unique
-                $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
+
 
                 $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
 
