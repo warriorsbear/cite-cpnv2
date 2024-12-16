@@ -29,14 +29,11 @@ class Participation extends Model
 
     use HasFactory;
 
-	protected $casts = [
-		'id_utilisateur' => 'int',
-		'id_evenement' => 'int',
-        'presence' => 'int'
-    ];
 
 	protected $fillable = [
-		'presence'
+        'id_utilisateur',
+        'id_evenement',
+        'presence'
 	];
 
     public static function create(array $data)

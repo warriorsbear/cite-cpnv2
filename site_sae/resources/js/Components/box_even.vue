@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import {useForm, usePage} from '@inertiajs/vue3';
-import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default defineComponent({
   name: "box_even",
@@ -9,6 +9,7 @@ export default defineComponent({
     const montrerPopup = ref(false);
 
     const path = ref('');
+
 
     const togglePopup = () => {
       montrerPopup.value = !montrerPopup.value;
@@ -21,6 +22,10 @@ export default defineComponent({
     };
   },
   props: {
+      id: {
+          type: Number,
+          required: true
+      },
     titre_even: {
       type: String,
       required: true
@@ -49,6 +54,21 @@ export default defineComponent({
   },
 
   methods: {
+      showSuccessNotification () {
+          Swal.fire({
+              icon: 'success',
+              title: 'Evenement rejoins',
+              text: 'Tu as bien rejoins l\'evenement'
+          });
+      },
+
+      showErrorNotification (message) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Tu participe deja a cet evenement !',
+              text: message,
+          });
+      },
     returnimagePath(type: string): string {
       const basePath = '../public/images/evenement/';
       switch (type.toLowerCase()) {
@@ -80,7 +100,10 @@ export default defineComponent({
     },
       async joinEvent() {
           const user = usePage().props.auth.user;
-          const eventId = this.$props.id; // Assurez-vous que l'ID de l'événement est passé en tant que prop
+          const eventId = this.$props.id;
+          console.log('id utilisateur :',user );
+          console.log('id evenement:', eventId);
+          // Assurez-vous que l'ID de l'événement est passé en tant que prop
           try {
               const response = await fetch('http://127.0.0.1:8000/api/participations', {
                   method: 'POST',
@@ -92,14 +115,21 @@ export default defineComponent({
                       id_evenement: eventId
                   })
               });
-              console.log('API Response:', response);
 
               if (!response.ok) {
-                  throw new Error('Network response was not ok');
+                  if (response.status === 409) {
+                      const errorData = await response.json();
+                      console.error('Error response data:', errorData);
+                      this.showErrorNotification(errorData.message);
+                      this.togglePopup();
+                  } else {
+                      throw new Error('Network response was not ok');
+                  }
+              } else {
+                  const data = await response.json();
+                  console.log('Join event response:', data);
+                  this.showSuccessNotification();
               }
-
-              const data = await response.json();
-              console.log('Join event response:', data);
           } catch (error) {
               console.error('Error joining event:', error.message);
           }
@@ -110,21 +140,7 @@ export default defineComponent({
       this.path = this.returnimagePath(this.Type_even);
     }
 });
-const submit = () => {
-    const user = usePage().props.auth.user;
-    const eventId = this.$props.id;
-    const form = useForm({
-        id_evenement: eventId,
-        id_utilisateur: user,
-        presence: true
-    });
-    form.post(route('participation.create'), {
-        onSuccess: () => {
-            form.reset();
-            emit('submit');
-        }
-    });
-};
+
 </script>
 
 <template>
@@ -147,116 +163,202 @@ const submit = () => {
 
     <div class="event_titre">
       <h4> {{titre_even}} </h4>
-      <p>{{ formatDate(Date_even) }}</p>
-      <p>{{ formatTime(Date_even) }}</p>
     </div>
 
+      <div class="event_details">
+          <p class="event_date">{{ formatDate(Date_even) }}</p>
+          <p class="event_time">{{ formatTime(Date_even) }}</p>
+      </div>
   </div>
 
-  <div v-if="montrerPopup" class="modal" @click.self="togglePopup">
-    <div class="popup_content">
-      <span class="close_button" @click="togglePopup">&times;</span>
-      <h1 class="mid">{{titre_even}}</h1>
-      <h3 >Type : {{Type_even}}</h3>
-      <h3>Lieu : {{Lieu_even}}</h3>
-      <p> Description : {{ description_even}}</p>
-      <p>Officiel :{{Officiel_even}}</p>
-      <button class="button_rejoindre" @click="joinEvent">Rejoindre</button>
-      <button class="button_rejoindre">Voir commentaire</button>
+    <div v-if="montrerPopup" class="modal" @click.self="togglePopup">
+        <div class="popup_content">
+            <span class="close_button" @click="togglePopup">&times;</span>
+            <div class="popup_image">
+                <img src="../public/images/evenement/exposition.jpg" class="event_image_popup">
+            </div>
+            <div class="popup_details">
+                <h1 class="mid">{{ titre_even }}</h1>
+                <h3>Type : {{ Type_even }}</h3>
+                <h3>Lieu : {{ Lieu_even }}</h3>
+                <p>Description : {{ description_even }}</p>
+                <p>Officiel : {{ Officiel_even }}</p>
+                <button class="button_rejoindre" @click="joinEvent">Rejoindre</button>
+                <button class="button_commentaire">Voir les commentaire</button>
+            </div>
+        </div>
     </div>
-  </div>
 
 </template>
 
 
 
 <style scoped>
-.main_box{
-  background-color: #ffffff;
-  margin: 50px auto;
-  max-width: 300px;
-  min-height: 250px;
-  color: rgba(0, 0, 0, 0.87);
-  text-decoration: none;
-  display: block;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 10px;
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.87); /* Adding shadow effect */
-
-}
-.main_box:hover{
-  cursor: grab;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.87);
-  transform: scale(1.05); /* Slightly enlarge the box */
-  transition: transform 0.3s ease;
-  /* Adding a stronger shadow on hover */
-
+.main_box {
+    background-color: #ffffff;
+    margin: 50px auto;
+    width: 300px;
+    height: 310px;
+    color: rgb(73, 65, 59);
+    text-decoration: none;
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.event_titre {
-  padding: 15px;
+.main_box:hover {
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
 }
 
 .event_image {
-  width: 300px; /* Définir une largeur fixe */
-  height: 150px; /* Définir une hauteur fixe */
-  object-fit: cover;
-  display: block;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.event_titre {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1.2em;
+}
+
+.event_titre h4 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.event_titre p {
+    margin: 5px 0;
+    color: #777;
+}
+
+.event_details {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.event_date {
+    font-weight: normal;
+    color: #000;
+}
+
+.event_time {
+    font-size: small;
+    color: #777;
+}
+
+.button_commentaire {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #000000; /* Black background */
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.button_commentaire:hover {
+    background-color: #333333; /* Darker black on hover */
 }
 
 .modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  font-family: 'Poppins', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
 }
 
 .popup_content {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 900px;
-  width: 80%;
-  text-align: left;
-  position: relative;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    display: flex;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.popup_image {
+    flex: 1;
+    margin-right: 20px;
+    width: 50%; /* Ensure the image takes up the left side */
+}
+
+.event_image_popup {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.popup_details {
+    flex: 2;
+}
+
+.popup_details h1 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.popup_details h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.popup_details p {
+    font-size: 1em;
+    margin-bottom: 10px;
+    color: #777;
 }
 
 .close_button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
-  cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
 }
 
 .button_rejoindre {
-  padding: 10px 15px;
-  margin:5px;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.5s;
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #d68f26;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
 }
 
-button:hover{
-  background-color: #ff9900;
+.button_rejoindre:hover {
+    background-color: #b55519;
 }
-
 
 .mid {
-  text-align: center;
-
+    text-align: center;
 }
-
-
-
 </style>
