@@ -17,9 +17,9 @@
             <NavLink :href="route('profile.edit')" :active="route().current('profile.edit')">Mon compte</NavLink>
         </div>
         <div v-else class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-            <NavLink :href="route('contact')" :active="route().current('contact')">Contact</NavLink>
-            <NavLink :href="route('login')" :active="route().current('login')">Connexion</NavLink>
-            <NavLink :href="route('register')" :active="route().current('register')">Inscription</NavLink>
+            <NavLink :href="route('NousContacter')" :active="route().current('NousContacter')" class="black-link">Contact</NavLink>
+            <NavLink :href="route('register')" :active="route().current('register')" class="black-link">Inscription</NavLink>
+            <NavLink :href="route('login')" :active="route().current('login')" class="black-link">Connexion</NavLink>
         </div>
     </header>
 </template>
@@ -123,6 +123,14 @@ export default {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 5;
+}
+
+.black-link {
+    color: #000;
+}
+
+.black-link:hover {
+    text-decoration: underline;
 }
 
 @media (max-width: 768px) {
