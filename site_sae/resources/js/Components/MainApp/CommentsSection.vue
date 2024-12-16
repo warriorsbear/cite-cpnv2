@@ -3,11 +3,11 @@
         <h4 class="comments-title">Commentaires</h4>
         <div class="comments-docker">
             <hr>
-            <div v-for="comment in commentaires" :key="comment.id_commentaire_p" class="comment">
+            <div v-for="comment in comments" :key="comment.id_commentaire_p" class="comment">
                 <div class="user-info-comment">
                     <div class="user-info-left">
                         <img src="../../public/images/avatar.jpg" alt="Avatar commentaire" class="avatar-comments">
-                        <p class="user-comments"><strong>{{ comment.user }}</strong></p>
+                        <p class="user-comments"><strong>{{ comment.user.pseudo }}</strong></p>
                     </div>
                     <p class="date-comments">{{ comment.created_at }}</p>
                 </div>

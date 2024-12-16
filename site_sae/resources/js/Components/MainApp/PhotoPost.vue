@@ -17,7 +17,7 @@
             </div>
         </div>
         <div class="comments">
-            <CommentsSection :comments="commentaires"/>
+            <CommentsSection :comments="this.comments.filter(comment => comment.id_post === this.idPost)"/>
         </div>
     </div>
 </template>
@@ -25,16 +25,10 @@
 <script>
 import CommentsSection from './CommentsSection.vue';
 import {ref, onMounted, nextTick} from 'vue';
-import {fetchCommentairesPosts} from "@/Services/commentairePostService.js";
-import {fetchPosts} from "@/Services/postService.js";
 
 export default {
-    data() {
-        return {
-            commentaires: [],
-        };
-    },
     props: {
+        idPost: Number,
         username: String,
         userAvatar: String,
         postTime: String,
@@ -47,11 +41,6 @@ export default {
         CommentsSection,
     },
     async mounted() {
-        try {
-            this.commentaires = await fetchCommentairesPosts(); // Appel de l'API
-        } catch (error) {
-            console.error("Erreur lors du chargement des données :", error);
-        }
         nextTick(() => {
             this.setHeight();
         });

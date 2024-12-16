@@ -2,14 +2,15 @@
     <div class="main-app">
         <PhotoPost
             v-for="post in posts"
-            :key="post.id"
+            :key="post.id_post"
+            :idPost="post.id_post"
             :username="post.user.pseudo"
             :userAvatar="post.user.photo_de_profile"
             :postTime="post.created_at"
             :imageUrl="post.photos.chemin"
             :caption="post.Légende"
             :tags="post.tags"
-            :comments="post.comments"
+            :comments="this.commentaires"
             @add-comment="addComment(post.id, $event)"
         />
     </div>
@@ -34,6 +35,7 @@ export default {
         try {
             this.posts = await fetchPosts(); // Appel de l'API
             this.commentaires = await fetchCommentairesPosts(); // Appel de l'API
+            console.log(this.commentaires);
         } catch (error) {
             console.error("Erreur lors du chargement des données :", error);
         }
@@ -42,6 +44,9 @@ export default {
         addComment(postId, comment) {
             const post = this.posts.find(post => post.id === postId);
             post.comments.push(comment);
+        },
+        getComments(postId) {
+            return this.commentaires.filter(comment => comment.id_post === postId);
         },
     },
 };
