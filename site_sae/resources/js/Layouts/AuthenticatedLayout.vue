@@ -57,6 +57,13 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Mon compte
                                 </NavLink>
+
+                                <NavLink v-if="$page.props.auth.user.role === 'admin'"
+                                    :href="route('AdminGestion')"
+                                    :active="route().current('AdminGestion')"
+                                >
+                                    Gestion Admin
+                                </NavLink>
                             </div>
                         </div>
 
@@ -184,6 +191,13 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard')"
                         >
                             Mon compte
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink v-if="$page.props.auth.user.role === 'admin'"
+                            :href="route('dashboard')"
+                            :active="route().current('dashboard')"
+                        >
+                            Gestion Admin
                         </ResponsiveNavLink>
                     </div>
 

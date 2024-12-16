@@ -43,6 +43,14 @@ const UtilisateurQuiOnPasPaye = computed(() => {
   return utilisateurs.value.filter(utilisateur => utilisateur.statut_cotisation == false);
 });
 
+const UtilisateurPasAccepte = computed(() => {
+  return utilisateurs.value.filter(utilisateur => utilisateur.statut == 0);
+});
+
+const UtilisateurPasOK = computed(() => {
+    return utilisateurs.value.filter(utilisateur => utilisateur.statut_cotisation == 0 || utilisateur.statut == 0);
+});
+
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
   RecuperationUtilisateurs();
@@ -98,7 +106,7 @@ onMounted(() => {
 
                   <div id="zone2">
                     <div id="hautDeZone">
-                      <h3>Utilisateurs qui n'ont pas payé leur cotisation :</h3>
+                      <h3>Utilisateurs qui n'ont pas payé leur cotisation ou, <br> en attente d'acceptation :</h3>
                       <form class="search-bar" @submit.prevent>
                         <input type="search" v-model="recherche" placeholder="Rechercher..." />
                         <button type="submit">🔍</button>
@@ -106,15 +114,18 @@ onMounted(() => {
                     </div>
                     <div id="zoneScroll">
                       <!--créer une balise div pour chaques utilisteurs filtrés-->
-                      <div v-for="utilisateur in UtilisateurQuiOnPasPaye" :key="utilisateur.id_utilisateur" class="user">
+                      <div v-for="utilisateur in UtilisateurPasOK" :key="utilisateur.id_utilisateur" class="user">
                         <img v-if="utilisateur.photo_de_profile" :src="utilisateur.photo_de_profile" alt="logo" id="pp" width="100" height="100">
                         <div class="infoUtilisateur">
                           <p id="pseudo">{{utilisateur.pseudo}}</p>
                           <p>{{utilisateur.nom}} {{utilisateur.prenom}}</p>
+                          <p v-if="utilisateur.statut == 0" class="infoImportante">En attente de validation</p>
+                          <p v-else class="infoImportante">N'a pas payé</p>
                         </div>
                         <div id="boutons">
-                          <button @click="handleClick(utilisateur)">Accepter</button>
-                          <button @click="handleClick(utilisateur)">Refuser</button>
+                          <button v-if="utilisateur.statut == 0" @click="handleClick(utilisateur)">Accepter</button>
+                          <button v-if="utilisateur.statut == 0" @click="handleClick(utilisateur)">Refuser</button>
+                          <button v-else @click="handleClick(utilisateur)">Envoyer un rappel</button>
                         </div>
                       </div>
                     </div>
@@ -133,9 +144,9 @@ onMounted(() => {
                     <h3>utilisateurs qui n'ont pas payé leur cotisation</h3>
                   </div>
                   <div id="stat3">
-                    <h3>Il y a actuellement :</h3>
-                    <h1 id="nombre">{{nombreUtilisateurs}}</h1>
-                    <h3>utilisateurs inscrits</h3>
+                    <h3>Et aussi :</h3>
+                    <h1 id="nombre">{{UtilisateurPasAccepte.length}}</h1>
+                    <h3>utilisateurs en attentes de validation</h3>
                   </div>
                 </div>
               </div>
@@ -188,6 +199,7 @@ div#pageCharger{
 }
 div#avantStat{
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
@@ -196,7 +208,8 @@ div#avantStat{
   margin-top: 2%;
   margin-bottom: 2%;
 }
-div#zone1, #zone2 {
+
+#zone1, #zone2 {
   height: 28.5rem;
   width: 45%;
   background-color: #eae3e3;
@@ -241,22 +254,34 @@ div#hautDeZone{
 
 }
 
-.user{
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: flex-start;
-  max-height: 120px;
-  min-width: 100%;
+/* Media query pour mettre les zones les une en dessous des autres quand l'écran devient trop petit */
+@media (max-width: 1115px) {
+    div#avantStat {
+        flex-direction: column;
+        height: auto;
+    }
 
-  flex-grow: 1;
-  flex-shrink: 1;
+    div#zone1, div#zone2 {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
 
-  border-top: 3px solid #8b8d8d;
-  border-left: none;
-  border-right: none;
-  margin-top : 1%;
-  padding: 10px;
+.user {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: flex-start;
+    max-height: 150px;
+    min-width: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    border-top: 3px solid #8b8d8d;
+    border-left: none;
+    border-right: none;
+    margin-top: 1%;
+    padding-left: 10px;
+    overflow: hidden; /* Ensure content does not overflow */
 }
 .user img{
   border:2px solid #8b8d8d;
@@ -272,6 +297,10 @@ div#hautDeZone{
   width: 20%;
 
 font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+}
+.infoImportante{
+  color: #d79026;
+  font-weight: bold;
 }
 #pseudo{
   Font-size: 1.5em;
@@ -372,5 +401,23 @@ h1#nombre{
 }
 .search-bar button:hover {
   background-color: #8b8d8d;
+}
+@media (max-width: 550px) {
+    .search-bar {
+        width: 100%;
+    }
+    .search-bar input {
+        width: 100%;
+    }
+    .search-bar button {
+        padding: 10px 10px;
+    }
+
+    .user>#boutons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-left: auto;
+    }
 }
 </style>
