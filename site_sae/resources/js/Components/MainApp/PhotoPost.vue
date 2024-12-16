@@ -24,7 +24,7 @@
 
 <script>
 import CommentsSection from './CommentsSection.vue';
-import {ref, onMounted, nextTick} from 'vue';
+import {nextTick} from 'vue';
 
 export default {
     props: {
@@ -159,17 +159,17 @@ export default {
     /* Styles pour la section des commentaires */
     gap: 0.1rem;
     min-height: 100%;
+    width: 25rem;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1090px) {
     .photo-post {
         flex-direction: column;
         justify-content: start;
     }
 
     .comments {
-        width: 100%;
-        height: 50%;
+        width: 40rem;
     }
 }
 
