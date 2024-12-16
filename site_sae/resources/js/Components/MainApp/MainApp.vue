@@ -6,7 +6,7 @@
             :idPost="post.id_post"
             :username="post.user.pseudo"
             :userAvatar="post.user.photo_de_profile"
-            :postTime="post.created_at"
+            :postTime="formatCreatedAt(post.created_at)"
             :imageUrl="post.photos.chemin"
             :caption="post.Légende"
             :tags="post.tags"
@@ -20,6 +20,8 @@
 import PhotoPost from './PhotoPost.vue';
 import {fetchPosts} from "@/Services/postService.js";
 import {fetchCommentairesPosts} from "@/Services/commentairePostService.js";
+import {formatDistance} from "date-fns";
+import {fr} from "date-fns/locale";
 
 export default {
     components: {
@@ -47,6 +49,12 @@ export default {
         },
         getComments(postId) {
             return this.commentaires.filter(comment => comment.id_post === postId);
+        },
+        formatCreatedAt(date) {
+            return formatDistance(new Date(date), new Date(), {
+                addSuffix: true,
+                locale: fr
+            })
         },
     },
 };

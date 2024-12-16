@@ -9,7 +9,7 @@
                         <img src="../../public/images/avatar.jpg" alt="Avatar commentaire" class="avatar-comments">
                         <p class="user-comments"><strong>{{ comment.user.pseudo }}</strong></p>
                     </div>
-                    <p class="date-comments">{{ comment.created_at }}</p>
+                    <p class="date-comments">{{ formatCreatedAt(comment.created_at) }}</p>
                 </div>
                 <p class="text-comments">{{ comment.texte }}</p>
             </div>
@@ -23,6 +23,8 @@
 
 <script>
 import {nextTick} from "vue";
+import {formatDistance} from "date-fns";
+import {fr} from "date-fns/locale";
 
 export default {
     props: {
@@ -40,6 +42,12 @@ export default {
                 this.newComment = '';
             }
         },
+        formatCreatedAt(date) {
+            return formatDistance(new Date(date), new Date(), {
+                addSuffix: true,
+                locale: fr
+            })
+        }
     },
 };
 </script>

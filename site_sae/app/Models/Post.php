@@ -40,7 +40,7 @@ class Post extends Model
 	protected $fillable = [
 		'Légende',
 		'id_utilisateur',
-        'created_at'
+        'created_at' => 'datetime:Y-m-d\TH:i:sP'
 	];
 
 	public function user()

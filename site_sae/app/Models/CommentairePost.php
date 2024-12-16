@@ -35,7 +35,7 @@ class CommentairePost extends Model
 	protected $casts = [
 		'id_utilisateur' => 'int',
 		'id_post' => 'int',
-        'created_at' => 'timestamp'
+        'created_at' => 'datetime:Y-m-d\TH:i:sP'
 	];
 
 	protected $fillable = [
