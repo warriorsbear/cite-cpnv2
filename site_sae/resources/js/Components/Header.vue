@@ -1,7 +1,7 @@
 <template>
     <header class="app-header">
         <div class="logo-container">
-            <Link :href="route('dashboard')">
+            <Link :href="estConnecte ? route('dashboard') : route('PageBienvenue')">
                 <img src="../public/images/logo-CPN-Noir.png" alt="Logo de l'association" class="logo">
             </Link>
         </div>

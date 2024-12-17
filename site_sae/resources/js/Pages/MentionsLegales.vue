@@ -1,34 +1,29 @@
-<script setup >
-import { Head, Link } from '@inertiajs/vue3';
-import Footer from "@/Components/Footer.vue";
-import guest from "@/Layouts/GuestLayout.vue";
-import newheaderauthentifie from "@/Layouts/newheaderauthentifie.vue";
-import NavLink from "@/Components/NavLink.vue";
-import Header from "@/Components/Header.vue";
-</script>
-
 <template>
-    <Head title="Mentions légales" />
-    <AuthenticatedLayout>
-        <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
-                Mentions Légales
-            </h2>
-        </template>
+    <div>
+        <Head title="Mentions légales" />
 
         <div class="mentions-legales">
             <h1>Mentions légales</h1>
 
             <section>
                 <h2>Qui sommes-nous ?</h2>
-                <p>Page Facebook : <a href="https://www.facebook.com/clubphotonailloux/" target="_blank">Cliquez ici</a></p>
+                <p>
+                    Page Facebook :
+                    <a href="https://www.facebook.com/clubphotonailloux/" target="_blank">Cliquez ici</a>
+                </p>
                 <ul>
                     <li><strong>Responsable de la publication :</strong></li>
-                    <li><strong>Webmaster :</strong> Hervé(exemple), <a href="mailto:adminsite@clubphoto-nailloux.fr">adminsite@clubphoto-nailloux.fr</a></li>
-                    <li><strong>Hébergeur :</strong> o2switch - Chem. des Pardiaux, 63000 Clermont-Ferrand</li>
-                    <li><strong>Délégué de la protection des données :</strong> Patrice(exemple), <a href="mailto:bureau@clubphoto-nailloux.fr">bureau@clubphoto-nailloux.fr</a></li>
+                    <li>
+                        <strong>Webmaster :</strong> Hervé(exemple),
+                        <a href="mailto:adminsite@clubphoto-nailloux.fr">adminsite@clubphoto-nailloux.fr</a>
+                    </li>
+                    <li>
+                        <strong>Hébergeur :</strong> o2switch - Chem. des Pardiaux, 63000 Clermont-Ferrand
+                    </li>
+                    <li>
+                        <strong>Délégué de la protection des données :</strong> Patrice(exemple),
+                        <a href="mailto:bureau@clubphoto-nailloux.fr">bureau@clubphoto-nailloux.fr</a>
+                    </li>
                 </ul>
                 <p>Ce site est optimisé pour un fonctionnement avec Firefox.</p>
             </section>
@@ -113,73 +108,73 @@ import Header from "@/Components/Header.vue";
             </section>
         </div>
         <Footer />
-    </AuthenticatedLayout>
-
+    </div>
 </template>
 
-<script>
-import Header from "@/Components/Header.vue";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Head} from "@inertiajs/vue3";
+<script setup>
+import { Head } from '@inertiajs/vue3';
 import Footer from "@/Components/Footer.vue";
+import Header from "@/Components/Header.vue";
+</script>
 
+<script>
 export default {
-    components: {Footer, Head, AuthenticatedLayout, Header},
-  head() {
-    return {
-      title: 'Mentions légales - Club Photo Nailloux',
-    };
-  },
+    components: { Footer, Head, Header },
+    head() {
+        return {
+            title: 'Mentions légales - Club Photo Nailloux',
+        };
+    },
 };
 </script>
 
 <style scoped>
 .mentions-legales {
-  padding: 30px;
-  background-color: #fff;
-  color: #000;
-  font-family: 'Helvetica', 'Arial', sans-serif;
-  font-size: 14px; /* Réduction de la taille de police */
-  line-height: 1.6;
+    padding: 30px;
+    background-color: #fff;
+    color: #000;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-size: 14px; /* Réduction de la taille de police */
+    line-height: 1.6;
 }
 
 h1 {
-  font-size: 1.8em;
-  margin-bottom: 20px;
-  text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 h2 {
-  font-size: 1.3em;
-  margin-top: 30px;
-  margin-bottom: 15px;
+    font-size: 1.3em;
+    margin-top: 30px;
+    margin-bottom: 15px;
 }
 
 h3 {
-  font-size: 1.1em;
-  margin-top: 20px;
-  margin-bottom: 10px;
+    font-size: 1.1em;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 p, ul {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 ul {
-  list-style-type: disc;
-  margin-left: 20px;
+    list-style-type: disc;
+    margin-left: 20px;
 }
 
 ul li {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 
 a {
-  color: #007BFF;
-  text-decoration: none;
+    color: #007BFF;
+    text-decoration: none;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 </style>

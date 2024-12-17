@@ -1,7 +1,9 @@
 <script setup>
+import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import Footer from "@/Components/Footer.vue";
 import Header from "@/Components/Header.vue";
+import ImageModale from "@/Components/ImageModale.vue";
 
 defineProps({
     canLogin: {
@@ -19,6 +21,18 @@ defineProps({
         required: true,
     },
 });
+
+const modalVisible = ref(false);
+const selectedImage = ref({ src: '', description: '' });
+
+const openModal = (src, description) => {
+    selectedImage.value = { src, description };
+    modalVisible.value = true;
+};
+
+const closeModal = () => {
+    modalVisible.value = false;
+};
 </script>
 
 <template>
@@ -33,7 +47,7 @@ defineProps({
             <div class="container">
                 <div class="main-content">
                     <div class="main-image">
-                        <img src="../public/images/_DSC3514.JPG" alt="Présentation du club photo" />
+                        <img src="../public/images/_DSC3514.JPG" alt="Présentation du club photo" @click="openModal('../public/images/_DSC3514.JPG', 'Présentation du club photo')" />
                     </div>
                     <div class="main-text">
                         <h2>Bienvenue au Club Photo Nailloux</h2>
@@ -43,8 +57,8 @@ defineProps({
                             l'art photographique.
                         </p>
                         <div class="btn-group">
-                            <Link :href="route('register')" class="btn login-btn">S'inscrire</Link>
-                            <Link :href="route('login')" class="btn">Se connecter</Link>
+                            <Link :href="route('register')" class="btn orange-btn">S'inscrire</Link>
+                            <Link :href="route('login')" class="btn black-btn">Se connecter</Link>
                         </div>
                     </div>
                 </div>
@@ -69,15 +83,15 @@ defineProps({
             <div class="container">
                 <h3>Nos Activités en Images</h3>
                 <div class="gallery-grid">
-                    <div class="gallery-item">
+                    <div class="gallery-item" @click="openModal('../public/images/_DSC3283.JPG', 'Sortie Photo Nature')">
                         <img src="../public/images/_DSC3283.JPG" alt="Sortie photo nature" />
                         <p>Sortie Photo Nature</p>
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item" @click="openModal('../public/images/_DSC3497.JPG', 'Atelier Studio')">
                         <img src="../public/images/_DSC3497.JPG" alt="Atelier studio photo" />
                         <p>Atelier Studio</p>
                     </div>
-                    <div class="gallery-item">
+                    <div class="gallery-item" @click="openModal('../public/images/_DSC3514.JPG', 'Événements')">
                         <img src="../public/images/_DSC3514.JPG" alt="Évènement photo de groupe" />
                         <p>Événements</p>
                     </div>
@@ -88,6 +102,12 @@ defineProps({
 
     <!-- Pied de page -->
     <Footer />
+    <ImageModale
+        :visible="modalVisible"
+        :imageSrc="selectedImage.src"
+        :description="selectedImage.description"
+        @close="closeModal"
+    />
 </template>
 
 <style scoped>
@@ -144,6 +164,7 @@ section {
     max-width: 500px;
     border-radius: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
 .main-text {
@@ -170,7 +191,6 @@ section {
 }
 
 .btn {
-    background-color: #ff6600;
     color: white;
     padding: 10px 20px;
     text-decoration: none;
@@ -178,7 +198,19 @@ section {
     transition: background 0.3s ease;
 }
 
-.btn:hover {
+.orange-btn {
+    background-color: #ff6600;
+}
+
+.orange-btn:hover {
+    background-color: #333;
+}
+
+.black-btn {
+    background-color: #000;
+}
+
+.black-btn:hover {
     background-color: #333;
 }
 
@@ -225,6 +257,7 @@ section {
     border-radius: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    cursor: pointer;
 }
 
 .gallery-item img:hover {

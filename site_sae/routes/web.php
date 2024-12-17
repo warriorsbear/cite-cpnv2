@@ -13,7 +13,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('PageBienvenue');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -51,11 +51,11 @@ Route::get('/monCompte', function () {
 
 Route::get('/MentionsLegales', function () {
     return Inertia::render('MentionsLegales');
-})->middleware(['auth', 'verified'])->name('MentionsLegales');
+})->name('MentionsLegales');
 
 Route::get('/NousContacter', function () {
     return Inertia::render('NousContacter');
-})->middleware(['auth', 'verified'])->name('NousContacter');
+})->name('NousContacter');
 
 Route::get('/AdminGestion', function () {
     return Inertia::render('AdminGestion');
