@@ -43,9 +43,8 @@ class DocumentController extends Controller
         $document->load('event', 'user');
 
         return response()->json([
-            'message' => 'Document uploadé avec succès',
             'document' => $document
-        ]);
+        ], 200);
 
     }
 

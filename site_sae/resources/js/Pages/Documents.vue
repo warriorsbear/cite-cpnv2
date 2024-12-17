@@ -45,10 +45,11 @@ const addDocument = async (documentData) => {
         })
 
         // Ajouter le nouveau document à la liste
-         documents.value.unshift(response.data.document)
+        await fetchDocuments()
         closeDocumentModal()
     } catch (err) {
         error.value = "Erreur lors de l'ajout du document"
+        console.error(err) // Pour le débogage
     }
 }
 
@@ -114,6 +115,8 @@ const user = usePage().props.auth.user
     gap: 30px;
     justify-content: flex-start;
     padding: 20px;
+    padding-left: 10%;
     background-color: rgb(255, 255, 255);
+
 }
 </style>
