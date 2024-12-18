@@ -50,6 +50,10 @@ onMounted(() => {
             </h2>
         </template>
 
+        <button class="buttons" @click="montrerTestCreation = true">Créer un nouvel événement</button>
+
+        <test_creation v-if="montrerTestCreation" @submit="handleFormSubmit" @close="montrerTestCreation = false"/>
+
 
 
                         <div v-if="loading" class="loading-icon">

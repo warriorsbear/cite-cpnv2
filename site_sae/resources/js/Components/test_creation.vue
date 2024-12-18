@@ -117,7 +117,7 @@ const submit = () => {
 
                 <TextInput
                     id="password_confirmation"
-                    type="text"
+                    type="datetime-local"
                     class="mt-1 block w-full"
                     v-model="form.date_heure"
                     required
