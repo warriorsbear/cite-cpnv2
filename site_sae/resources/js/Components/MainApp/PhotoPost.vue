@@ -8,7 +8,7 @@
                     <p class="post-time">{{ postTime }}</p>
                 </div>
             </div>
-            <img src="../../public/images/image1.jpg" alt="Photo" class="post-image"/>
+            <img :src="imageUrl[0] ? imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg'" alt="Photo du photographe" class="post-image"/>
             <div class="post-caption">
                 <p>{{ caption }}</p>
                 <div class="tags">
@@ -32,7 +32,7 @@ export default {
         username: String,
         userAvatar: String,
         postTime: String,
-        imageUrl: String,
+        imageUrl: Array,
         caption: String,
         tags: Array,
         comments: Array,
@@ -44,6 +44,7 @@ export default {
         nextTick(() => {
             this.setHeight();
         });
+        console.log(this.imageUrl);
     },
     methods: {
         setHeight() {

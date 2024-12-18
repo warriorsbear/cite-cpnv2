@@ -48,8 +48,8 @@ class DatabaseSeeder extends Seeder
             'id_utilisateur' => fn() => User::all()->random()->id
         ]);
 
-        // Crée 10 commentaires de post avec un utilisateur aléatoire et un post spécifique
-        CommentairePost::factory()->count(10)->create([
+        // Crée 15 commentaires de post avec un utilisateur aléatoire et un post spécifique
+        CommentairePost::factory()->count(15)->create([
             'id_utilisateur' => fn() => User::all()->random()->id,
             'id_post' => fn() => Post::all()->random()->id_post
         ]);
@@ -64,7 +64,11 @@ class DatabaseSeeder extends Seeder
                 return $idUtilisateur;
             },
             'id_post' => fn() => Post::all()->random()->id_post,
-            'chemin' => 'http://127.0.0.1:8000/storage/photos/inoxtag.jpg'
+            'chemin' => fn() => ['http://127.0.0.1:8000/storage/photos/inoxtag.jpg',
+                'http://127.0.0.1:8000/storage/photos/rs3.jpg',
+                'http://127.0.0.1:8000/storage/photos/arches.jpg',
+                'http://127.0.0.1:8000/storage/photos/alpine.jpg',
+                ][array_rand([0, 1, 2, 3])], // chemin aléatoire
         ]);
 
         // Crée 10 mots clés

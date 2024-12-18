@@ -7,7 +7,7 @@
             :username="post.user.pseudo"
             :userAvatar="post.user.photo_de_profile"
             :postTime="formatCreatedAt(post.created_at)"
-            :imageUrl="post.photos.chemin"
+            :imageUrl="post.photos"
             :caption="post.Légende"
             :tags="post.tags"
             :comments="this.commentaires"
@@ -37,7 +37,9 @@ export default {
         try {
             this.posts = await fetchPosts(); // Appel de l'API
             this.commentaires = await fetchCommentairesPosts(); // Appel de l'API
-            console.log(this.commentaires);
+            // console.log(this.commentaires);
+            console.log(this.posts);
+
         } catch (error) {
             console.error("Erreur lors du chargement des données :", error);
         }
