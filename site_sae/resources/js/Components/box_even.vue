@@ -49,7 +49,12 @@ export default defineComponent({
     Officiel_even: {
       type: Boolean,
       required: true
-    }
+    },
+      participe_deja: {
+          type: Boolean,
+          required: true,
+          default: false
+      }
 
   },
 
@@ -195,7 +200,7 @@ export default defineComponent({
                 <h3>Lieu : {{ Lieu_even }}</h3>
                 <p>Description : {{ description_even }}</p>
                 <p>Officiel : {{ Officiel_even }}</p>
-                <button class="button_rejoindre" @click="joinEvent">Rejoindre</button>
+                <button v-if="!participe_deja" class="button_rejoindre" @click="joinEvent">Rejoindre</button>
                 <button class="button_commentaire">Voir les commentaire</button>
             </div>
         </div>

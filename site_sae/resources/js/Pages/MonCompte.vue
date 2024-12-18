@@ -4,6 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Footer from "@/Components/Footer.vue";
 import {usePage} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
+import Box_even from "@/Components/box_even.vue";
 
 const participations = ref([]);
 const allEvents = ref([]);
@@ -215,27 +216,23 @@ onMounted(() => {
             <!-- Posted Events -->
             <div v-if="activeMenu === 'evenements'" class="posted-events">
                 <h2>Événements</h2>
-                <div class="events-grid">
-                    <div v-for="event in evenements" :key="event.id" class="event-item">
-                        <div class="main_box">
-                            <img v-if="event.type === 'collaboration'" src="../public/images/evenement/collaboration.jpeg" alt="image" class="event_image">
-                            <img v-if="event.type === 'cours'" src="../public/images/evenement/cours.PNG" alt="image" class="event_image">
-                            <img v-if="event.type === 'exposition'" src="../public/images/evenement/exposition.jpg" alt="image" class="event_image">
-                            <img v-if="event.type === 'information'" src="../public/images/evenement/information.jpg" alt="image" class="event_image">
-                            <img v-if="event.type === 'reunion'" src="../public/images/evenement/reunion.jpg" alt="image" class="event_image">
-                            <img v-if="event.type === 'sortie_a_theme'" src="../public/images/evenement/sortie_a_theme.jpg" alt="image" class="event_image">
-                            <img v-if="event.type === 'visionnage'" src="../public/images/evenement/Visionnage.jpg" alt="image" class="event_image">
-
-                            <div class="event_titre">
-                                <h4>{{ event.titre }}</h4>
-                            </div>
-
-                            <div class="event_details">
-                                <p class="event_lieu">Lieu : {{ event.lieu }}</p>
-                                <p class="event_type">Type : {{ event.type }}</p>
-                            </div>
-                        </div>
-                    </div>
+                <div v-if="loading" class="loading-icon">
+                    <h1>Chargement des événements...</h1>
+                    <img src="../public/images/loading.gif" alt="Loading..." />
+                </div>
+                <div v-else class ="conteuneur">
+                    <box_even
+                        v-for="evenement in evenements"
+                        :key="evenement.id"
+                        :id="evenement.id"
+                        :titre_even="evenement.titre"
+                        :description_even="evenement.description"
+                        :Date_even="evenement.date_heure"
+                        :Lieu_even="evenement.lieu"
+                        :Type_even="evenement.type"
+                        :Officiel_even="evenement.officiel"
+                        :participe_deja=true
+                    />
                 </div>
             </div>
         </div>
@@ -392,54 +389,15 @@ h2 {
     margin: 10px;
 }
 
-.main_box {
-    background-color: #ffffff;
-    width: 100%;
-    height: 310px;
-    color: rgb(73, 65, 59);
-    text-decoration: none;
-    font-family: 'Poppins', sans-serif;
-    border-radius: 10px;
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.main_box:hover {
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    transform: scale(1.05);
-}
-
-.event_image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.event_titre {
-    padding: 15px;
-    border-bottom: 1px solid #e0e0e0;
-    font-size: 1.2em;
-}
-
-.event_titre h4 {
-    margin: 0;
-    font-size: 1.2em;
-    color: #333;
-}
-
-.event_titre p {
-    margin: 5px 0;
-    color: #777;
-}
-
-.event_details {
+.conteuneur{
     display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    border-top: 1px solid #e0e0e0;
+    flex-wrap: wrap; /* Allow items to wrap to the next row */
+    gap: 30px; /* Consistent space between items */
+    justify-content: flex-start; /* Align items to the left */
+    padding: 20px;
+    /*
+
+     */
 }
 
 </style>
