@@ -48,33 +48,63 @@ class DocumentController extends Controller
 
     }
 
+//    public function download($id)
+//    {
+//        $document = Document::findOrFail($id);
+//
+//        // Vérification des permissions si nécessaire
+//        // Par exemple :
+//        // if (!$this->canAccessDocument($document)) {
+//        //     abort(403, 'Accès non autorisé');
+//        // }
+//        $path = storage_path('app/public/' . $document->chemin);
+//
+//        if (!file_exists($path)) {
+//            abort(404, 'Fichier introuvable');
+//        }
+//        // Récupérer l'extension originale du fichier
+//        $originalExtension = pathinfo($document->nom, PATHINFO_EXTENSION);
+//
+//        // Si l'extension n'est pas présente dans le nom, utilisez l'extension du fichier stocké
+//        if (empty($originalExtension)) {
+//            $originalExtension = pathinfo($path, PATHINFO_EXTENSION);
+//        }
+//
+//        // Construire le nom de fichier avec l'extension
+//        $filename = $document->nom . ($originalExtension ? '.' . $originalExtension : '');
+//
+//        return response()->download($path, $filename);
+//
+//    }
     public function download($id)
     {
         $document = Document::findOrFail($id);
 
-        // Vérification des permissions si nécessaire
-        // Par exemple :
-        // if (!$this->canAccessDocument($document)) {
-        //     abort(403, 'Accès non autorisé');
-        // }
-        $path = storage_path('app/public/' . $document->chemin);
+        $filePath = storage_path('app/public/' . $document->chemin);
 
-        if (!file_exists($path)) {
-            abort(404, 'Fichier introuvable');
-        }
-        // Récupérer l'extension originale du fichier
-        $originalExtension = pathinfo($document->nom, PATHINFO_EXTENSION);
-
-        // Si l'extension n'est pas présente dans le nom, utilisez l'extension du fichier stocké
-        if (empty($originalExtension)) {
-            $originalExtension = pathinfo($path, PATHINFO_EXTENSION);
+        if (!file_exists($filePath)) {
+            abort(404, 'Fichier non trouvé');
         }
 
-        // Construire le nom de fichier avec l'extension
-        $filename = $document->nom . ($originalExtension ? '.' . $originalExtension : '');
+        // Récupérer le type MIME
+        $mimeType = mime_content_type($filePath);
 
-        return response()->download($path, $filename);
+        // Vérifier si c'est une requête de prévisualisation ou de téléchargement
+        $isInline = request()->has('preview') || str_contains(request()->header('Accept', ''), 'text/html');
 
+        $headers = [
+            'Content-Type' => $mimeType,
+        ];
+
+        if ($isInline) {
+            // Pour prévisualisation
+            $headers['Content-Disposition'] = 'inline; filename="' . $document->nom . '"';
+            return response()->file($filePath, $headers);
+        } else {
+            // Pour téléchargement
+            $headers['Content-Disposition'] = 'attachment; filename="' . $document->nom . '"';
+            return response()->download($filePath, $document->nom, $headers);
+        }
     }
 
     public function delete($id)
@@ -82,7 +112,7 @@ class DocumentController extends Controller
         $document = Document::findOrFail($id);
 
         // Vérification des permissions
-        if ($document->id_utilisateur !== Auth::id() && !Auth::user()->isAdmin()) {
+        if ($document->id_utilisateur !== Auth::id() ) {
             abort(403, 'Vous ne pouvez pas supprimer ce document');
         }
 

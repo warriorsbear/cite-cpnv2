@@ -1,7 +1,9 @@
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, defineEmits } from 'vue'
 import { formatDistance } from 'date-fns'
 import { fr } from 'date-fns/locale'
+
+const emit = defineEmits(['preview'])
 
 const props = defineProps({
     document: {
@@ -18,18 +20,29 @@ const formatCreatedAt = (date) => {
     })
 }
 
+const extension = props.document.chemin.split('.').pop().toLowerCase()
 
+const nom_extension = props.document.nom+'.'+extension
 
 // Méthode pour télécharger le document
 const downloadDocument = () => {
     window.location.href = route('documents.download', props.document.id_document)
 }
+
+// Nouvelle méthode pour prévisualiser
+const previewDocument = () => {
+    emit('preview', props.document)
+    console.log('Prévisualisation du document', props.document)
+}
 </script>
 
 <template>
-    <div class="bg-white shadow-md rounded-lg p-4 w-64 hover:shadow-lg transition-shadow">
+    <div
+        class="bg-white shadow-md rounded-lg p-4 w-64 hover:shadow-lg transition-shadow cursor-pointer"
+        @click="previewDocument"
+    >
         <div class="flex justify-between items-center mb-2">
-            <h3 class="text-lg font-semibold truncate">{{ props.document.nom }}</h3>
+            <h3 class="text-lg font-semibold truncate">{{ nom_extension }}</h3>
             <span
                 class="text-sm text-gray-500"
                 :title="new Date(document.created_at).toLocaleString()"
@@ -64,5 +77,6 @@ const downloadDocument = () => {
         <div v-if="document.event" class="text-sm text-gray-500 mt-2">
             Événement : {{ document.event.titre }}
         </div>
+
     </div>
 </template>

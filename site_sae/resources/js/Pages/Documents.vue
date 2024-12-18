@@ -5,6 +5,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import Footer from "@/Components/Footer.vue"
 import DocumentModal from '@/Components/DocumentModal.vue'
 import DocumentCard from '@/Components/DocumentCard.vue'
+import DocumentPreviewModal from '@/Components/DocumentPreviewModal.vue'
 import axios from 'axios'
 
 // Données réactives
@@ -46,11 +47,28 @@ const addDocument = async (documentData) => {
 
         // Ajouter le nouveau document à la liste
         await fetchDocuments()
+        console.log('Document ajouté', response.data)
         closeDocumentModal()
     } catch (err) {
         error.value = "Erreur lors de l'ajout du document"
         console.error(err) // Pour le débogage
     }
+}
+
+// État pour la prévisualisation
+const selectedDocument = ref(null)
+const showPreviewModal = ref(false)
+
+// Méthode de prévisualisation
+const previewDocument = (document) => {
+    selectedDocument.value = document
+    showPreviewModal.value = true
+}
+
+// Fermer la prévisualisation
+const closePreviewModal = () => {
+    showPreviewModal.value = false
+    selectedDocument.value = null
 }
 
 // Charger les documents au montage du composant
@@ -95,6 +113,8 @@ const user = usePage().props.auth.user
                 v-else
                 v-for="document in documents"
                 :document="document"
+                @preview="previewDocument"
+                class="w-full"
             />
         </div>
 
@@ -102,6 +122,12 @@ const user = usePage().props.auth.user
             v-if="showModal"
             @close="closeDocumentModal"
             @add-document="addDocument"
+        />
+
+        <DocumentPreviewModal
+            v-if="showPreviewModal"
+            :document="selectedDocument"
+            @close="closePreviewModal"
         />
 
         <Footer />
@@ -114,8 +140,7 @@ const user = usePage().props.auth.user
     flex-wrap: wrap;
     gap: 30px;
     justify-content: flex-start;
-    padding: 20px;
-    padding-left: 10%;
+    padding: 5%;
     background-color: rgb(255, 255, 255);
 
 }

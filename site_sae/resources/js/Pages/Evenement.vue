@@ -57,26 +57,22 @@ onMounted(() => {
 
         <!-- Inclure le modal de création d'événement -->
 
-
-
-
-
-                        <div v-if="loading" class="loading-icon">
-                            <h1>Chargement des événements...</h1>
-                            <img src="../public/images/loading.gif" alt="Loading..." />
-                        </div>
-                        <div v-else class ="conteuneur">
-                            <box_even
-                                v-for="evenement in evenements.data"
-                                :key="evenement.id"
-                                :titre_even="evenement.titre"
-                                :description_even="evenement.description"
-                                :Date_even="evenement.date_heure"
-                                :Lieu_even="evenement.lieu"
-                                :Type_even="evenement.type"
-                                :Officiel_even="evenement.officiel"
-                            />
-                        </div>
+        <div v-if="loading" class="loading-icon">
+            <h1>Chargement des événements...</h1>
+            <img src="../public/images/loading.gif" alt="Loading..." />
+        </div>
+        <div v-else class ="conteuneur">
+            <box_even
+                v-for="evenement in evenements.data"
+                :key="evenement.id"
+                :titre_even="evenement.titre"
+                :description_even="evenement.description"
+                :Date_even="evenement.date_heure"
+                :Lieu_even="evenement.lieu"
+                :Type_even="evenement.type"
+                :Officiel_even="evenement.officiel"
+            />
+        </div>
         <Footer />
 
 
