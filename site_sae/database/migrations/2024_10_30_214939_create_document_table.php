@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('id_document', true);
             $table->string('nom', 50)->nullable();
             $table->string('chemin', 100)->nullable();
-            $table->dateTime('date_depot')->nullable();
+            $table->timestamps();
             $table->integer('id_evenement')->nullable()->index('id_evenement');
             $table->integer('id_utilisateur')->index('id_utilisateur');
         });

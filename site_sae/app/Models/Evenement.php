@@ -56,14 +56,15 @@ class Evenement extends Model
 		'id_utilisateur'
 	];
 
-    public static function create(array $data)
+    public static function
+    create(array $data)
     {
         return self::query()->create($data);
     }
 
 	public function utilisateur()
 	{
-		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+		return $this->belongsTo(User::class, 'id_utilisateur');
 	}
 
 	public function participations()

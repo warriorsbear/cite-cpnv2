@@ -4,7 +4,6 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 
 const user = usePage().props.auth.user;
 
@@ -35,7 +34,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="titre" value="titre" />
+                <InputLabel for="titre" value="Titre" />
 
                 <TextInput
                     id="titre"
@@ -51,7 +50,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="descriptif" value="descriptif" />
+                <InputLabel for="descriptif" value="Descriptif" />
 
                 <TextInput
                     id="descriptif"
@@ -66,10 +65,10 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="lieu" value="lieu" />
+                <InputLabel for="lieu" value="Lieu" />
 
                 <TextInput
-                    id="pseudo"
+                    id="lieu"
                     type="text"
                     class="mt-1 block w-full"
                     v-model="form.lieu"
@@ -81,18 +80,25 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="type" value="type" />
+                <InputLabel for="type" value="Type" />
 
-                <TextInput
+                <select
                     id="type"
-                    type="text"
                     class="mt-1 block w-full"
                     v-model="form.type"
                     required
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.type" />
+                >
+                    <option value="" disabled selected>Choisissez un type d'évenement</option>
+                    <option value="cours">Cours</option>
+                    <option value="visionnage">Visionnage</option>
+                    <option value="sortie">Sortie</option>
+                    <option value="reunion">Réunion</option>
+                    <option value="exposition">Exposition</option>
+                    <option value="collaboration">Collaboration</option>
+                    <option value="information">Information</option>
+                    <option value="sortie_a_theme">Sortie à thème</option>
+                    <!-- Add more options as needed -->
+                </select>
             </div>
 
             <div class="mt-4">
@@ -112,11 +118,11 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="date_heure"
-                    value="date_heure"
+                    value="Date et heure"
                 />
 
                 <TextInput
-                    id="password_confirmation"
+                    id="date_heure"
                     type="datetime-local"
                     class="mt-1 block w-full"
                     v-model="form.date_heure"
