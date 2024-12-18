@@ -12,6 +12,7 @@ class EvenementController extends Controller
 {
     public function index()
     {
+
         $evenements = Evenement::get();
         if($evenements)
         {
@@ -23,6 +24,19 @@ class EvenementController extends Controller
         }
 
     }
+    public function getEvenementById(Request $request)
+    {
+        $eventId = $request->query('id_evenement');
+
+        if ($eventId) {
+            $evenements = Evenement::where('id_evenement', $eventId)->get();
+        } else {
+            $evenements = Evenement::all();
+        }
+
+        return response()->json($evenements);
+    }
+
 
     /**
      * Show the form for creating a new resource.

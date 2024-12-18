@@ -175,7 +175,19 @@ export default defineComponent({
         <div class="popup_content">
             <span class="close_button" @click="togglePopup">&times;</span>
             <div class="popup_image">
-                <img src="../public/images/evenement/exposition.jpg" class="event_image_popup">
+                <img v-if="Type_even=='collaboration'" src="../public/images/evenement/collaboration.jpeg" alt="image" class="event_image_popup">
+
+                <img v-if="Type_even=='cours'" src="../public/images/evenement/cours.PNG" alt="image" class="event_image_popup">
+
+                <img v-if="Type_even=='exposition'" src="../public/images/evenement/exposition.jpg" alt="image" class="event_image_popup">
+
+                <img v-if="Type_even=='information'" src="../public/images/evenement/information.jpg" alt="image" class="event_image_popup">
+
+                <img v-if="Type_even=='reunion'" src="../public/images/evenement/reunion.jpg" alt="image" class="event_image_popup">
+
+                <img v-if="Type_even=='sortie_a_theme'" src="../public/images/evenement/sortie_a_theme.jpg" alt="image" class="event_image_popup">
+
+                <img v-if="Type_even=='visionnage'" src="../public/images/evenement/Visionnage.jpg" alt="image" class="event_image_popup">
             </div>
             <div class="popup_details">
                 <h1 class="mid">{{ titre_even }}</h1>

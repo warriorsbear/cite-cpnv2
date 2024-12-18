@@ -1,11 +1,13 @@
 <script setup>
-
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Footer from "@/Components/Footer.vue";
 import {usePage} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 
+const participations = ref([]);
+const allEvents = ref([]);
+const evenements= ref([]);
 const photos = ref([]);
 const loading = ref(true);
 
@@ -24,15 +26,47 @@ const showDescriptionInput= ref(false);
 const newDescription= ref('');
 const description = ref('Ceci est la description du profil.');
 
+const fetchEvenements = async () => {
+    try {
+        // Fetch all events
+        const eventsResponse = await fetch(`http://127.0.0.1:8000/api/evenements`);
+        const eventsData = await eventsResponse.json();
+        if (!Array.isArray(eventsData.data)) {
+            throw new TypeError('Expected an array of events');
+        }
+        allEvents.value = eventsData.data;
+        console.log("Les événements ont été récupérés :", allEvents.value);
 
+        // Fetch user participations
+        const participationsResponse = await fetch(`http://127.0.0.1:8000/api/participations?user_id=${user.id}`);
+        const participationsData = await participationsResponse.json();
+        if (!Array.isArray(participationsData)) {
+            throw new TypeError('Expected an array of participations');
+        }
+        participations.value = participationsData;
+        console.log("Les participations ont été récupérées :", participations.value);
+
+        // Extract event IDs from user participations
+        const userEventIds = participations.value.map(participation => participation.id_evenement);
+
+        // Filter and sort events based on user participation
+        evenements.value = allEvents.value.filter(event => userEventIds.includes(event.id));
+        console.log("Les événements triés ont été récupérés :", evenements.value);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+    } finally {
+        loading.value = false;
+    }
+};
 const fetchPhotos = async () => {
+    const user = usePage().props.auth.user;
     try {
         const response = await fetch('http://127.0.0.1:8000/api/photos/', {
         });
         photos.value = await response.json();
-        console.log("Les evenements ont été récupérés :", photos.value);
+        console.log("Les photos ont été récupérés :", photos.value);
     } catch (error) {
-        console.error('Erreur lors de la récupération des événements:', error);
+        console.error('Erreur lors de la récupération des photos:', error);
     } finally {
         loading.value = false;
     }
@@ -54,6 +88,7 @@ const updateDescription = () => {
 
 onMounted(() => {
     fetchPhotos();
+    fetchEvenements();
 });
 </script>
 
@@ -177,17 +212,35 @@ onMounted(() => {
                 </div>
             </div>
 
+            <!-- Posted Events -->
             <div v-if="activeMenu === 'evenements'" class="posted-events">
                 <h2>Événements</h2>
-                <!-- Add your events display logic here -->
+                <div class="events-grid">
+                    <div v-for="event in evenements" :key="event.id" class="event-item">
+                        <div class="main_box">
+                            <img v-if="event.type === 'collaboration'" src="../public/images/evenement/collaboration.jpeg" alt="image" class="event_image">
+                            <img v-if="event.type === 'cours'" src="../public/images/evenement/cours.PNG" alt="image" class="event_image">
+                            <img v-if="event.type === 'exposition'" src="../public/images/evenement/exposition.jpg" alt="image" class="event_image">
+                            <img v-if="event.type === 'information'" src="../public/images/evenement/information.jpg" alt="image" class="event_image">
+                            <img v-if="event.type === 'reunion'" src="../public/images/evenement/reunion.jpg" alt="image" class="event_image">
+                            <img v-if="event.type === 'sortie_a_theme'" src="../public/images/evenement/sortie_a_theme.jpg" alt="image" class="event_image">
+                            <img v-if="event.type === 'visionnage'" src="../public/images/evenement/Visionnage.jpg" alt="image" class="event_image">
 
+                            <div class="event_titre">
+                                <h4>{{ event.titre }}</h4>
+                            </div>
+
+                            <div class="event_details">
+                                <p class="event_lieu">Lieu : {{ event.lieu }}</p>
+                                <p class="event_type">Type : {{ event.type }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-
         </div>
         </body>
         <Footer />
-
     </AuthenticatedLayout>
 </template>
 
@@ -332,4 +385,61 @@ h2 {
 .edit-button:hover {
     background-color: #ff9900;
 }
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 10px;
+}
+
+.main_box {
+    background-color: #ffffff;
+    width: 100%;
+    height: 310px;
+    color: rgb(73, 65, 59);
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    border-radius: 10px;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main_box:hover {
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+.event_image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.event_titre {
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 1.2em;
+}
+
+.event_titre h4 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.event_titre p {
+    margin: 5px 0;
+    color: #777;
+}
+
+.event_details {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+}
+
 </style>

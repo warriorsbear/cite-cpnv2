@@ -11,9 +11,19 @@ use Illuminate\Http\Request;
 
 class ParticipationController extends Controller
 {
-    public function index(){
-        return response()->json(Participation::get());
+    public function index(Request $request)
+    {
+        $userId = $request->query('user_id');
+
+        if ($userId) {
+            $participations = Participation::where('id_utilisateur', $userId)->get();
+        } else {
+            $participations = Participation::all();
+        }
+
+        return response()->json($participations);
     }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
