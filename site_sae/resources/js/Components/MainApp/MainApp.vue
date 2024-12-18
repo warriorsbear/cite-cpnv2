@@ -62,27 +62,27 @@ export default {
 };
 
 // NE FONCTIONNE PAS...
-let lastScrollY = window.scrollY;
-const navbar = () => document.querySelector('nav');
-
-window.addEventListener('scroll', () => {
-    // Cacher la navbar quand on descend
-    if (window.scrollY > lastScrollY) {
-        navbar.classList.add('hidden');
-    }
-    // Réafficher la navbar quand on remonte
-    else {
-        navbar.classList.remove('hidden');
-    }
-    lastScrollY = window.scrollY;
-});
-
-// Réafficher si la souris atteint le haut de l'écran
-document.addEventListener('mousemove', (e) => {
-    if (e.clientY < 50) {
-        navbar.classList.remove('hidden');
-    }
-});
+// let lastScrollY = window.scrollY;
+// const navbar = () => document.querySelector('nav');
+//
+// window.addEventListener('scroll', () => {
+//     // Cacher la navbar quand on descend
+//     if (window.scrollY > lastScrollY) {
+//         navbar.classList.add('hidden');
+//     }
+//     // Réafficher la navbar quand on remonte
+//     else {
+//         navbar.classList.remove('hidden');
+//     }
+//     lastScrollY = window.scrollY;
+// });
+//
+// // Réafficher si la souris atteint le haut de l'écran
+// document.addEventListener('mousemove', (e) => {
+//     if (e.clientY < 50) {
+//         navbar.classList.remove('hidden');
+//     }
+// });
 </script>
 
 <style>
@@ -90,17 +90,17 @@ document.addEventListener('mousemove', (e) => {
     font-family: 'Open Sans', sans-serif;
 }
 
-nav {
+/*nav {
     position: fixed;
     width: 100%;
     display: flex;
     justify-content: space-between;
     z-index: 10;
-    transition: transform 0.3s ease-in-out; /* Animation douce */
+    transition: transform 0.3s ease-in-out; /* Animation douce *//*
 }
 
 nav.hidden {
-    transform: translateY(-100%); /* Cache la navbar hors de l'écran */
+    transform: translateY(-100%); /* Cache la navbar hors de l'écran *//*
 }
 
 header {
@@ -113,7 +113,7 @@ header {
     font-weight: bold;
     text-transform: uppercase;
     width: 100%;
-}
+}*/
 
 /* Styles globaux pour ton application */
 .main-app {
