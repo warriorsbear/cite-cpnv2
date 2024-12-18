@@ -12,6 +12,7 @@
             :tags="post.tags"
             :comments="this.commentaires"
             @add-comment="addComment(post.id, $event)"
+            :context="'feed'"
         />
     </div>
 </template>

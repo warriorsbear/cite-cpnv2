@@ -5,11 +5,14 @@ import Footer from "@/Components/Footer.vue";
 import {usePage} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import Box_even from "@/Components/box_even.vue";
+import PhotoPost from "@/Components/MainApp/PhotoPost.vue";
+import Post_account from "@/Components/Post_account.vue";
 
 const participations = ref([]);
 const allEvents = ref([]);
 const evenements= ref([]);
 const photos = ref([]);
+const posts = ref([]);
 const loading = ref(true);
 
 const user = usePage().props.auth.user;
@@ -60,7 +63,7 @@ const fetchEvenements = async () => {
     }
 };
 const fetchPhotos = async () => {
-    const user = usePage().props.auth.user;
+
     try {
         const response = await fetch('http://127.0.0.1:8000/api/photos/', {
         });
@@ -68,6 +71,27 @@ const fetchPhotos = async () => {
         console.log("Les photos ont été récupérés :", photos.value);
     } catch (error) {
         console.error('Erreur lors de la récupération des photos:', error);
+    } finally {
+        loading.value = false;
+    }
+};
+const fetchPost = async () => {
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/posts/');
+        const postsData = await response.json();
+        console.log(postsData);
+        // Check if the response has a data property and if it's an array
+        if (!postsData || !Array.isArray(postsData)) {
+            throw new TypeError('Expected an array of posts');
+        }
+
+        // Filter the posts to only include those posted by the connected user
+        const userPosts = postsData.filter(post => post.id_utilisateur === user.id);
+        posts.value = userPosts;
+        console.log("Les posts de l'utilisateur ont été récupérés :", posts.value);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des posts:', error);
     } finally {
         loading.value = false;
     }
@@ -90,6 +114,7 @@ const updateDescription = () => {
 onMounted(() => {
     fetchPhotos();
     fetchEvenements();
+    fetchPost();
 });
 </script>
 
@@ -200,39 +225,49 @@ onMounted(() => {
                 <button :class="{'active': activeMenu === 'photos'}" @click="toggleMenu('photos')">Photos</button>
                 <button :class="{'active': activeMenu === 'evenements'}" @click="toggleMenu('evenements')">Événements</button>
             </div>
+
             <!-- Posted Photos -->
             <div v-if="activeMenu === 'photos'" class="posted-photos">
-                <h2>Photos</h2>
-                <div class="photos-grid">
-                    <div v-for="photo in photos.data" :key="photo.id_photo" class="photo-item">
-                        <div>
-                            <img :src="`/storage/${photo.nom}`" alt="Photo" class="photo_user"/>
-                            <p>{{ photo.legende }}</p>
-                        </div>
-                    </div>
+                <div v-if="posts.length === 0" class="no-content-message">
+                    <p class="messageAbs">Vous n'avez pas encore posté de photos.</p>
+                </div>
+                <div v-else class="photos-grid">
+                    <Post_account
+                        v-for="post in posts"
+                        :key="post.id_post"
+                        :idPost="post.id_post"
+                        :username="post.user.pseudo"
+                        :userAvatar="post.user.photo_de_profile"
+                        :imageUrl="post.photos"
+                        :context="'profile'"
+                    />
                 </div>
             </div>
 
             <!-- Posted Events -->
             <div v-if="activeMenu === 'evenements'" class="posted-events">
-                <h2>Événements</h2>
                 <div v-if="loading" class="loading-icon">
                     <h1>Chargement des événements...</h1>
                     <img src="../public/images/loading.gif" alt="Loading..." />
                 </div>
-                <div v-else class ="conteuneur">
-                    <box_even
-                        v-for="evenement in evenements"
-                        :key="evenement.id"
-                        :id="evenement.id"
-                        :titre_even="evenement.titre"
-                        :description_even="evenement.description"
-                        :Date_even="evenement.date_heure"
-                        :Lieu_even="evenement.lieu"
-                        :Type_even="evenement.type"
-                        :Officiel_even="evenement.officiel"
-                        :participe_deja=true
-                    />
+                <div v-else>
+                    <div v-if="evenements.length === 0" class="no-content-message">
+                        <p class="messageAbs">Vous n'avez pas encore rejoint d'événements.</p>
+                    </div>
+                    <div v-else class="conteuneur">
+                        <box_even
+                            v-for="evenement in evenements"
+                            :key="evenement.id"
+                            :id="evenement.id"
+                            :titre_even="evenement.titre"
+                            :description_even="evenement.description"
+                            :Date_even="evenement.date_heure"
+                            :Lieu_even="evenement.lieu"
+                            :Type_even="evenement.type"
+                            :Officiel_even="evenement.officiel"
+                            :participe_deja="true"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -248,7 +283,12 @@ html, body {
     padding: 0;
     overflow: auto; /* Ensure scrolling is enabled */
 }
-
+.messageAbs {
+    text-align: center;
+    font-size: 15px;
+    margin: 20px;
+    color: #991b1b;
+}
 .mon-compte {
     display: flex;
     flex-direction: column;
