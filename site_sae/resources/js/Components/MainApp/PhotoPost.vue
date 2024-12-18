@@ -4,12 +4,11 @@
             <div class="post-header">
                 <img src="../../public/images/avatar.jpg" alt="Avatar" class="avatar"/>
                 <div class="user-info">
-                    <!--          <h4 class="username">{{ users[0]?.pseudo || "nop"}}</h4>-->
                     <h4 class="username">{{ username }}</h4>
                     <p class="post-time">{{ postTime }}</p>
                 </div>
             </div>
-            <img src="../../public/images/image1.jpg" alt="Photo" class="post-image"/>
+            <img :src="imageUrl[0] ? imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg'" alt="Photo du photographe" class="post-image"/>
             <div class="post-caption">
                 <p>{{ caption }}</p>
                 <div class="tags">
@@ -18,21 +17,22 @@
             </div>
         </div>
         <div class="comments">
-            <CommentsSection :comments="comments"/>
+            <CommentsSection :comments="this.comments.filter(comment => comment.id_post === this.idPost)"/>
         </div>
     </div>
 </template>
 
 <script>
 import CommentsSection from './CommentsSection.vue';
-import {ref, onMounted, nextTick} from 'vue';
+import {nextTick} from 'vue';
 
 export default {
     props: {
+        idPost: Number,
         username: String,
         userAvatar: String,
         postTime: String,
-        imageUrl: String,
+        imageUrl: Array,
         caption: String,
         tags: Array,
         comments: Array,
@@ -40,29 +40,11 @@ export default {
     components: {
         CommentsSection,
     },
-    setup() {
-        const users = ref([]);
-
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch('http://localhost:8000/api/utilisateurs');
-                users.value = await response.json();
-                console.log("Les utilisateurs ont été récupérés :", users.value);
-            } catch (e) {
-                console.log("Erreur lors de la récupération des utilisateurs", e);
-            }
-        };
-
-        onMounted(fetchUsers);
-
-        return {
-            users,
-        };
-    },
-    mounted() {
+    async mounted() {
         nextTick(() => {
             this.setHeight();
         });
+        console.log(this.imageUrl);
     },
     methods: {
         setHeight() {
@@ -178,17 +160,17 @@ export default {
     /* Styles pour la section des commentaires */
     gap: 0.1rem;
     min-height: 100%;
+    width: 25rem;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1090px) {
     .photo-post {
         flex-direction: column;
         justify-content: start;
     }
 
     .comments {
-        width: 100%;
-        height: 50%;
+        width: 40rem;
     }
 }
 

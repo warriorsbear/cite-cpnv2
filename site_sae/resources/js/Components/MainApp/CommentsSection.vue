@@ -3,15 +3,15 @@
         <h4 class="comments-title">Commentaires</h4>
         <div class="comments-docker">
             <hr>
-            <div v-for="comment in comments" :key="comment.id" class="comment">
+            <div v-for="comment in comments" :key="comment.id_commentaire_p" class="comment">
                 <div class="user-info-comment">
                     <div class="user-info-left">
                         <img src="../../public/images/avatar.jpg" alt="Avatar commentaire" class="avatar-comments">
-                        <p class="user-comments"><strong>{{ comment.user }}</strong></p>
+                        <p class="user-comments"><strong>{{ comment.user.pseudo }}</strong></p>
                     </div>
-                    <p class="date-comments">{{ comment.comDate }}</p>
+                    <p class="date-comments">{{ formatCreatedAt(comment.created_at) }}</p>
                 </div>
-                <p class="text-comments">{{ comment.text }}</p>
+                <p class="text-comments">{{ comment.texte }}</p>
             </div>
         </div>
         <div class="add-comment">
@@ -23,6 +23,8 @@
 
 <script>
 import {nextTick} from "vue";
+import {formatDistance} from "date-fns";
+import {fr} from "date-fns/locale";
 
 export default {
     props: {
@@ -40,6 +42,12 @@ export default {
                 this.newComment = '';
             }
         },
+        formatCreatedAt(date) {
+            return formatDistance(new Date(date), new Date(), {
+                addSuffix: true,
+                locale: fr
+            })
+        }
     },
 };
 </script>

@@ -24,8 +24,8 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'nom' => fake()->name(),
-            'prenom' => fake()->name(),
+            'nom' => fake()->lastName(),
+            'prenom' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'cp' => fake()->regexify('[0-9]{5}'),
@@ -37,6 +37,7 @@ class UserFactory extends Factory
             'telephone' => fake()->phoneNumber(),
             'adresse' => fake()->address(),
             'pseudo' => fake()->userName(),
+            // 'photo_de_profil' => fake()->imageUrl(),
         ];
     }
 
