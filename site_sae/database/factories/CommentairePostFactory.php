@@ -18,7 +18,7 @@ class CommentairePostFactory extends Factory
     {
         return [
             'texte' => $this->faker->text(),
-            'date_heure' => $this->faker->dateTime(),
+            'created_at' => $this->faker->dateTime(),
             'id_utilisateur' => $this->faker->numberBetween(1, 10),
             'id_post' => $this->faker->numberBetween(1, 10),
         ];
