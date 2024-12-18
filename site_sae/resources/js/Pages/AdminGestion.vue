@@ -7,6 +7,9 @@ const utilisateurs = ref([]); //variable réactive pour stocker les utilisateurs
 const recherche = ref(''); //variable réactive qui stock la recherche
 const entrainDeCharger = ref(true); //variable réactive pour savoir si on est en train de charger les utilisateurs
 const UtilisateurConnecter = usePage().props.auth.user; //variable pour stocker les informations de l'utilisateur connecté
+const form = useForm({
+    id: ' ',
+});
 const RecuperationUtilisateurs = async () => {
   try {
     let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
@@ -39,17 +42,37 @@ const UtilisateurFiltre = computed(() => {
   );
 });
 
+/**
+ * Filtrer les utilisateurs qui n'ont pas payé leur cotisation
+ */
 const UtilisateurQuiOnPasPaye = computed(() => {
   return utilisateurs.value.filter(utilisateur => utilisateur.statut_cotisation == false);
 });
 
+/**
+ * Filtrer les utilisateurs qui n'ont pas été acceptés
+ */
 const UtilisateurPasAccepte = computed(() => {
   return utilisateurs.value.filter(utilisateur => utilisateur.statut == 0);
 });
 
+/**
+ * Filtrer les utilisateurs qui n'ont pas payé leur cotisation ou qui n'ont pas été acceptés
+ */
 const UtilisateurPasOK = computed(() => {
     return utilisateurs.value.filter(utilisateur => utilisateur.statut_cotisation == 0 || utilisateur.statut == 0);
 });
+
+// Fonctions pour gérer les clics sur les boutons
+const SuprClic = (utilisateur) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+        form.id = utilisateur.id;
+        form.delete(route('users.suprimerUser', { id: utilisateur.id }));
+        window.location.reload();
+    } else {
+        console.log('Suppression annulée');
+    }
+};
 
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
@@ -95,7 +118,7 @@ onMounted(() => {
                         </div>
                         <div id="boutons">
                           <button @click="handleClick(utilisateur)">Modifier</button>
-                          <button @click="handleClick(utilisateur)">Supprimer</button>
+                          <button @click="SuprClic(utilisateur)">Supprimer</button>
                           <button @click="handleClick(utilisateur)">Profil</button>
                         </div>
                       </div>

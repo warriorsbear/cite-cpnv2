@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\EvenementController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\PhotoController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/evenement', [EvenementController::class, 'store'])->name('evenement.create');
     Route::post('/photo', [PhotoController::class, 'store'])->name('photo.create');
+    //Route::delete('/AdminGestion/{id}', [UserController::class, 'suprimerUser'])->name('AdminGestion.suprimerUser');
+    Route::delete('/users/{id}', [UserController::class, 'suprimerUser'])->name('users.suprimerUser');
 });
 
 
@@ -68,3 +71,5 @@ Route::get('/user/photos', [PhotoController::class, 'getUserPhotos'])
 Route::get('/AdminGestion', function () {
     return Inertia::render('AdminGestion');
 })->middleware(['auth', 'verified'])->name('AdminGestion');
+
+Route::delete('/api/utilisateurs/{id}', [UsersController::class, 'suprimerUser'])->name('utilisateurs.suprimerUser');
