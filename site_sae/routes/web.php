@@ -37,7 +37,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/evenement', [EvenementController::class, 'store'])->name('evenement.create');
     Route::post('/photo', [PhotoController::class, 'store'])->name('photo.create');
-    //Route::delete('/AdminGestion/{id}', [UserController::class, 'suprimerUser'])->name('AdminGestion.suprimerUser');
     Route::delete('/users/{id}', [UserController::class, 'suprimerUser'])->name('users.suprimerUser');
 });
 
@@ -45,11 +44,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 /**
- * Route ajoutée par Florian
- *
- * J'ai enlever ces lignes (fichier AuthenticatedLayout.vue, ligne 55) :
- * :href="route('profile.edit')"
- * :active="route().current('profile.edit')"
+ * Route ajoutée par flo
  */
 Route::get('/monCompte', function () {
     return Inertia::render('MonCompte');
@@ -72,4 +67,9 @@ Route::get('/AdminGestion', function () {
     return Inertia::render('AdminGestion');
 })->middleware(['auth', 'verified'])->name('AdminGestion');
 
-Route::delete('/api/utilisateurs/{id}', [UsersController::class, 'suprimerUser'])->name('utilisateurs.suprimerUser');
+//déclaration de la route en post pour que les paramètres ne soient pas visibles dans l'url
+Route::post('/ProfileModification/{id}', function ($id) {
+    return Inertia::render('ProfileModification', ['id' => $id]);
+})->middleware(['auth', 'verified'])->name('ProfileModification');
+
+

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import AuthenticatedLayout from "../Layouts/AuthenticatedLayout.vue";
 import {Head, useForm, usePage} from "@inertiajs/vue3";
 
 const utilisateurs = ref([]); //variable réactive pour stocker les utilisateurs
@@ -14,7 +14,6 @@ const RecuperationUtilisateurs = async () => {
   try {
     let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
     utilisateurs.value = await response.json(); // Lit le corps en tant que JSON et le stocke dans `users`
-    console.log("Les utilisateurs ont été récupérés :", utilisateurs.value);
   } catch (error) {
     console.error('Erreur lors de la récupération des utilisateurs:', error);
   }finally{
@@ -74,6 +73,10 @@ const SuprClic = (utilisateur) => {
     }
 };
 
+const ModifClic = (utilisateur) => {
+    form.post(route('ProfileModification', { id: utilisateur.id }));
+};
+
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
   RecuperationUtilisateurs();
@@ -96,7 +99,7 @@ onMounted(() => {
             <h1>Bienvenue sur votre tableau de bord {{UtilisateurConnecter.nom}} !</h1>
             <!-- Afficher l'icône de chargement si les données sont en cours de chargement -->
             <div v-if="entrainDeCharger" class="loading-icon">
-              <img src="\public\images\loading.gif" alt="Loading..." />
+              <img src="../public/images/loading.gif" alt="Loading..." />
             </div>
               <div v-else id="pageCharger">
                 <div id="avantStat">
@@ -117,7 +120,7 @@ onMounted(() => {
                           <p>{{utilisateur.nom}} {{utilisateur.prenom}}</p>
                         </div>
                         <div id="boutons">
-                          <button @click="handleClick(utilisateur)">Modifier</button>
+                          <button @click="ModifClic(utilisateur)">Modifier</button>
                           <button @click="SuprClic(utilisateur)">Supprimer</button>
                           <button @click="handleClick(utilisateur)">Profil</button>
                         </div>
@@ -147,7 +150,7 @@ onMounted(() => {
                         </div>
                         <div id="boutons">
                           <button v-if="utilisateur.statut == 0" @click="handleClick(utilisateur)">Accepter</button>
-                          <button v-if="utilisateur.statut == 0" @click="handleClick(utilisateur)">Refuser</button>
+                          <button v-if="utilisateur.statut == 0" @click="SuprClic(utilisateur)">Refuser</button>
                           <button v-else @click="handleClick(utilisateur)">Envoyer un rappel</button>
                         </div>
                       </div>
