@@ -66,20 +66,6 @@ export default defineComponent({
               text: 'Tu as bien rejoins l\'evenement'
           });
       },
-      showSuccessNotificationQuit () {
-          Swal.fire({
-              icon: 'success',
-              title: 'Evenement quitté',
-              text: 'Tu as bien quitté l\'evenement'
-          });
-      },
-      showErrorNotificationQuit (message) {
-          Swal.fire({
-              icon: 'error',
-              title: 'Tu as deja quitté cet evenement !',
-              text: message,
-          });
-      },
 
       showErrorNotification (message) {
           Swal.fire({
@@ -181,7 +167,7 @@ export default defineComponent({
                   });
               }
           } catch (error) {
-              this.showErrorNotificationQuit(error.message);
+                console.error('Error leaving event:', error.message);
           }
       }
       },
