@@ -25,6 +25,8 @@ Route::apiResource('utilisateurs', UserController::class);
 
 Route::get('/participations',[ParticipationController::class, 'index']);
 Route::post('/participations', [ParticipationController::class, 'store']);
+Route::delete('/participations', [ParticipationController::class, 'destroy']);
+
 Route::post('/evenements', [EvenementController::class, 'store']);
 Route::get('/photos/', [PhotoController::class, 'index']);
 Route::post('/photos', [PhotoController::class, 'store']);

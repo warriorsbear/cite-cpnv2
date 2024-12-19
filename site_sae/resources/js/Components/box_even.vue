@@ -66,6 +66,20 @@ export default defineComponent({
               text: 'Tu as bien rejoins l\'evenement'
           });
       },
+      showSuccessNotificationQuit () {
+          Swal.fire({
+              icon: 'success',
+              title: 'Evenement quitté',
+              text: 'Tu as bien quitté l\'evenement'
+          });
+      },
+      showErrorNotificationQuit (message) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Tu as deja quitté cet evenement !',
+              text: message,
+          });
+      },
 
       showErrorNotification (message) {
           Swal.fire({
@@ -134,13 +148,44 @@ export default defineComponent({
                   const data = await response.json();
                   console.log('Join event response:', data);
                   this.showSuccessNotification();
+                    this.togglePopup();
               }
           } catch (error) {
               console.error('Error joining event:', error.message);
           }
-      }
+      },
+      async leaveEvent() {
+          const user = usePage().props.auth.user;
+          const eventId = this.$props.id;
+          try {
+              const response = await fetch('http://127.0.0.1:8000/api/participations', {
+                  method: 'DELETE',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      id_utilisateur: user.id,
+                      id_evenement: eventId
+                  })
+              });
 
-  },
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              } else {
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Evenement quitté',
+                      text: 'Tu as bien quitté l\'événement'
+                  }).then(() => {
+                      window.location.reload();
+                  });
+              }
+          } catch (error) {
+              this.showErrorNotificationQuit(error.message);
+          }
+      }
+      },
+
     mounted() {
       this.path = this.returnimagePath(this.Type_even);
     }
@@ -201,6 +246,7 @@ export default defineComponent({
                 <p>Description : {{ description_even }}</p>
                 <p>Officiel : {{ Officiel_even }}</p>
                 <button v-if="!participe_deja" class="button_rejoindre" @click="joinEvent">Rejoindre</button>
+                <button v-if="participe_deja" class="button_quitter" @click="leaveEvent">Quitter</button>
                 <button class="button_commentaire">Voir les commentaire</button>
             </div>
         </div>
@@ -237,6 +283,23 @@ export default defineComponent({
     object-fit: cover;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+}
+
+.button_quitter {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #d9534f; /* Red background */
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.button_quitter:hover {
+    background-color: #c9302c; /* Darker red on hover */
 }
 
 .event_titre {

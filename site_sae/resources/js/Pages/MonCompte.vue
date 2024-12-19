@@ -58,8 +58,6 @@ const fetchEvenements = async () => {
         console.log("Les événements triés ont été récupérés :", evenements.value);
     } catch (error) {
         console.error('Erreur lors de la récupération des événements:', error);
-    } finally {
-        loading.value = false;
     }
 };
 const fetchPhotos = async () => {
@@ -71,8 +69,6 @@ const fetchPhotos = async () => {
         console.log("Les photos ont été récupérés :", photos.value);
     } catch (error) {
         console.error('Erreur lors de la récupération des photos:', error);
-    } finally {
-        loading.value = false;
     }
 };
 const fetchPost = async () => {
@@ -92,8 +88,6 @@ const fetchPost = async () => {
         console.log("Les posts de l'utilisateur ont été récupérés :", posts.value);
     } catch (error) {
         console.error('Erreur lors de la récupération des posts:', error);
-    } finally {
-        loading.value = false;
     }
 };
 
@@ -111,10 +105,9 @@ const updateDescription = () => {
     newDescription.value = '';
 };
 
-onMounted(() => {
-    fetchPhotos();
-    fetchEvenements();
-    fetchPost();
+onMounted(async () => {
+    await Promise.all([fetchPhotos(), fetchEvenements(), fetchPost()]);
+    loading.value = false;
 });
 </script>
 
@@ -226,31 +219,32 @@ onMounted(() => {
                 <button :class="{'active': activeMenu === 'evenements'}" @click="toggleMenu('evenements')">Événements</button>
             </div>
 
-            <!-- Posted Photos -->
-            <div v-if="activeMenu === 'photos'" class="posted-photos">
-                <div v-if="posts.length === 0" class="no-content-message">
-                    <p class="messageAbs">Vous n'avez pas encore posté de photos.</p>
-                </div>
-                <div v-else class="photos-grid">
-                    <Post_account
-                        v-for="post in posts"
-                        :key="post.id_post"
-                        :idPost="post.id_post"
-                        :username="post.user.pseudo"
-                        :userAvatar="post.user.photo_de_profile"
-                        :imageUrl="post.photos"
-                        :context="'profile'"
-                    />
-                </div>
+            <div v-if="loading===true" class="loading-icon">
+                <h1>Chargement des données...</h1>
+                <img src="../public/images/loading.gif" alt="Loading..." />
             </div>
 
-            <!-- Posted Events -->
-            <div v-if="activeMenu === 'evenements'" class="posted-events">
-                <div v-if="loading" class="loading-icon">
-                    <h1>Chargement des événements...</h1>
-                    <img src="../public/images/loading.gif" alt="Loading..." />
+            <div v-else>
+                <!-- Posted Photos -->
+                <div v-if="activeMenu === 'photos'" class="posted-photos">
+                    <div v-if="posts.length === 0" class="no-content-message">
+                        <p class="messageAbs">Vous n'avez pas encore posté de photos.</p>
+                    </div>
+                    <div v-else class="photos-grid">
+                        <Post_account
+                            v-for="post in posts"
+                            :key="post.id_post"
+                            :idPost="post.id_post"
+                            :username="post.user.pseudo"
+                            :userAvatar="post.user.photo_de_profile"
+                            :imageUrl="post.photos"
+                            :context="'profile'"
+                        />
+                    </div>
                 </div>
-                <div v-else>
+
+                <!-- Posted Events -->
+                <div v-if="activeMenu === 'evenements'" class="posted-events">
                     <div v-if="evenements.length === 0" class="no-content-message">
                         <p class="messageAbs">Vous n'avez pas encore rejoint d'événements.</p>
                     </div>
@@ -269,7 +263,10 @@ onMounted(() => {
                         />
                     </div>
                 </div>
+
             </div>
+
+
         </div>
         </body>
         <Footer />
@@ -309,7 +306,18 @@ html, body {
     font-family: 'Poppins', sans-serif;
     margin-bottom: 10px;
 }
+.loading-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
 
+.loading-icon img {
+    width: 50px;
+    height: 50px;
+}
 
 .banner {
     background-color: #838383;

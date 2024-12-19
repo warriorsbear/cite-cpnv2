@@ -63,5 +63,30 @@ class ParticipationController extends Controller
 
 
     }
+    public function destroy(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_utilisateur' => 'required|integer',
+            'id_evenement' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()
+            ], 422);
+        }
+
+        $deleted = Participation::deleteByUserAndEvent($request['id_utilisateur'], $request['id_evenement']);
+
+        if ($deleted) {
+            return response()->json([
+                'message' => 'Participation deleted successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                'error' => 'Participation not found'
+            ], 404);
+        }
+    }
 
 }

@@ -40,6 +40,13 @@ class Participation extends Model
     {
         return self::query()->create($data);
     }
+    public static function deleteByUserAndEvent($userId, $eventId)
+    {
+        return self::where('id_utilisateur', $userId)
+            ->where('id_evenement', $eventId)
+            ->delete();
+    }
+
 
 	public function utilisateur()
 	{
