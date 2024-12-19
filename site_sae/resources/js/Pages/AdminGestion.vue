@@ -10,6 +10,14 @@ const UtilisateurConnecter = usePage().props.auth.user; //variable pour stocker 
 const form = useForm({
     id: ' ',
 });
+
+//fonction qui vérifie que la personne qui va modifier est bien un admin
+const verificationAdmin = () => {
+    if (UtilisateurConnecter.role !== 'admin') {
+        alert('Vous n\'avez pas les droits pour accéder à cette page');
+        location.href = '/';
+    }
+};
 const RecuperationUtilisateurs = async () => {
   try {
     let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
@@ -79,6 +87,7 @@ const ModifClic = (utilisateur) => {
 
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
+    verificationAdmin()
   RecuperationUtilisateurs();
 });
 </script>

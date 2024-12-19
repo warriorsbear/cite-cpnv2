@@ -5,34 +5,38 @@ import {Head, usePage} from "@inertiajs/vue3";
 import Footer from "@/Components/Footer.vue";
 
 const UtilisateurConnecter = usePage().props.auth.user; //variable pour stocker les informations de l'utilisateur connecté
+
+//fonction qui vérifie que la personne qui va modifier est bien un admin
+const verificationAdmin = () => {
+    if (UtilisateurConnecter.role !== 'admin') {
+        alert('Vous n\'avez pas les droits pour accéder à cette page');
+        location.href = '/';
+    }
+}
 const { id } = defineProps({
     id: String
 });
 
-const utilisateur = ref(null);
+const utilisateur = ref([]);
 
-const fetchUtilisateur = async () => {
+const fetchUtilisateurs = async () => {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/utilisateurs`);
-        const data = await response.json();
-        console.log("Les utilisateurs ont été récupérés :", data.value);
-        utilisateur.value = data.find(user => user.id === id);
-    } catch (error) {
-        console.error('Erreur lors de la récupération de l\'utilisateur:', error);
-    }
-};
-const RecuperationUtilisateurs = async () => {
-    try {
+        const utilisateurId = parseInt(id, 10); // Transforme id en integer
         let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
-        utilisateur.value = await response.json(); // Lit le corps en tant que JSON et le stocke dans `users`
+        utilisateur.value = (await response.json()).find(u => u.id === utilisateurId);
     } catch (error) {
         console.error('Erreur lors de la récupération des utilisateurs:', error);
     }
-};
+}
 
 onMounted(() => {
-    RecuperationUtilisateurs();
+    verificationAdmin()
+    fetchUtilisateurs();
 });
+
+const SauvegardeClic = async () => {
+    //traiter les différents cas de modification
+};
 </script>
 
 <template>
@@ -53,15 +57,15 @@ onMounted(() => {
                 <form>
                     <div class="form-group">
                         <label for="nom">Nom</label>
-                        <input type="text" id="nom" name="nom" required>
+                        <input type="text" id="nom" name="nom" :placeholder="utilisateur?.nom" required>
                     </div>
                     <div class="form-group">
                         <label for="prenom">Prénom</label>
-                        <input type="text" id="prenom" name="prenom" required>
+                        <input type="text" id="prenom" name="prenom" :placeholder="utilisateur?.prenom" required>
                     </div>
                     <div class="form-group">
                         <label for="pseudo">Pseudo</label>
-                        <input type="text" id="pseudo" name="pseudo" required>
+                        <input type="text" id="pseudo" name="pseudo" :placeholder="utilisateur?.pseudo" required>
                     </div>
                     <div class="form-group">
                         <label for="role">Rôle</label>
@@ -71,7 +75,7 @@ onMounted(() => {
                         </select>
                     </div>
                     <div class="form-group">
-                        <button type="submit">Sauvegarder</button>
+                        <button type="submit" @click="SauvegardeClic()">Sauvegarder</button>
                     </div>
                 </form>
             </div>
