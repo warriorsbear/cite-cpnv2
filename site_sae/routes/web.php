@@ -76,3 +76,8 @@ Route::get('/ProfileModification/{id}', [ProfileController::class, 'show'])->nam
 Route::post('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
 Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
 
+//ajout de la route pour la page monCompte avec un paramètre
+Route::get('/monCompte/{id}', function ($id) {
+    return Inertia::render('MonCompte', ['id' => $id]);
+})->middleware(['auth', 'verified'])->name('monCompte.show');
+

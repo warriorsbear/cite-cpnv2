@@ -86,6 +86,10 @@ const ModifClic = (utilisateur) => {
     window.location.href = route('profile.show', { id: utilisateur.id });
 };
 
+const ProfileClic = (utilisateur) => {
+    window.location.href = route('monCompte.show', { id: utilisateur.id });
+};
+
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
     verificationAdmin()
@@ -132,7 +136,7 @@ onMounted(() => {
                         <div id="boutons">
                           <button @click="ModifClic(utilisateur)">Modifier</button>
                           <button @click="SuprClic(utilisateur)">Supprimer</button>
-                          <button @click="handleClick(utilisateur)">Profil</button>
+                          <button @click="ProfileClic(utilisateur)">Profile</button>
                         </div>
                       </div>
                     </div>

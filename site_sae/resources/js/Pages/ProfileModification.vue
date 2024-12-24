@@ -27,16 +27,6 @@ const { user } = defineProps({
 // Référence pour stocker les données de l'utilisateur
 const utilisateur = ref([]);
 
-const fetchUtilisateurs = async () => {
-    try {
-        const utilisateurId = parseInt(id, 10); // Transforme id en integer
-        let response = await fetch(`/ProfileModification/${utilisateurId}`);
-        utilisateur.value = await response.json();
-    } catch (error) {
-        console.error('Erreur lors de la récupération des utilisateurs:', error);
-    }
-};
-
 // Utilisation de useForm pour gérer le formulaire de modification de profil
 const form = useForm({
     nom: user.nom,

@@ -22,3 +22,5 @@ Route::post('/evenements', [EvenementController::class, 'store']);
 Route::get('/photos/', [PhotoController::class, 'index']);
 Route::post('/photos', [PhotoController::class, 'store']);
 Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);
+
+Route::get('utilisateurs/{id}', [UserController::class, 'show']);
