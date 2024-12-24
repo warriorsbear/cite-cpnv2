@@ -72,4 +72,7 @@ Route::post('/ProfileModification/{id}', function ($id) {
     return Inertia::render('ProfileModification', ['id' => $id]);
 })->middleware(['auth', 'verified'])->name('ProfileModification');
 
+Route::get('/ProfileModification/{id}', [ProfileController::class, 'show'])->name('profile.show');
+Route::post('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
+Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
 

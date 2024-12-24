@@ -82,7 +82,8 @@ const SuprClic = (utilisateur) => {
 };
 
 const ModifClic = (utilisateur) => {
-    form.post(route('ProfileModification', { id: utilisateur.id }));
+    //form.post(route('ProfileModification', { id: utilisateur.id }));
+    window.location.href = route('profile.show', { id: utilisateur.id });
 };
 
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
@@ -290,7 +291,7 @@ div#hautDeZone{
 }
 
 /* Media query pour mettre les zones les une en dessous des autres quand l'écran devient trop petit */
-@media (max-width: 1115px) {
+@media (max-width: 1200px) {
     div#avantStat {
         flex-direction: column;
         height: auto;

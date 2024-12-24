@@ -1,8 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, watch} from 'vue';
 import AuthenticatedLayout from "../Layouts/AuthenticatedLayout.vue";
-import {Head, usePage} from "@inertiajs/vue3";
+import {Head, useForm, usePage} from "@inertiajs/vue3";
 import Footer from "@/Components/Footer.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 const UtilisateurConnecter = usePage().props.auth.user; //variable pour stocker les informations de l'utilisateur connecté
 
@@ -13,8 +17,14 @@ const verificationAdmin = () => {
         location.href = '/';
     }
 }
+/**
 const { id } = defineProps({
     id: String
+});
+ */
+
+const { user } = defineProps({
+    user: Object
 });
 
 const utilisateur = ref([]);
@@ -22,21 +32,24 @@ const utilisateur = ref([]);
 const fetchUtilisateurs = async () => {
     try {
         const utilisateurId = parseInt(id, 10); // Transforme id en integer
-        let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
-        utilisateur.value = (await response.json()).find(u => u.id === utilisateurId);
+        let response = await fetch(`/ProfileModification/${utilisateurId}`);
+        utilisateur.value = await response.json();
     } catch (error) {
         console.error('Erreur lors de la récupération des utilisateurs:', error);
     }
-}
+};
+
+const form = useForm({
+    nom: user.nom,
+    prenom: user.prenom,
+    pseudo: user.pseudo,
+    role: user.role,
+});
 
 onMounted(() => {
     verificationAdmin()
-    fetchUtilisateurs();
+    //fetchUtilisateurs();
 });
-
-const SauvegardeClic = async () => {
-    //traiter les différents cas de modification
-};
 </script>
 
 <template>
@@ -54,28 +67,32 @@ const SauvegardeClic = async () => {
         <main>
             <div class="form-container">
                 <h2>Modifications possibles</h2>
-                <form>
+                <form @submit.prevent="form.patch(route('profile.updateModif', { id: user.id }))">
                     <div class="form-group">
-                        <label for="nom">Nom</label>
-                        <input type="text" id="nom" name="nom" :placeholder="utilisateur?.nom" required>
+                        <InputLabel for="nom" value="Nom" />
+                        <TextInput id="nom" type="text" v-model="form.nom" required />
+                        <InputError :message="form.errors.nom" />
                     </div>
                     <div class="form-group">
-                        <label for="prenom">Prénom</label>
-                        <input type="text" id="prenom" name="prenom" :placeholder="utilisateur?.prenom" required>
+                        <InputLabel for="prenom" value="Prénom" />
+                        <TextInput id="prenom" type="text" v-model="form.prenom" required />
+                        <InputError :message="form.errors.prenom" />
                     </div>
                     <div class="form-group">
-                        <label for="pseudo">Pseudo</label>
-                        <input type="text" id="pseudo" name="pseudo" :placeholder="utilisateur?.pseudo" required>
+                        <InputLabel for="pseudo" value="Pseudo" />
+                        <TextInput id="pseudo" type="text" v-model="form.pseudo" required />
+                        <InputError :message="form.errors.pseudo" />
                     </div>
                     <div class="form-group">
-                        <label for="role">Rôle</label>
-                        <select id="role" name="role" required>
+                        <InputLabel for="role" value="Rôle" />
+                        <select id="role" v-model="form.role" required>
                             <option value="admin">Admin</option>
                             <option value="user">User</option>
                         </select>
+                        <InputError :message="form.errors.role" />
                     </div>
                     <div class="form-group">
-                        <button type="submit" @click="SauvegardeClic()">Sauvegarder</button>
+                        <PrimaryButton :disabled="form.processing">Sauvegarder</PrimaryButton>
                     </div>
                 </form>
             </div>
