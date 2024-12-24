@@ -21,13 +21,17 @@ export default defineComponent({
             const user = usePage().props.auth.user;
             return user && user.id === props.id_createur_even;
         });
+        const officielStatus = computed(() => {
+            return props.Officiel_even ? 'officiel (créer par un admin)' : 'non officiel';
+        });
 
         return {
             montrerPopup,
             togglePopup,
             path,
             isAdmin,
-            isCreateur
+            isCreateur,
+            officielStatus
         };
     },
   props: {
@@ -273,7 +277,7 @@ export default defineComponent({
                 <h3>Type : {{ Type_even }}</h3>
                 <h3>Lieu : {{ Lieu_even }}</h3>
                 <p>Description : {{ description_even }}</p>
-                <p>Officiel : {{ Officiel_even }}</p>
+                <p>Officiel : {{ officielStatus }}</p>
                 <button v-if="!participe_deja" class="button_rejoindre" @click="joinEvent">Rejoindre</button>
                 <button v-if="participe_deja" class="button_quitter" @click="leaveEvent">Quitter</button>
                 <button v-if="isAdmin || isCreateur" class="button_quitter" @click="SupprEvent">Supprimer</button>
