@@ -28,6 +28,7 @@ Route::post('/participations', [ParticipationController::class, 'store']);
 Route::delete('/participations', [ParticipationController::class, 'destroy']);
 
 Route::post('/evenements', [EvenementController::class, 'store']);
+Route::delete('/evenements', [EvenementController::class, 'destroy']);
 Route::get('/photos/', [PhotoController::class, 'index']);
 Route::post('/photos', [PhotoController::class, 'store']);
 Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);

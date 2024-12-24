@@ -1,26 +1,35 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
-import {useForm, usePage} from '@inertiajs/vue3';
+import { defineComponent, ref, computed } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
 
 export default defineComponent({
-  name: "box_even",
-  setup() {
-    const montrerPopup = ref(false);
+    name: "box_even",
+    setup(props) {
+        const montrerPopup = ref(false);
+        const path = ref('');
 
-    const path = ref('');
+        const togglePopup = () => {
+            montrerPopup.value = !montrerPopup.value;
+        };
 
+        const isAdmin = computed(() => {
+            const user = usePage().props.auth.user;
+            return user && user.role === 'admin';
+        });
+        const isCreateur = computed(() => {
+            const user = usePage().props.auth.user;
+            return user && user.id === props.id_createur_even;
+        });
 
-    const togglePopup = () => {
-      montrerPopup.value = !montrerPopup.value;
-    };
-
-    return {
-      montrerPopup,
-      togglePopup,
-        path
-    };
-  },
+        return {
+            montrerPopup,
+            togglePopup,
+            path,
+            isAdmin,
+            isCreateur
+        };
+    },
   props: {
       id: {
           type: Number,
@@ -54,6 +63,10 @@ export default defineComponent({
           type: Boolean,
           required: true,
           default: false
+      },
+      id_createur_even:{
+            type: Number,
+            required: true
       }
 
   },
@@ -140,6 +153,36 @@ export default defineComponent({
               console.error('Error joining event:', error.message);
           }
       },
+      async SupprEvent() {
+          const eventId = this.$props.id;
+          try {
+              const response = await fetch('http://127.0.0.1:8000/api/evenements', {
+                  method: 'DELETE',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                  id_evenement: eventId
+                  })
+              });
+
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              } else {
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Evenement supprimé',
+                      text: 'L\'événement a été supprimé avec succès'
+                  }).then(() => {
+                      window.location.reload();
+                  });
+              }
+          } catch (error) {
+              console.error('Error deleting event:', error.message);
+          }
+      },
+
+
       async leaveEvent() {
           const user = usePage().props.auth.user;
           const eventId = this.$props.id;
@@ -233,6 +276,7 @@ export default defineComponent({
                 <p>Officiel : {{ Officiel_even }}</p>
                 <button v-if="!participe_deja" class="button_rejoindre" @click="joinEvent">Rejoindre</button>
                 <button v-if="participe_deja" class="button_quitter" @click="leaveEvent">Quitter</button>
+                <button v-if="isAdmin || isCreateur" class="button_quitter" @click="SupprEvent">Supprimer</button>
                 <button class="button_commentaire">Voir les commentaire</button>
             </div>
         </div>
