@@ -7,6 +7,7 @@ const utilisateurs = ref([]); //variable réactive pour stocker les utilisateurs
 const recherche = ref(''); //variable réactive qui stock la recherche
 const entrainDeCharger = ref(true); //variable réactive pour savoir si on est en train de charger les utilisateurs
 const UtilisateurConnecter = usePage().props.auth.user; //variable pour stocker les informations de l'utilisateur connecté
+// Formulaire pour gérer les actions sur les utilisateurs
 const form = useForm({
     id: ' ',
 });
@@ -70,7 +71,9 @@ const UtilisateurPasOK = computed(() => {
     return utilisateurs.value.filter(utilisateur => utilisateur.statut_cotisation == 0 || utilisateur.statut == 0);
 });
 
-// Fonctions pour gérer les clics sur les boutons
+// Fonctions pour gérer les clics sur les boutons ----------------------------------------------------------------------
+
+//fonction pour supprimer un utilisateur
 const SuprClic = (utilisateur) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
         form.id = utilisateur.id;
@@ -81,15 +84,17 @@ const SuprClic = (utilisateur) => {
     }
 };
 
+//fonction pour modifier un utilisateur
 const ModifClic = (utilisateur) => {
-    //form.post(route('ProfileModification', { id: utilisateur.id }));
     window.location.href = route('profile.show', { id: utilisateur.id });
 };
 
+//fonction pour afficher le profil d'un utilisateur
 const ProfileClic = (utilisateur) => {
     window.location.href = route('monCompte.show', { id: utilisateur.id });
 };
 
+//fonction pour accepter un utilisateur (change son statut à 1)
 const AccepterClic = (utilisateur) => {
     fetch(`http://127.0.0.1:8000/api/utilisateurs/${utilisateur.id}/accepter`, {
         method: 'PUT',
@@ -110,6 +115,7 @@ const AccepterClic = (utilisateur) => {
         });
 };
 
+//fonction pour envoyer un rappel à un utilisateur (par mail)
 const RappelClic = (utilisateur) => {
     const email = utilisateur.email;
     const subject = `Rappel cotisation de ${utilisateur.pseudo}`;
@@ -164,7 +170,7 @@ onMounted(() => {
                         </div>
                         <div id="boutons">
                           <button @click="ModifClic(utilisateur)">Modifier</button>
-                          <button @click="SuprClic(utilisateur)">Supprimer</button>
+                          <button class="suppr" @click="SuprClic(utilisateur)">Supprimer</button>
                           <button @click="ProfileClic(utilisateur)">Profile</button>
                         </div>
                       </div>
@@ -192,8 +198,8 @@ onMounted(() => {
                           <p v-else class="infoImportante">N'a pas payé</p>
                         </div>
                         <div id="boutons">
-                          <button v-if="utilisateur.statut == 0" @click="AccepterClic(utilisateur)">Accepter</button>
-                          <button v-if="utilisateur.statut == 0" @click="SuprClic(utilisateur)">Refuser</button>
+                          <button class="accept" v-if="utilisateur.statut == 0" @click="AccepterClic(utilisateur)">Accepter</button>
+                          <button class="suppr" v-if="utilisateur.statut == 0" @click="SuprClic(utilisateur)">Refuser</button>
                           <button v-else @click="RappelClic(utilisateur)">Envoyer un rappel</button>
                         </div>
                       </div>
@@ -389,14 +395,24 @@ font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
   margin-right: 6%;
   border: none;
   border-radius: 5px;
-  background-color: #8b8d8d;
+  background-color: #e1b066;
+    color: white;
   cursor: pointer;
   font-size: 15px;
   transition: background-color 0.3s ease;
 }
 #boutons button:hover{
-  background-color: #8b8d8d;
+  background-color: #d89838;
   transform: scale(1.1);
+}
+
+#boutons button.suppr{
+  background-color: #d32f2f;
+    color : white;
+}
+#boutons button.accept{
+  background-color: #4caf50;
+    color : white;
 }
 
 div#stat{
