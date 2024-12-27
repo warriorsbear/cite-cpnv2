@@ -33,6 +33,10 @@ class User extends Authenticatable
         'photo_de_profil',
     ];
 
+    protected $attributes = [
+        'statut' => 0,
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
