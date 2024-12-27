@@ -35,6 +35,7 @@ class User extends Authenticatable
 
     protected $attributes = [
         'statut' => 0,
+        'statut_cotisation' => 0,
     ];
 
     /**

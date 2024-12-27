@@ -110,6 +110,15 @@ const AccepterClic = (utilisateur) => {
         });
 };
 
+const RappelClic = (utilisateur) => {
+    const email = utilisateur.email;
+    const subject = `Rappel cotisation de ${utilisateur.pseudo}`;
+    const body = 'Bonjour, \n\nNous vous rappelons que vous n\'avez pas encore payé votre cotisation pour l\'année en cours. \n' +
+        'Nous vous prions de bien vouloir payer cette cotisation sous peine de voir votre compte désactivé dans les prochains jours. \n\nCordialement, \nLe Club Photo Nailloux';
+
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
     verificationAdmin()
@@ -185,7 +194,7 @@ onMounted(() => {
                         <div id="boutons">
                           <button v-if="utilisateur.statut == 0" @click="AccepterClic(utilisateur)">Accepter</button>
                           <button v-if="utilisateur.statut == 0" @click="SuprClic(utilisateur)">Refuser</button>
-                          <button v-else @click="handleClick(utilisateur)">Envoyer un rappel</button>
+                          <button v-else @click="RappelClic(utilisateur)">Envoyer un rappel</button>
                         </div>
                       </div>
                     </div>
