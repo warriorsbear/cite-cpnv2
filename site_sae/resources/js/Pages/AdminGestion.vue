@@ -90,6 +90,26 @@ const ProfileClic = (utilisateur) => {
     window.location.href = route('monCompte.show', { id: utilisateur.id });
 };
 
+const AccepterClic = (utilisateur) => {
+    fetch(`http://127.0.0.1:8000/api/utilisateurs/${utilisateur.id}/accepter`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                utilisateur.statut = 1; // Met à jour l'état local
+                alert('Utilisateur accepté avec succès');
+            } else {
+                console.error('Erreur lors de l\'acceptation de l\'utilisateur:', response.status, response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la requête:', error);
+        });
+};
+
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
     verificationAdmin()
@@ -163,7 +183,7 @@ onMounted(() => {
                           <p v-else class="infoImportante">N'a pas payé</p>
                         </div>
                         <div id="boutons">
-                          <button v-if="utilisateur.statut == 0" @click="handleClick(utilisateur)">Accepter</button>
+                          <button v-if="utilisateur.statut == 0" @click="AccepterClic(utilisateur)">Accepter</button>
                           <button v-if="utilisateur.statut == 0" @click="SuprClic(utilisateur)">Refuser</button>
                           <button v-else @click="handleClick(utilisateur)">Envoyer un rappel</button>
                         </div>

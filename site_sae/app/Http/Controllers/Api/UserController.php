@@ -41,4 +41,21 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Accepte un utilisateur
+     * @param $id l'id de l'utilisateur
+     * @return \Illuminate\Http\JsonResponse réponse en json
+     */
+    public function accepter($id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            $user->statut = 1;
+            $user->save();
+            return response()->json(['message' => 'Utilisateur accepté avec succès'], 200);
+        } else {
+            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        }
+    }
+
 }

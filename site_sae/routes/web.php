@@ -80,4 +80,3 @@ Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModi
 Route::get('/monCompte/{id}', function ($id) {
     return Inertia::render('MonCompte', ['id' => $id]);
 })->middleware(['auth', 'verified'])->name('monCompte.show');
-
