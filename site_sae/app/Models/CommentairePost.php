@@ -28,7 +28,7 @@ class CommentairePost extends Model
 {
 	protected $table = 'commentaire_post';
 	protected $primaryKey = 'id_commentaire_p';
-	public $timestamps = false;
+	public $timestamps = true;
 
     use HasFactory;
 
@@ -41,13 +41,14 @@ class CommentairePost extends Model
 	protected $fillable = [
 		'texte',
 		'created_at',
+        'updated_at',
 		'id_utilisateur',
 		'id_post'
 	];
 
 	public function user()
 	{
-		return $this->belongsTo(User::class, 'id_utilisateur');
+		return $this->belongsTo(User::class, 'id_utilisateur', 'id');
 	}
 
 	public function post()

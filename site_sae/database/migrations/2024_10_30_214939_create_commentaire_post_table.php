@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('id_commentaire_p', true);
             $table->text('texte')->nullable();
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
             $table->integer('id_utilisateur')->index('id_utilisateur');
             $table->integer('id_post')->index('id_post');
         });

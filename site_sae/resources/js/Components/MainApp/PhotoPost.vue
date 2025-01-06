@@ -17,7 +17,11 @@
             </div>
         </div>
         <div class="comments">
-            <CommentsSection :comments="this.comments.filter(comment => comment.id_post === this.idPost)"/>
+            <CommentsSection
+                :comments="this.comments.filter(comment => comment.id_post === this.idPost)"
+                :postId="this.idPost"
+                @add-comment="onAddComment"
+            />
         </div>
     </div>
 </template>
@@ -47,6 +51,10 @@ export default {
         console.log(this.imageUrl);
     },
     methods: {
+        onAddComment(newComment) {
+            // Mettre à jour la liste des commentaires en temps réel
+            this.comments.unshift(newComment);
+        },
         setHeight() {
             const postElement = this.$el.querySelector('.post');
             if (postElement) {
