@@ -81,13 +81,14 @@ export default {
                         },
                     });
                     const newComment = await response.data;
+                    console.log('Nouveau commentaire :', newComment);
                     this.localComments.unshift({
-                        id_commentaire_p: newComment.id,
-                        texte: newComment.texte,
-                        created_at: newComment.created_at,
+                        id_commentaire_p: newComment.commentaire.id,
+                        texte: newComment.commentaire.texte,
+                        created_at: newComment.commentaire.created_at,
                         user: {
-                            pseudo: usePage().props.auth.user.pseudo,
-                            photo_de_profile: usePage().props.auth.user.photo_de_profile,
+                            pseudo: usePage().props.auth.user.pseudo || 'Utilisateur inconnu',
+                            photo_de_profile: usePage().props.auth.user.photo_de_profile || null,
                         },
                     });
                     this.newComment = '';
