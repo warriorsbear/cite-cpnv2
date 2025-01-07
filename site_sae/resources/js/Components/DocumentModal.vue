@@ -75,6 +75,7 @@ onMounted(async () => {
                         type="file"
                         @change="handleFileChange"
                         required
+                        accept=".pdf,.txt"
                         class="w-full px-3 py-2 border rounded-md"
                     />
                 </div>

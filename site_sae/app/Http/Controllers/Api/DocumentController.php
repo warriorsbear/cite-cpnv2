@@ -22,7 +22,7 @@ class DocumentController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:10240', // 10 Mo max
+            'file' => 'required|file|mimes:pdf,txt|max:10240', // 10 Mo max
             'nom' => 'required|string|max:50',
             'id_utilisateur' => 'required|exists:users,id',
             'id_evenement' => 'nullable|exists:evenement,id_evenement'

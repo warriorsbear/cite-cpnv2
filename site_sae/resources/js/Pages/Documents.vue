@@ -45,10 +45,10 @@ const addDocument = async (documentData) => {
             }
         })
 
-        // Ajouter le nouveau document à la liste
+        // recharge les documents
         await fetchDocuments()
-        console.log('Document ajouté', response.data)
         closeDocumentModal()
+        window.location.reload()
     } catch (err) {
         error.value = "Erreur lors de l'ajout du document"
         console.error(err) // Pour le débogage
