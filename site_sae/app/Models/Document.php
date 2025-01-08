@@ -43,6 +43,11 @@ class Document extends Model
 		'id_utilisateur'
 	];
 
+    protected $dates = [
+        'created_at',
+        'updated_at'
+    ];
+
 	public function event()
 	{
 		return $this->belongsTo(Evenement::class, 'id_evenement');
