@@ -65,12 +65,14 @@ onMounted(() => {
             <box_even
                 v-for="evenement in evenements.data"
                 :key="evenement.id"
+                :id="evenement.id"
                 :titre_even="evenement.titre"
                 :description_even="evenement.description"
                 :Date_even="evenement.date_heure"
                 :Lieu_even="evenement.lieu"
                 :Type_even="evenement.type"
                 :Officiel_even="evenement.officiel"
+                :id_createur_even="evenement.id_utilisateur"
             />
         </div>
         <Footer />

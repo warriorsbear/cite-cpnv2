@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\EvenementController;
 use App\Http\Controllers\Api\FileUploadController;
+use App\Http\Controllers\Api\ParticipationController;
 use App\Http\Controllers\Api\PhotoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -42,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/evenement', [EvenementController::class, 'store'])->name('evenement.create');
+    Route::post('participation', [ParticipationController::class, 'store'])->name('participation.create');
     Route::post('/photo', [PhotoController::class, 'store'])->name('photo.create');
 
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');

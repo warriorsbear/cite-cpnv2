@@ -1,12 +1,18 @@
 <script setup>
-
 import {Head, Link, useForm} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Footer from "@/Components/Footer.vue";
 import {usePage} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
+import Box_even from "@/Components/box_even.vue";
+import PhotoPost from "@/Components/MainApp/PhotoPost.vue";
+import Post_account from "@/Components/Post_account.vue";
 
+const participations = ref([]);
+const allEvents = ref([]);
+const evenements= ref([]);
 const photos = ref([]);
+const posts = ref([]);
 const loading = ref(true);
 
 const user = usePage().props.auth.user;
@@ -24,17 +30,64 @@ const showDescriptionInput= ref(false);
 const newDescription= ref('');
 const description = ref('Ceci est la description du profil.');
 
+const fetchEvenements = async () => {
+    try {
+        // Fetch all events
+        const eventsResponse = await fetch(`http://127.0.0.1:8000/api/evenements`);
+        const eventsData = await eventsResponse.json();
+        if (!Array.isArray(eventsData.data)) {
+            throw new TypeError('Expected an array of events');
+        }
+        allEvents.value = eventsData.data;
+        console.log("Les événements ont été récupérés :", allEvents.value);
 
+        // Fetch user participations
+        const participationsResponse = await fetch(`http://127.0.0.1:8000/api/participations?user_id=${user.id}`);
+        const participationsData = await participationsResponse.json();
+        if (!Array.isArray(participationsData)) {
+            throw new TypeError('Expected an array of participations');
+        }
+        participations.value = participationsData;
+        console.log("Les participations ont été récupérées :", participations.value);
+
+        // Extract event IDs from user participations
+        const userEventIds = participations.value.map(participation => participation.id_evenement);
+
+        // Filter and sort events based on user participation
+        evenements.value = allEvents.value.filter(event => userEventIds.includes(event.id));
+        console.log("Les événements triés ont été récupérés :", evenements.value);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+    }
+};
 const fetchPhotos = async () => {
+
     try {
         const response = await fetch('http://127.0.0.1:8000/api/photos/', {
         });
         photos.value = await response.json();
-        console.log("Les evenements ont été récupérés :", photos.value);
+        console.log("Les photos ont été récupérés :", photos.value);
     } catch (error) {
-        console.error('Erreur lors de la récupération des événements:', error);
-    } finally {
-        loading.value = false;
+        console.error('Erreur lors de la récupération des photos:', error);
+    }
+};
+const fetchPost = async () => {
+
+    try {
+        const response = await fetch('http://127.0.0.1:8000/api/posts/');
+        const postsData = await response.json();
+        console.log(postsData);
+        // Check if the response has a data property and if it's an array
+        if (!postsData || !Array.isArray(postsData)) {
+            throw new TypeError('Expected an array of posts');
+        }
+
+        // Filter the posts to only include those posted by the connected user
+        const userPosts = postsData.filter(post => post.id_utilisateur === user.id);
+        posts.value = userPosts;
+        console.log("Les posts de l'utilisateur ont été récupérés :", posts.value);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des posts:', error);
     }
 };
 
@@ -52,8 +105,9 @@ const updateDescription = () => {
     newDescription.value = '';
 };
 
-onMounted(() => {
-    fetchPhotos();
+onMounted(async () => {
+    await Promise.all([fetchPhotos(), fetchEvenements(), fetchPost()]);
+    loading.value = false;
 });
 </script>
 
@@ -164,22 +218,51 @@ onMounted(() => {
                 <button :class="{'active': activeMenu === 'photos'}" @click="toggleMenu('photos')">Photos</button>
                 <button :class="{'active': activeMenu === 'evenements'}" @click="toggleMenu('evenements')">Événements</button>
             </div>
-            <!-- Posted Photos -->
-            <div v-if="activeMenu === 'photos'" class="posted-photos">
-                <h2>Photos</h2>
-                <div class="photos-grid">
-                    <div v-for="photo in photos.data" :key="photo.id_photo" class="photo-item">
-                        <div>
-                            <img :src="`/storage/${photo.nom}`" alt="Photo" class="photo_user"/>
-                            <p>{{ photo.legende }}</p>
-                        </div>
-                    </div>
-                </div>
+
+            <div v-if="loading===true" class="loading-icon">
+                <h1>Chargement des données...</h1>
+                <img src="../public/images/loading.gif" alt="Loading..." />
             </div>
 
-            <div v-if="activeMenu === 'evenements'" class="posted-events">
-                <h2>Événements</h2>
-                <!-- Add your events display logic here -->
+            <div v-else>
+                <!-- Posted Photos -->
+                <div v-if="activeMenu === 'photos'" class="posted-photos">
+                    <div v-if="posts.length === 0" class="no-content-message">
+                        <p class="messageAbs">Vous n'avez pas encore posté de photos.</p>
+                    </div>
+                    <div v-else class="photos-grid">
+                        <Post_account
+                            v-for="post in posts"
+                            :key="post.id_post"
+                            :idPost="post.id_post"
+                            :username="post.user.pseudo"
+                            :userAvatar="post.user.photo_de_profile"
+                            :imageUrl="post.photos"
+                            :context="'profile'"
+                        />
+                    </div>
+                </div>
+
+                <!-- Posted Events -->
+                <div v-if="activeMenu === 'evenements'" class="posted-events">
+                    <div v-if="evenements.length === 0" class="no-content-message">
+                        <p class="messageAbs">Vous n'avez pas encore rejoint d'événements.</p>
+                    </div>
+                    <div v-else class="conteuneur">
+                        <box_even
+                            v-for="evenement in evenements"
+                            :key="evenement.id"
+                            :id="evenement.id"
+                            :titre_even="evenement.titre"
+                            :description_even="evenement.description"
+                            :Date_even="evenement.date_heure"
+                            :Lieu_even="evenement.lieu"
+                            :Type_even="evenement.type"
+                            :Officiel_even="evenement.officiel"
+                            :participe_deja="true"
+                        />
+                    </div>
+                </div>
 
             </div>
 
@@ -187,7 +270,6 @@ onMounted(() => {
         </div>
         </body>
         <Footer />
-
     </AuthenticatedLayout>
 </template>
 
@@ -198,7 +280,12 @@ html, body {
     padding: 0;
     overflow: auto; /* Ensure scrolling is enabled */
 }
-
+.messageAbs {
+    text-align: center;
+    font-size: 15px;
+    margin: 20px;
+    color: #991b1b;
+}
 .mon-compte {
     display: flex;
     flex-direction: column;
@@ -219,7 +306,18 @@ html, body {
     font-family: 'Poppins', sans-serif;
     margin-bottom: 10px;
 }
+.loading-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
 
+.loading-icon img {
+    width: 50px;
+    height: 50px;
+}
 
 .banner {
     background-color: #838383;
@@ -332,4 +430,22 @@ h2 {
 .edit-button:hover {
     background-color: #ff9900;
 }
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 10px;
+}
+
+.conteuneur{
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next row */
+    gap: 30px; /* Consistent space between items */
+    justify-content: flex-start; /* Align items to the left */
+    padding: 20px;
+    /*
+
+     */
+}
+
 </style>

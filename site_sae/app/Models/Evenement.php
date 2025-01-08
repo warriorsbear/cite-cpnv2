@@ -61,6 +61,20 @@ class Evenement extends Model
     {
         return self::query()->create($data);
     }
+    public static function deleteById($eventId)
+    {
+        // Supprimer les documents associés à l'événement
+        \DB::table('document')->where('id_evenement', $eventId)->delete();
+
+        // Supprimer les participations associées à l'événement
+        \DB::table('participation')->where('id_evenement', $eventId)->delete();
+
+        // Supprimer les commentaires associés �� l'événement
+        \DB::table('commentaire_event')->where('id_evenement', $eventId)->delete();
+
+        // Supprimer l'événement
+        return self::where('id_evenement', $eventId)->delete();
+    }
 
 	public function utilisateur()
 	{
