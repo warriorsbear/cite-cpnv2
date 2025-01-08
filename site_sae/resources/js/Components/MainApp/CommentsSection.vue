@@ -81,7 +81,7 @@ export default {
                         created_at: newComment.commentaire.created_at,
                         user: {
                             pseudo: usePage().props.auth.user.pseudo || 'Utilisateur inconnu',
-                            photo_de_profile: usePage().props.auth.user.photo_de_profile || null,
+                            photo_de_profil: usePage().props.auth.user.photo_de_profil || null,
                         },
                     });
                     this.newComment = '';
