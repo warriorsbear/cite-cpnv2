@@ -8,22 +8,22 @@ import Box_even from "@/Components/box_even.vue";
 import PhotoPost from "@/Components/MainApp/PhotoPost.vue";
 import Post_account from "@/Components/Post_account.vue";
 
+const userDemanderId = usePage().props.id ? usePage().props.id : null;
 const participations = ref([]);
 const allEvents = ref([]);
 const evenements= ref([]);
 const photos = ref([]);
 const posts = ref([]);
 const loading = ref(true);
-
-const user = usePage().props.auth.user;
+let utilisateur = usePage().props.auth.user;
 
 const form = useForm({
-    id: user.id,
-    nom: user.nom,
-    prenom: user.prenom,
-    pseudo: user.pseudo,
-    email: user.email,
-    photo: user.photo_de_profil,
+    id: utilisateur.id,
+    nom: utilisateur.nom,
+    prenom: utilisateur.prenom,
+    pseudo: utilisateur.pseudo,
+    email: utilisateur.email,
+    photo: utilisateur.photo_de_profil,
 });
 const activeMenu = ref('photos');
 const showDescriptionInput= ref(false);
@@ -41,7 +41,7 @@ const fetchEvenements = async () => {
         allEvents.value = eventsData.data;
         console.log("Les événements ont été récupérés :", allEvents.value);
 
-        // Fetch user participations
+         // Fetch user participations
         const participationsResponse = await fetch(`http://127.0.0.1:8000/api/participations?user_id=${user.id}`);
         const participationsData = await participationsResponse.json();
         if (!Array.isArray(participationsData)) {
@@ -60,6 +60,29 @@ const fetchEvenements = async () => {
         console.error('Erreur lors de la récupération des événements:', error);
     }
 };
+
+        
+const fetchUser = async (id) => {
+    if(id != null) {
+        console.log("id", id);
+        try{
+            let response;
+            const utilisateurId = parseInt(id, 10); // Transforme id en integer
+            response = await fetch(`http://127.0.0.1:8000/api/utilisateurs/${utilisateurId}`);
+            const fetchedUser = await response.json();
+            //Object.assign(utilisateur, fetchedUser);
+            utilisateur = fetchedUser;
+            console.log("Les informations de l'utilisateur ont été récupérées :", utilisateur);
+        }catch (error){
+            console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
+        }
+
+       
+    }else{
+        console.log("id", id);
+    }
+};
+
 const fetchPhotos = async () => {
 
     try {
@@ -106,68 +129,12 @@ const updateDescription = () => {
 };
 
 onMounted(async () => {
-    await Promise.all([fetchPhotos(), fetchEvenements(), fetchPost()]);
+    await Promise.all([fetchPhotos(), fetchEvenements(), fetchPost(),fetchUser(userDemanderId);]);
     loading.value = false;
+
+
 });
 </script>
-
-<!--<script>-->
-<!--export default {-->
-<!--    components: {Box_even},-->
-<!--    data() {-->
-<!--        return {-->
-<!--            utilisateur: {-->
-<!--                photo: "http://[::1]:5173/resources/js/public/images/avatar.jpg",-->
-<!--                banner: "http://[::1]:5173/resources/js/public/images/baniere.png",-->
-<!--                nom: usePage().props.auth.user.nom.split(' ')[1] || '',-->
-<!--                prenom: usePage().props.auth.user.prenom.split(' ')[0] || '',-->
-<!--                description: "Ceci est la description du profil.",-->
-<!--                photos: [-->
-<!--                ]-->
-<!--            },-->
-<!--            activeMenu: 'photos',-->
-<!--            showDescriptionInput: false,-->
-<!--            newDescription: ''-->
-<!--        };-->
-
-<!--    },-->
-<!--    mounted() {-->
-<!--        this.fetchUserPhotos();-->
-<!--    },-->
-<!--    methods: {-->
-<!--        async fetchUserPhotos() {-->
-<!--            try {-->
-<!--                const response = await axios.get('/user/photos', {-->
-<!--                    params: {-->
-<!--                        userId: usePage().props.auth.user.id-->
-<!--                    }-->
-<!--                });-->
-
-<!--                // Transformez les données de la réponse-->
-<!--                this.utilisateur.photos = response.data.data.map(photo => ({-->
-<!--                    id: photo.id,-->
-<!--                    url: `/storage/app/public/photos/${photo.nom}`, // Assurez-vous que le chemin est correct-->
-<!--                    description: photo.legende || 'Sans légende'-->
-<!--                }));-->
-<!--            } catch (error) {-->
-<!--                console.error('Erreur lors de la récupération des photos:', error);-->
-<!--                // Optionnel : gérer l'erreur (message à l'utilisateur, etc.)-->
-<!--            }-->
-<!--        },-->
-<!--        toggleMenu(menu) {-->
-<!--            this.activeMenu = menu;-->
-<!--        },-->
-<!--        changeDescription(newDescription) {-->
-<!--            this.utilisateur.description = newDescription;-->
-<!--        },-->
-<!--        updateDescription() {-->
-<!--            this.changeDescription(this.newDescription);-->
-<!--            this.showDescriptionInput = false;-->
-<!--            this.newDescription = '';-->
-<!--        }-->
-<!--    }-->
-<!--};-->
-<!--</script>-->
 
 <template>
     <Head title="Mon compte" />
@@ -193,7 +160,7 @@ onMounted(async () => {
 
             <div class="profile-header">
                 <img src="../public/images/avatar.jpg" alt="Profile Picture" class="profile-picture"/>
-                <h1>{{ user.nom }} {{ user.prenom }} </h1>
+                <h1>{{ utilisateur.nom }} {{ utilisateur.prenom }} </h1>
 
             </div>
 

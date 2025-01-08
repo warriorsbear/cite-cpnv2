@@ -20,6 +20,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->string('cp', 5)->nullable();
+            $table->integer('statut')->nullable();
             $table->integer('statut_cotisation')->nullable();
             $table->integer('notif_mail')->nullable();
             $table->string('role');

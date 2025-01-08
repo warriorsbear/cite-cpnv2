@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\EvenementController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\ParticipationController;
 use App\Http\Controllers\Api\PhotoController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/events/list', [EvenementController::class, 'index'])->name('events.list');
 
 
+    Route::delete('/users/{id}', [UserController::class, 'suprimerUser'])->name('users.suprimerUser');
 });
 
 
@@ -59,11 +61,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 /**
- * Route ajoutée par Florian
- *
- * J'ai enlever ces lignes (fichier AuthenticatedLayout.vue, ligne 55) :
- * :href="route('profile.edit')"
- * :active="route().current('profile.edit')"
+ * Route ajoutée par flo
  */
 Route::get('/monCompte', function () {
     return Inertia::render('MonCompte');
@@ -85,3 +83,17 @@ Route::get('/user/photos', [PhotoController::class, 'getUserPhotos'])
 Route::get('/AdminGestion', function () {
     return Inertia::render('AdminGestion');
 })->middleware(['auth', 'verified'])->name('AdminGestion');
+
+//déclaration de la route en post pour que les paramètres ne soient pas visibles dans l'url
+Route::post('/ProfileModification/{id}', function ($id) {
+    return Inertia::render('ProfileModification', ['id' => $id]);
+})->middleware(['auth', 'verified'])->name('ProfileModification');
+
+Route::get('/ProfileModification/{id}', [ProfileController::class, 'show'])->name('profile.show');
+Route::post('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
+Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
+
+//ajout de la route pour la page monCompte avec un paramètre
+Route::get('/monCompte/{id}', function ($id) {
+    return Inertia::render('MonCompte', ['id' => $id]);
+})->middleware(['auth', 'verified'])->name('monCompte.show');

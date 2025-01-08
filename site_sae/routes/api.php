@@ -37,3 +37,5 @@ Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/commentaires', [CommentairePostController::class, 'index']);
 Route::post('/commentaires', [CommentairePostController::class, 'store']);//->middleware('auth:sanctum');
+
+Route::put('/utilisateurs/{id}/accepter', [UserController::class, 'accepter'])->name('utilisateurs.accepter');

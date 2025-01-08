@@ -1,17 +1,28 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import AuthenticatedLayout from "../Layouts/AuthenticatedLayout.vue";
 import {Head, useForm, usePage} from "@inertiajs/vue3";
 
 const utilisateurs = ref([]); //variable réactive pour stocker les utilisateurs
 const recherche = ref(''); //variable réactive qui stock la recherche
 const entrainDeCharger = ref(true); //variable réactive pour savoir si on est en train de charger les utilisateurs
 const UtilisateurConnecter = usePage().props.auth.user; //variable pour stocker les informations de l'utilisateur connecté
+// Formulaire pour gérer les actions sur les utilisateurs
+const form = useForm({
+    id: ' ',
+});
+
+//fonction qui vérifie que la personne qui va modifier est bien un admin
+const verificationAdmin = () => {
+    if (UtilisateurConnecter.role !== 'admin') {
+        alert('Vous n\'avez pas les droits pour accéder à cette page');
+        location.href = '/';
+    }
+};
 const RecuperationUtilisateurs = async () => {
   try {
     let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
     utilisateurs.value = await response.json(); // Lit le corps en tant que JSON et le stocke dans `users`
-    console.log("Les utilisateurs ont été récupérés :", utilisateurs.value);
   } catch (error) {
     console.error('Erreur lors de la récupération des utilisateurs:', error);
   }finally{
@@ -39,12 +50,84 @@ const UtilisateurFiltre = computed(() => {
   );
 });
 
+/**
+ * Filtrer les utilisateurs qui n'ont pas payé leur cotisation
+ */
 const UtilisateurQuiOnPasPaye = computed(() => {
   return utilisateurs.value.filter(utilisateur => utilisateur.statut_cotisation == false);
 });
 
+/**
+ * Filtrer les utilisateurs qui n'ont pas été acceptés
+ */
+const UtilisateurPasAccepte = computed(() => {
+  return utilisateurs.value.filter(utilisateur => utilisateur.statut == 0);
+});
+
+/**
+ * Filtrer les utilisateurs qui n'ont pas payé leur cotisation ou qui n'ont pas été acceptés
+ */
+const UtilisateurPasOK = computed(() => {
+    return utilisateurs.value.filter(utilisateur => utilisateur.statut_cotisation == 0 || utilisateur.statut == 0);
+});
+
+// Fonctions pour gérer les clics sur les boutons ----------------------------------------------------------------------
+
+//fonction pour supprimer un utilisateur
+const SuprClic = (utilisateur) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+        form.id = utilisateur.id;
+        form.delete(route('users.suprimerUser', { id: utilisateur.id }));
+        window.location.reload();
+    } else {
+        console.log('Suppression annulée');
+    }
+};
+
+//fonction pour modifier un utilisateur
+const ModifClic = (utilisateur) => {
+    window.location.href = route('profile.show', { id: utilisateur.id });
+};
+
+//fonction pour afficher le profil d'un utilisateur
+const ProfileClic = (utilisateur) => {
+    window.location.href = route('monCompte.show', { id: utilisateur.id });
+};
+
+//fonction pour accepter un utilisateur (change son statut à 1)
+const AccepterClic = (utilisateur) => {
+    fetch(`http://127.0.0.1:8000/api/utilisateurs/${utilisateur.id}/accepter`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => {
+            if (response.ok) {
+                utilisateur.statut = 1; // Met à jour l'état local
+                alert('Utilisateur accepté avec succès');
+            } else {
+                console.error('Erreur lors de l\'acceptation de l\'utilisateur:', response.status, response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la requête:', error);
+        });
+};
+
+//fonction pour envoyer un rappel à un utilisateur (par mail)
+const RappelClic = (utilisateur) => {
+    const email = utilisateur.email;
+    const subject = `Rappel cotisation de ${utilisateur.pseudo}`;
+    const body = 'Bonjour, \n\nNous vous rappelons que vous n\'avez pas encore payé votre cotisation pour l\'année en cours. \n' +
+        'Nous vous prions de bien vouloir payer cette cotisation sous peine de voir votre compte désactivé dans les prochains jours. \n\nCordialement, \nLe Club Photo Nailloux';
+
+    window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
 // Appelle la fonction lorsque le composant est monté (complétement chargé dans le DOM)
 onMounted(() => {
+    verificationAdmin()
   RecuperationUtilisateurs();
 });
 </script>
@@ -58,14 +141,14 @@ onMounted(() => {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Messagerie
+                Gestion des utilisateurs
             </h2>
         </template>
           <main>
             <h1>Bienvenue sur votre tableau de bord {{UtilisateurConnecter.nom}} !</h1>
             <!-- Afficher l'icône de chargement si les données sont en cours de chargement -->
             <div v-if="entrainDeCharger" class="loading-icon">
-              <img src="\public\images\loading.gif" alt="Loading..." />
+              <img src="../public/images/loading.gif" alt="Loading..." />
             </div>
               <div v-else id="pageCharger">
                 <div id="avantStat">
@@ -86,9 +169,9 @@ onMounted(() => {
                           <p>{{utilisateur.nom}} {{utilisateur.prenom}}</p>
                         </div>
                         <div id="boutons">
-                          <button @click="handleClick(utilisateur)">Modifier</button>
-                          <button @click="handleClick(utilisateur)">Supprimer</button>
-                          <button @click="handleClick(utilisateur)">Profil</button>
+                          <button @click="ModifClic(utilisateur)">Modifier</button>
+                          <button class="suppr" @click="SuprClic(utilisateur)">Supprimer</button>
+                          <button @click="ProfileClic(utilisateur)">Profile</button>
                         </div>
                       </div>
                     </div>
@@ -98,7 +181,7 @@ onMounted(() => {
 
                   <div id="zone2">
                     <div id="hautDeZone">
-                      <h3>Utilisateurs qui n'ont pas payé leur cotisation :</h3>
+                      <h3>Utilisateurs qui n'ont pas payé leur cotisation ou, <br> en attente d'acceptation :</h3>
                       <form class="search-bar" @submit.prevent>
                         <input type="search" v-model="recherche" placeholder="Rechercher..." />
                         <button type="submit">🔍</button>
@@ -106,15 +189,18 @@ onMounted(() => {
                     </div>
                     <div id="zoneScroll">
                       <!--créer une balise div pour chaques utilisteurs filtrés-->
-                      <div v-for="utilisateur in UtilisateurQuiOnPasPaye" :key="utilisateur.id_utilisateur" class="user">
+                      <div v-for="utilisateur in UtilisateurPasOK" :key="utilisateur.id_utilisateur" class="user">
                         <img v-if="utilisateur.photo_de_profile" :src="utilisateur.photo_de_profile" alt="logo" id="pp" width="100" height="100">
                         <div class="infoUtilisateur">
                           <p id="pseudo">{{utilisateur.pseudo}}</p>
                           <p>{{utilisateur.nom}} {{utilisateur.prenom}}</p>
+                          <p v-if="utilisateur.statut == 0" class="infoImportante">En attente de validation</p>
+                          <p v-else class="infoImportante">N'a pas payé</p>
                         </div>
                         <div id="boutons">
-                          <button @click="handleClick(utilisateur)">Accepter</button>
-                          <button @click="handleClick(utilisateur)">Refuser</button>
+                          <button class="accept" v-if="utilisateur.statut == 0" @click="AccepterClic(utilisateur)">Accepter</button>
+                          <button class="suppr" v-if="utilisateur.statut == 0" @click="SuprClic(utilisateur)">Refuser</button>
+                          <button v-else @click="RappelClic(utilisateur)">Envoyer un rappel</button>
                         </div>
                       </div>
                     </div>
@@ -133,9 +219,9 @@ onMounted(() => {
                     <h3>utilisateurs qui n'ont pas payé leur cotisation</h3>
                   </div>
                   <div id="stat3">
-                    <h3>Il y a actuellement :</h3>
-                    <h1 id="nombre">{{nombreUtilisateurs}}</h1>
-                    <h3>utilisateurs inscrits</h3>
+                    <h3>Et aussi :</h3>
+                    <h1 id="nombre">{{UtilisateurPasAccepte.length}}</h1>
+                    <h3>utilisateurs en attentes de validation</h3>
                   </div>
                 </div>
               </div>
@@ -188,6 +274,7 @@ div#pageCharger{
 }
 div#avantStat{
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
@@ -196,7 +283,8 @@ div#avantStat{
   margin-top: 2%;
   margin-bottom: 2%;
 }
-div#zone1, #zone2 {
+
+#zone1, #zone2 {
   height: 28.5rem;
   width: 45%;
   background-color: #eae3e3;
@@ -241,22 +329,34 @@ div#hautDeZone{
 
 }
 
-.user{
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: flex-start;
-  max-height: 120px;
-  min-width: 100%;
+/* Media query pour mettre les zones les une en dessous des autres quand l'écran devient trop petit */
+@media (max-width: 1200px) {
+    div#avantStat {
+        flex-direction: column;
+        height: auto;
+    }
 
-  flex-grow: 1;
-  flex-shrink: 1;
+    div#zone1, div#zone2 {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+}
 
-  border-top: 3px solid #8b8d8d;
-  border-left: none;
-  border-right: none;
-  margin-top : 1%;
-  padding: 10px;
+.user {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: flex-start;
+    max-height: 150px;
+    min-width: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    border-top: 3px solid #8b8d8d;
+    border-left: none;
+    border-right: none;
+    margin-top: 1%;
+    padding-left: 10px;
+    overflow: hidden; /* Ensure content does not overflow */
 }
 .user img{
   border:2px solid #8b8d8d;
@@ -272,6 +372,10 @@ div#hautDeZone{
   width: 20%;
 
 font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+}
+.infoImportante{
+  color: #d79026;
+  font-weight: bold;
 }
 #pseudo{
   Font-size: 1.5em;
@@ -291,14 +395,24 @@ font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
   margin-right: 6%;
   border: none;
   border-radius: 5px;
-  background-color: #8b8d8d;
+  background-color: #e1b066;
+    color: white;
   cursor: pointer;
   font-size: 15px;
   transition: background-color 0.3s ease;
 }
 #boutons button:hover{
-  background-color: #8b8d8d;
+  background-color: #d89838;
   transform: scale(1.1);
+}
+
+#boutons button.suppr{
+  background-color: #d32f2f;
+    color : white;
+}
+#boutons button.accept{
+  background-color: #4caf50;
+    color : white;
 }
 
 div#stat{
@@ -372,5 +486,23 @@ h1#nombre{
 }
 .search-bar button:hover {
   background-color: #8b8d8d;
+}
+@media (max-width: 550px) {
+    .search-bar {
+        width: 100%;
+    }
+    .search-bar input {
+        width: 100%;
+    }
+    .search-bar button {
+        padding: 10px 10px;
+    }
+
+    .user>#boutons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-left: auto;
+    }
 }
 </style>
