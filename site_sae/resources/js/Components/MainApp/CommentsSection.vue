@@ -2,11 +2,11 @@
     <div class="comments-section">
         <h4 class="comments-title">Commentaires</h4>
         <div class="comments-docker">
-            <hr>
-            <div v-for="comment in comments" :key="comment.id_commentaire_p" class="comment">
+            <hr/>
+            <div v-for="comment in localComments" :key="comment.id_commentaire_p" class="comment">
                 <div class="user-info-comment">
                     <div class="user-info-left">
-                        <img src="../../public/images/avatar.jpg" alt="Avatar commentaire" class="avatar-comments">
+                        <img :src="comment.user.photo_de_profil" alt="Avatar commentaire" class="avatar-comments"/>
                         <p class="user-comments"><strong>{{ comment.user.pseudo }}</strong></p>
                     </div>
                     <p class="date-comments">{{ formatCreatedAt(comment.created_at) }}</p>
@@ -15,42 +15,102 @@
             </div>
         </div>
         <div class="add-comment">
-            <input v-model="newComment" placeholder="Ajouter un commentaire..."/>
+            <input
+                v-model="newComment"
+                placeholder="Ajouter un commentaire..."
+                aria-label="Champ pour ajouter un commentaire"
+            />
             <button @click="addComment">Commenter</button>
         </div>
+        <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
     </div>
 </template>
 
 <script>
-import {nextTick} from "vue";
+import axios from 'axios';
 import {formatDistance} from "date-fns";
 import {fr} from "date-fns/locale";
+import {usePage} from "@inertiajs/vue3";
 
 export default {
     props: {
-        comments: Array,
+        comments: {
+            type: Array,
+            required: true,
+        },
+        postId: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
             newComment: '',
+            errorMessage: '',
+            localComments: [...this.comments],
         };
     },
+    watch: {
+        comments: {
+            handler(newComments) {
+                this.localComments = [...newComments]; // Synchronisation si la prop change
+            },
+            deep: true,
+        },
+    },
     methods: {
-        addComment() {
+        async addComment() {
             if (this.newComment.trim() !== '') {
-                this.$emit('add-comment', this.newComment);
-                this.newComment = '';
+                try {
+                    const response = await axios({
+                        url: 'http://127.0.0.1:8000/api/commentaires',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        data: {
+                            texte: this.newComment,
+                            id_post: this.postId,
+                            id_utilisateur: usePage().props.auth.user.id,
+                        },
+                    });
+                    const newComment = await response.data;
+                    this.localComments.unshift({
+                        id_commentaire_p: newComment.commentaire.id,
+                        texte: newComment.commentaire.texte,
+                        created_at: newComment.commentaire.created_at,
+                        user: {
+                            pseudo: usePage().props.auth.user.pseudo || 'Utilisateur inconnu',
+                            photo_de_profil: usePage().props.auth.user.photo_de_profil || null,
+                        },
+                    });
+                    this.newComment = '';
+                } catch (error) {
+                    if (error.response) {
+                        // La requête a été faite et le serveur a répondu avec un code de statut
+                        // qui tombe hors de la plage de 2xx
+                        this.errorMessage = `Erreur ${error.response.status}: ${error.response.data.message}`;
+                    } else if (error.request) {
+                        // La requête a été faite mais aucune réponse n'a été reçue
+                        this.errorMessage = 'Aucune réponse du serveur. Vérifiez votre connexion.';
+                    } else {
+                        // Quelque chose s'est passé lors de la configuration de la requête qui a déclenché une erreur
+                        this.errorMessage = 'Erreur lors de la configuration de la requête.';
+                    }
+                    console.error(error);
+                }
             }
         },
         formatCreatedAt(date) {
             return formatDistance(new Date(date), new Date(), {
                 addSuffix: true,
-                locale: fr
-            })
-        }
+                locale: fr,
+            });
+        },
     },
 };
 </script>
+
 
 <style scoped>
 * {

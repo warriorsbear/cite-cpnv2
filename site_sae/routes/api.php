@@ -10,16 +10,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->middleware('auth:sanctum');
+});
 
 Route::get('/test', function () {
     return response()->json(['message' => 'API fonctionne correctement']);
 })->middleware(['auth', 'verified']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+//    Route::get('/user', function (Request $request) {
+//        return $request->user();
+//    });
 
     Route::get('/test', function () {
         return response()->json(['message' => 'API fonctionne correctement']);
@@ -41,3 +41,4 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/commentaires', [CommentairePostController::class, 'index']);
+Route::post('/commentaires', [CommentairePostController::class, 'store']);//->middleware('auth:sanctum');

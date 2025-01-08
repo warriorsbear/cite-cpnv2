@@ -5,7 +5,9 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import { createPinia } from 'pinia';
 
+const pinia = createPinia(); // Initialisation de Pinia
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -16,12 +18,15 @@ createInertiaApp({
             import.meta.glob('./Pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(ZiggyVue)
-            .mount(el);
+        const app = createApp({ render: () => h(App, props) });
+        app.config.devtools = true; // Activation des outils de développement
+        return app
+            .use(plugin) // Utilisation correcte du plugin Inertia.js
+            .use(pinia) // Ajout de Pinia
+            .use(ZiggyVue) // Ajout de ZiggyVue
+            .mount(el); // Montage de l'application
     },
     progress: {
-        color: '#4B5563',
+        color: '#4B5563', // Couleur de la barre de progression
     },
 });

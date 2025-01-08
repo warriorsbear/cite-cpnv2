@@ -2,7 +2,7 @@
     <div class="photo-post">
         <div class="post">
             <div class="post-header">
-                <img src="../../public/images/avatar.jpg" alt="Avatar" class="avatar"/>
+                <img :src="userAvatar" alt="Avatar" class="avatar"/>
                 <div class="user-info">
                     <h4 class="username">{{ username }}</h4>
                     <p class="post-time">{{ postTime }}</p>
@@ -17,7 +17,10 @@
             </div>
         </div>
         <div class="comments">
-            <CommentsSection :comments="this.comments.filter(comment => comment.id_post === this.idPost)"/>
+            <CommentsSection
+                :comments="this.comments.filter(comment => comment.id_post === this.idPost)"
+                :postId="this.idPost"
+            />
         </div>
     </div>
 </template>
@@ -44,7 +47,6 @@ export default {
         nextTick(() => {
             this.setHeight();
         });
-        console.log(this.imageUrl);
     },
     methods: {
         setHeight() {

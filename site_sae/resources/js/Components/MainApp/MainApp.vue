@@ -5,13 +5,12 @@
             :key="post.id_post"
             :idPost="post.id_post"
             :username="post.user.pseudo"
-            :userAvatar="post.user.photo_de_profile"
+            :userAvatar="post.user.photo_de_profil"
             :postTime="formatCreatedAt(post.created_at)"
             :imageUrl="post.photos"
             :caption="post.Légende"
             :tags="post.tags"
             :comments="this.commentaires"
-            @add-comment="addComment(post.id, $event)"
         />
     </div>
 </template>
@@ -37,21 +36,11 @@ export default {
         try {
             this.posts = await fetchPosts(); // Appel de l'API
             this.commentaires = await fetchCommentairesPosts(); // Appel de l'API
-            // console.log(this.commentaires);
-            console.log(this.posts);
-
         } catch (error) {
             console.error("Erreur lors du chargement des données :", error);
         }
     },
     methods: {
-        addComment(postId, comment) {
-            const post = this.posts.find(post => post.id === postId);
-            post.comments.push(comment);
-        },
-        getComments(postId) {
-            return this.commentaires.filter(comment => comment.id_post === postId);
-        },
         formatCreatedAt(date) {
             return formatDistance(new Date(date), new Date(), {
                 addSuffix: true,
@@ -60,29 +49,6 @@ export default {
         },
     },
 };
-
-// NE FONCTIONNE PAS...
-// let lastScrollY = window.scrollY;
-// const navbar = () => document.querySelector('nav');
-//
-// window.addEventListener('scroll', () => {
-//     // Cacher la navbar quand on descend
-//     if (window.scrollY > lastScrollY) {
-//         navbar.classList.add('hidden');
-//     }
-//     // Réafficher la navbar quand on remonte
-//     else {
-//         navbar.classList.remove('hidden');
-//     }
-//     lastScrollY = window.scrollY;
-// });
-//
-// // Réafficher si la souris atteint le haut de l'écran
-// document.addEventListener('mousemove', (e) => {
-//     if (e.clientY < 50) {
-//         navbar.classList.remove('hidden');
-//     }
-// });
 </script>
 
 <style>

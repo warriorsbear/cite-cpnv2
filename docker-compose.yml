@@ -25,6 +25,7 @@ services:
       - ./db_dev_data:/var/lib/mysql
     ports:
       - "3306:3306"
+    user: "${UID}:${GID}"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
