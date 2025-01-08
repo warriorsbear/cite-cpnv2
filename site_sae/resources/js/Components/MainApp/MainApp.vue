@@ -5,7 +5,7 @@
             :key="post.id_post"
             :idPost="post.id_post"
             :username="post.user.pseudo"
-            :userAvatar="post.user.photo_de_profile"
+            :userAvatar="post.user.photo_de_profil"
             :postTime="formatCreatedAt(post.created_at)"
             :imageUrl="post.photos"
             :caption="post.Légende"

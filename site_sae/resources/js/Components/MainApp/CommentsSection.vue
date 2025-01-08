@@ -6,7 +6,7 @@
             <div v-for="comment in localComments" :key="comment.id_commentaire_p" class="comment">
                 <div class="user-info-comment">
                     <div class="user-info-left">
-                        <img :src="comment.user.photo_de_profile" alt="Avatar commentaire" class="avatar-comments"/>
+                        <img :src="comment.user.photo_de_profil" alt="Avatar commentaire" class="avatar-comments"/>
                         <p class="user-comments"><strong>{{ comment.user.pseudo }}</strong></p>
                     </div>
                     <p class="date-comments">{{ formatCreatedAt(comment.created_at) }}</p>
@@ -30,7 +30,6 @@
 import axios from 'axios';
 import {formatDistance} from "date-fns";
 import {fr} from "date-fns/locale";
-import {useAuthStore} from "@/Services/authStore.js";
 import {usePage} from "@inertiajs/vue3";
 
 export default {
@@ -63,11 +62,6 @@ export default {
         async addComment() {
             if (this.newComment.trim() !== '') {
                 try {
-                    // const authStore = useAuthStore(); // Utilisez Pinia pour accéder à l'utilisateur
-                    // console.log('Utilisateur connecté :', authStore.user);
-
-                    console.log('Utilisateur connecté :', usePage().props.auth.user);
-
                     const response = await axios({
                         url: 'http://127.0.0.1:8000/api/commentaires',
                         method: 'POST',
@@ -81,7 +75,6 @@ export default {
                         },
                     });
                     const newComment = await response.data;
-                    console.log('Nouveau commentaire :', newComment);
                     this.localComments.unshift({
                         id_commentaire_p: newComment.commentaire.id,
                         texte: newComment.commentaire.texte,
