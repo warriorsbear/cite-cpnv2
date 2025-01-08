@@ -51,7 +51,7 @@ const addDocument = async (documentData) => {
         window.location.reload()
     } catch (err) {
         error.value = "Erreur lors de l'ajout du document"
-        console.error(err) // Pour le débogage
+        //console.error(err) // Pour le débogage
     }
 }
 

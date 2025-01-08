@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
     Route::get('/documents/download/{id}', [DocumentController::class, 'download'])->name('documents.download');
+    Route::delete('/documents/{id}', [DocumentController::class, 'delete'])->name('documents.destroy');
+
     Route::get('/events/list', [EvenementController::class, 'index'])->name('events.list');
 
 
