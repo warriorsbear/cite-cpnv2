@@ -15,7 +15,7 @@ const evenements= ref([]);
 const photos = ref([]);
 const posts = ref([]);
 const loading = ref(true);
-let utilisateur = usePage().props.auth.user;
+const utilisateur = usePage().props.auth.user;
 
 const form = useForm({
     id: utilisateur.id,
@@ -42,7 +42,7 @@ const fetchEvenements = async () => {
         console.log("Les événements ont été récupérés :", allEvents.value);
 
          // Fetch user participations
-        const participationsResponse = await fetch(`http://127.0.0.1:8000/api/participations?user_id=${user.id}`);
+        const participationsResponse = await fetch(`http://127.0.0.1:8000/api/participations?user_id=${utilisateur.id}`);
         const participationsData = await participationsResponse.json();
         if (!Array.isArray(participationsData)) {
             throw new TypeError('Expected an array of participations');
@@ -61,7 +61,7 @@ const fetchEvenements = async () => {
     }
 };
 
-        
+
 const fetchUser = async (id) => {
     if(id != null) {
         console.log("id", id);
@@ -77,7 +77,7 @@ const fetchUser = async (id) => {
             console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
         }
 
-       
+
     }else{
         console.log("id", id);
     }
@@ -106,7 +106,7 @@ const fetchPost = async () => {
         }
 
         // Filter the posts to only include those posted by the connected user
-        const userPosts = postsData.filter(post => post.id_utilisateur === user.id);
+        const userPosts = postsData.filter(post => post.id_utilisateur === utilisateur.id);
         posts.value = userPosts;
         console.log("Les posts de l'utilisateur ont été récupérés :", posts.value);
     } catch (error) {
@@ -129,7 +129,7 @@ const updateDescription = () => {
 };
 
 onMounted(async () => {
-    await Promise.all([fetchPhotos(), fetchEvenements(), fetchPost(),fetchUser(userDemanderId);]);
+    await Promise.all([fetchPhotos(), fetchEvenements(), fetchPost(),fetchUser(userDemanderId)]);
     loading.value = false;
 
 
@@ -227,6 +227,7 @@ onMounted(async () => {
                             :Type_even="evenement.type"
                             :Officiel_even="evenement.officiel"
                             :participe_deja="true"
+                            :id_createur_even="evenement.id_utilisateur"
                         />
                     </div>
                 </div>
