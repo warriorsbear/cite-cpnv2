@@ -5,6 +5,7 @@ import { ref, onMounted } from 'vue';
 import Box_even from "@/Components/box_even.vue";
 import CreationEvenement from "@/Components/CreationEvenement.vue";
 import Test_creation from "@/Components/test_creation.vue";
+import Footer from "@/Components/Footer.vue";
 
 
 
@@ -55,27 +56,25 @@ onMounted(() => {
         <test_creation v-if="montrerTestCreation" @submit="handleFormSubmit" @close="montrerTestCreation = false"/>
 
         <!-- Inclure le modal de création d'événement -->
-        <CreationEvenement :visible="montrerBoutonCreer" :user_id=user.id @close="montrerBoutonCreer = false"/>
 
-
-
-
-                        <div v-if="loading" class="loading-icon">
-                            <h1>Chargement des événements...</h1>
-                            <img src="../public/images/loading.gif" alt="Loading..." />
-                        </div>
-                        <div v-else class ="conteuneur">
-                            <box_even
-                                v-for="evenement in evenements.data"
-                                :key="evenement.id"
-                                :titre_even="evenement.titre"
-                                :description_even="evenement.description"
-                                :Date_even="evenement.date_heure"
-                                :Lieu_even="evenement.lieu"
-                                :Type_even="evenement.type"
-                                :Officiel_even="evenement.officiel"
-                            />
-                        </div>
+        <div v-if="loading" class="loading-icon">
+            <h1>Chargement des événements...</h1>
+            <img src="../public/images/loading.gif" alt="Loading..." />
+        </div>
+        <div v-else class ="conteuneur">
+            <box_even
+                v-for="evenement in evenements.data"
+                :key="evenement.id"
+                :id="evenement.id"
+                :titre_even="evenement.titre"
+                :description_even="evenement.description"
+                :Date_even="evenement.date_heure"
+                :Lieu_even="evenement.lieu"
+                :Type_even="evenement.type"
+                :Officiel_even="evenement.officiel"
+                :id_createur_even="evenement.id_utilisateur"
+            />
+        </div>
         <Footer />
 
 

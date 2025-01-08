@@ -105,6 +105,7 @@
                             type="submit"
                             :disabled="!isFormValid"
                             class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors disabled:opacity-50"
+                            @click="uploadPhoto"
                         >
                             Publier
                         </button>
@@ -118,6 +119,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
+import Swal from 'sweetalert2';
 
 // Récupérer l'utilisateur connecté
 const user = usePage().props.auth.user
@@ -202,8 +204,11 @@ const submitPhoto = () => {
         forceFormData: true,
         onSuccess: () => {
             closeModal()
+            showSuccessNotification();
+            console.log('Photo uploadée avec succès');
         },
         onError: (errors) => {
+            showErrorNotification(errors.message);
             console.error('Erreurs de validation :', errors)
         }
     })
@@ -215,4 +220,32 @@ const isFormValid = computed(() => {
         form.legende.trim() !== '' &&
         form.date_prise_vue !== ''
 })
+
+//notification
+const showSuccessNotification = () => {
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Photo uploaded successfully!',
+    });
+};
+
+const showErrorNotification = (message) => {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: message,
+    });
+};
+
+const uploadPhoto = async () => {
+    try {
+        // Your photo upload logic
+        // On success:
+        showSuccessNotification();
+    } catch (error) {
+        // On error:
+        showErrorNotification(error.message);
+    }
+};
 </script>

@@ -12,6 +12,7 @@ class EvenementController extends Controller
 {
     public function index()
     {
+
         $evenements = Evenement::get();
         if($evenements)
         {
@@ -22,6 +23,25 @@ class EvenementController extends Controller
             return response()->json(['message' => 'Aucun événement trouvé'],200);
         }
 
+    }
+    public function getEvenementById(Request $request)
+    {
+        $eventId = $request->query('id_evenement');
+
+        if ($eventId) {
+            $evenements = Evenement::where('id_evenement', $eventId)->get();
+        } else {
+            $evenements = Evenement::all();
+        }
+
+        return response()->json($evenements);
+    }
+
+
+    public function listEvents()
+    {
+        $events = Evenement::select('id', 'titre')->get();
+        return response()->json(['events' => $events]);
     }
 
     /**
@@ -103,8 +123,27 @@ class EvenementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Evenement $evenement)
+    public function destroy(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'id_evenement' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()
+            ], 422);
+        }
+        $deleted=Evenement::deleteById($request['id_evenement']);
+        if ($deleted) {
+            return response()->json([
+                'message' => 'Événement supprimé avec succès'
+            ], 200);
+        }
+        else{
+            return response()->json([
+                'message' => 'Événement non trouvé'
+            ], 404);
+        }
     }
 }

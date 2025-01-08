@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id_utilisateur
  * @property int $id_evenement
- * @property bool|null $presence
+ * @property int $presence
  *
  * @property Utilisateur $utilisateur
  * @property Evenement $evenement
@@ -29,15 +29,24 @@ class Participation extends Model
 
     use HasFactory;
 
-	protected $casts = [
-		'id_utilisateur' => 'int',
-		'id_evenement' => 'int',
-		'presence' => 'bool'
-	];
 
 	protected $fillable = [
-		'presence'
+        'id_utilisateur',
+        'id_evenement',
+        'presence'
 	];
+
+    public static function create(array $data)
+    {
+        return self::query()->create($data);
+    }
+    public static function deleteByUserAndEvent($userId, $eventId)
+    {
+        return self::where('id_utilisateur', $userId)
+            ->where('id_evenement', $eventId)
+            ->delete();
+    }
+
 
 	public function utilisateur()
 	{

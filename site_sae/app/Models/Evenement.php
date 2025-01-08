@@ -56,14 +56,29 @@ class Evenement extends Model
 		'id_utilisateur'
 	];
 
-    public static function create(array $data)
+    public static function
+    create(array $data)
     {
         return self::query()->create($data);
+    }
+    public static function deleteById($eventId)
+    {
+        // Supprimer les documents associés à l'événement
+        \DB::table('document')->where('id_evenement', $eventId)->delete();
+
+        // Supprimer les participations associées à l'événement
+        \DB::table('participation')->where('id_evenement', $eventId)->delete();
+
+        // Supprimer les commentaires associés �� l'événement
+        \DB::table('commentaire_event')->where('id_evenement', $eventId)->delete();
+
+        // Supprimer l'événement
+        return self::where('id_evenement', $eventId)->delete();
     }
 
 	public function utilisateur()
 	{
-		return $this->belongsTo(Utilisateur::class, 'id_utilisateur');
+		return $this->belongsTo(User::class, 'id_utilisateur');
 	}
 
 	public function participations()
