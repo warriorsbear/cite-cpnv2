@@ -18,7 +18,7 @@ class UserController extends Controller
      */
     public function suprimerUser($id)
     {
-        $user = User::find($id); // On récupère l'utilisateur
+        $user = User::find($id);
         if ($user) {
             $user->delete();
             return response()->json(['message' => 'Utilisateur supprimé avec succès']);
@@ -26,6 +26,7 @@ class UserController extends Controller
             return response()->json(['message' => 'Utilisateur non trouvé'], 404);
         }
     }
+
     public function index()
     {
         return response()->json(User::get());
