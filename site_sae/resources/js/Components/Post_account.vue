@@ -8,14 +8,29 @@
                     <p class="post-time">{{ postTime }}</p>
                 </div>
             </div>
-            <div class="post-images">
-                <img :src="imageUrl[currentImageIndex].chemin" alt="Photo du photographe" class="post-image"/>
-                <button class="nav-arrow left" @click="prevImage">&#9664;</button>
-                <button class="nav-arrow right" @click="nextImage">&#9654;</button>
+            <div class="post-images" v-if="processedImages.length > 0">
+                <img
+                    :src="processedImages[currentImageIndex]"
+                    :alt="`Photo ${currentImageIndex + 1}`"
+                    class="post-image"
+                />
+                <button
+                    v-if="processedImages.length > 1"
+                    class="nav-arrow left"
+                    @click="prevImage"
+                >&#9664;</button>
+                <button
+                    v-if="processedImages.length > 1"
+                    class="nav-arrow right"
+                    @click="nextImage"
+                >&#9654;</button>
             </div>
-            <div class="post-caption">
+            <div v-else class="post-images">
+                <p class="no-images">Aucune image disponible</p>
+            </div>
+            <div class="post-caption" v-if="caption">
                 <p>{{ caption }}</p>
-                <div class="tags">
+                <div class="tags" v-if="tags && tags.length">
                     <span v-for="tag in tags" :key="tag" class="tag">{{ tag }}</span>
                 </div>
             </div>
@@ -25,6 +40,7 @@
 
 <script lang="ts">
 import { nextTick } from 'vue';
+import { computed, ref } from 'vue';
 
 export default {
     props: {
@@ -32,59 +48,50 @@ export default {
         username: String,
         userAvatar: String,
         postTime: String,
-        imageUrl: Array,
+        imageUrl: {
+            type: Array,
+            default: () => []
+        },
         caption: String,
         tags: Array,
         comments: Array,
         context: String,
     },
-    data() {
-        return {
-            currentImageIndex: 0,
-        };
-    },
-    /*
-    async mounted() {
-        nextTick(() => {
-            this.setHeight();
+    setup(props) {
+        const currentImageIndex = ref(0);
+
+        const processedImages = computed(() => {
+            if (!props.imageUrl) return [];
+
+            return props.imageUrl.map(img => {
+                if (typeof img === 'string') return img;
+                if (img && img.chemin) return img.chemin;
+                return null;
+            }).filter(Boolean);
         });
-        console.log(this.imageUrl);
-    },
 
-     */
-    methods: {
+        const nextImage = () => {
+            if (currentImageIndex.value < processedImages.value.length - 1) {
+                currentImageIndex.value++;
+            } else {
+                currentImageIndex.value = 0;
+            }
+        };
 
-        setHeight() {
-            const postElement = this.$el.querySelector('.post');
-            if (postElement) {
-                const heightPost = postElement.offsetHeight;
-                const commentsElement = this.$el.querySelector('.comments');
-                if (commentsElement) {
-                    commentsElement.style.maxHeight = `${heightPost}px`;
-                    commentsElement.style.height = `${heightPost}px`;
-                    document.querySelector('.comments-section').style.height = `${heightPost}px`;
-                    document.querySelector('.comments-section').style.minHeight = `${heightPost}px`;
-                    document.querySelector('.comments-section').style.maxHeight = `${heightPost}px`;
-                }
+        const prevImage = () => {
+            if (currentImageIndex.value > 0) {
+                currentImageIndex.value--;
             } else {
-                console.error("L'élément avec la classe .post n'existe pas.");
+                currentImageIndex.value = processedImages.value.length - 1;
             }
-        },
+        };
 
-        nextImage() {
-            if (this.currentImageIndex < this.imageUrl.length - 1) {
-                this.currentImageIndex++;
-            } else {
-                this.currentImageIndex = 0;
-            }
-        },
-        prevImage() {
-            if (this.currentImageIndex > 0) {
-                this.currentImageIndex--;
-            } else {
-                this.currentImageIndex = this.imageUrl.length - 1;
-            }
-        }
+        return {
+            currentImageIndex,
+            processedImages,
+            nextImage,
+            prevImage
+        };
     }
 };
 </script>

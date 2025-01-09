@@ -129,9 +129,12 @@ const user = usePage().props.auth.user
             :document="selectedDocument"
             @close="closePreviewModal"
         />
-
+        
         <Footer />
+
     </AuthenticatedLayout>
+
+
 </template>
 
 <style scoped>
@@ -144,4 +147,6 @@ const user = usePage().props.auth.user
     background-color: rgb(255, 255, 255);
 
 }
+
+
 </style>
