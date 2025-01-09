@@ -65,7 +65,8 @@ class PhotoController extends Controller
                     'legende' => $request->input('legende', 'Sans légende'),
                     'date_prise_vue' => $request->input('date_prise_vue'),
                     'id_utilisateur' => $request->input('id_utilisateur'),
-                    'id_utilisateur_1' => 1
+                    'id_utilisateur_1' => 1,
+                    'chemin' => 'http://127.0.0.1:8000/storage/' .$path,
                 ]);
 
 
