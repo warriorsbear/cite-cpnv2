@@ -36,7 +36,9 @@ Route::get('/doc', function () {
     return Inertia::render('Documents');
 })->middleware(['auth', 'verified'])->name('documents');
 
-
+Route::get('/contact', function () {
+    return Inertia::render('NousContacter');
+})->middleware(['auth', 'verified'])->name('contact');
 
 
 Route::middleware('auth')->group(function () {
