@@ -15,7 +15,7 @@ const evenements= ref([]);
 const photos = ref([]);
 const posts = ref([]);
 const loading = ref(true);
-const utilisateur = usePage().props.auth.user;
+let utilisateur = usePage().props.auth.user;
 
 const form = useForm({
     id: utilisateur.id,
