@@ -306,12 +306,7 @@ html, body {
     padding: 20px;
 
 }
-.photo_user {
-    width: 300px; /* Set a fixed width */
-    height: 200px; /* Set a fixed height */
-    object-fit: cover; /* Ensure the image covers the area while maintaining aspect ratio */
-    border-radius: 8px;
-}
+
 
 
 .profile-header h1 {
@@ -398,12 +393,7 @@ h2 {
 .edit-button:hover {
     background-color: #ff9900;
 }
-.events-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin: 10px;
-}
+
 
 .conteuneur{
     display: flex;
