@@ -15,8 +15,8 @@
                         <button @click="downloadPhoto">Télécharger la photo</button>
                         <button @click="viewExifData">Voir les données EXIF</button>
                     </div>
-                    <div v-if="isEXIFOpen" class="dropdown-menu exif-menu">
-                        <button @click="viewExifData">Fermer</button>
+                    <div v-if="isEXIFOpen && isDropdownOpen" class="dropdown-menu exif-menu">
+                        <button @click="toggleDropdown">Fermer</button>
                         <div>
                             <p>Boitier : {{ imageUrl[0].exif1 }}</p>
                             <p>Objectif : {{ imageUrl[0].exif2 }}</p>
@@ -95,6 +95,7 @@ export default {
         },
         toggleDropdown() {
             this.isDropdownOpen = !this.isDropdownOpen;
+            this.isEXIFOpen = false;
         },
         downloadPhoto() {
             const link = document.createElement('a');
