@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\EvenementResource;
 use App\Http\Resources\PhotoResource;
 use App\Models\Photo;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Mckenziearts\Notify\Facades\LaravelNotify;
@@ -44,21 +45,18 @@ class PhotoController extends Controller
             if ($request->hasFile('nom')) {
                 $file = $request->file('nom');
 
-                // Log pour déboguer
-                \Log::info('File details:', [
-                    'original_name' => $file->getClientOriginalName(),
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize()
-                ]);
-
                 // Génération d'un nom de fichier unique
-
-
                 $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
 
                 // Stockage du fichier dans le dossier public/photos
                 $path = $file->storeAs('photos', $fileName, 'public');
                 // Création de l'entrée dans la base de données
+
+                // 1. D'abord créer le post
+                $post = Post::create([
+                    'Légende' => $request->input('legende'),
+                    'id_utilisateur' => $request->input('id_utilisateur')
+                ]);
 
                 $photo = Photo::create([
                     'nom' => $path,
@@ -67,13 +65,10 @@ class PhotoController extends Controller
                     'id_utilisateur' => $request->input('id_utilisateur'),
                     'id_utilisateur_1' => 1,
                     'chemin' => 'http://127.0.0.1:8000/storage/' .$path,
+                    'id_post' => $post->id_post
                 ]);
 
 
-//                return response()->json([
-//                    'message' => 'Photo uploadee avec succes'
-//                ], 201);
-//            }
 
 //            return response()->json(['error' => 'Aucun fichier uploade'], 400);
                 LaravelNotify::success('Photo uploadée avec succès');

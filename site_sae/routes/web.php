@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\EvenementController;
 use App\Http\Controllers\Api\FileUploadController;
 use App\Http\Controllers\Api\ParticipationController;
 use App\Http\Controllers\Api\PhotoController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -48,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/evenement', [EvenementController::class, 'store'])->name('evenement.create');
     Route::post('participation', [ParticipationController::class, 'store'])->name('participation.create');
     Route::post('/photo', [PhotoController::class, 'store'])->name('photo.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.create');
 
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');

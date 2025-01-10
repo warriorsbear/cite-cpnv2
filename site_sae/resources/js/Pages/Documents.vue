@@ -129,7 +129,7 @@ const user = usePage().props.auth.user
             :document="selectedDocument"
             @close="closePreviewModal"
         />
-        
+
         <Footer />
 
     </AuthenticatedLayout>
