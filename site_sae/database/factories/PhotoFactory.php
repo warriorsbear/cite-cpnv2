@@ -26,6 +26,12 @@ class PhotoFactory extends Factory
             'id_utilisateur' => $idUser,
             'id_utilisateur_1' => $idUser,
             'id_post' => $this->faker->numberBetween(1, 10),
+            'exif1' => 'Sony Alpha 7R IV',
+            'exif2' => 'FE 24-70mm F2.8 GM',
+            'exif3' => '70mm',
+            'exif4' => 'f/2.8',
+            'exif5' => '1/200s',
+            'exif6' => 'ISO 100',
         ];
     }
 }
