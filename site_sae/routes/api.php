@@ -34,6 +34,7 @@ Route::post('/photos', [PhotoController::class, 'store']);
 Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);
 
 
+Route::post('/posts', [PostController::class, 'store']);
 Route::get('/posts', [PostController::class, 'index']);
 Route::get('/commentaires', [CommentairePostController::class, 'index']);
 Route::post('/commentaires', [CommentairePostController::class, 'store']);//->middleware('auth:sanctum');

@@ -45,11 +45,7 @@ class PhotoController extends Controller
             if ($request->hasFile('nom')) {
                 $file = $request->file('nom');
 
-
-
                 // Génération d'un nom de fichier unique
-
-
                 $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
 
                 // Stockage du fichier dans le dossier public/photos
