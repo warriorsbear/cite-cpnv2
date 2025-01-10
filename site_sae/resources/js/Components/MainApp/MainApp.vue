@@ -15,6 +15,7 @@
             :context="'feed'"
         />
     </div>
+    <div v-if="loading" class="loading">Chargement...</div>
 </template>
 
 <script>
@@ -32,17 +33,46 @@ export default {
         return {
             posts: [],
             commentaires: [],
+            page: 1,
+            loading: false,
+            allLoaded: false,
         };
     },
     async mounted() {
         try {
-            this.posts = await fetchPosts(); // Appel de l'API
+            await this.loadPosts();
             this.commentaires = await fetchCommentairesPosts(); // Appel de l'API
+            window.addEventListener('scroll', this.handleScroll);
         } catch (error) {
             console.error("Erreur lors du chargement des données :", error);
         }
     },
+    beforeDestroy() {
+        window.removeEventListener('scroll', this.handleScroll);
+    },
     methods: {
+        async loadPosts() {
+            if (this.loading || this.allLoaded) return;
+            this.loading = true;
+            try {
+                const newPosts = await fetchPosts(this.page);
+                if (newPosts.length > 0) {
+                    this.posts = [...this.posts, ...newPosts];
+                    this.page++;
+                } else {
+                    this.allLoaded = true;
+                }
+            } catch (error) {
+                console.error("Error lors du chargement des posts:", error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        handleScroll() {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+                this.loadPosts();
+            }
+        },
         formatCreatedAt(date) {
             return formatDistance(new Date(date), new Date(), {
                 addSuffix: true,
@@ -89,5 +119,10 @@ header {
     display: grid;
     flex-direction: column;
     justify-items: center;
+}
+
+.loading {
+    text-align: center;
+    margin: 20px 0;
 }
 </style>
