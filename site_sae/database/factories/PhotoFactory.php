@@ -26,6 +26,12 @@ class PhotoFactory extends Factory
             'id_utilisateur' => $idUser,
             'id_utilisateur_1' => $idUser,
             'id_post' => $this->faker->numberBetween(1, 10),
+            'exif1' => ['Sony Alpha 7R IV', 'Canon EOS 5D Mark IV', 'Nikon D850'][$this->faker->numberBetween(0, 2)],
+            'exif2' => ['FE 24-70mm F2.8 GM', 'EF 70-200mm f/2.8L IS II USM', 'AF-S NIKKOR 70-200mm f/2.8E FL ED VR'][$this->faker->numberBetween(0, 2)],
+            'exif3' => ['70mm', '200mm', '24mm'][$this->faker->numberBetween(0, 2)],
+            'exif4' => ['f/2.8', 'f/3.5', 'f/8'][$this->faker->numberBetween(0, 2)],
+            'exif5' => ['1/200s', '1/1000s', '1/500s'][$this->faker->numberBetween(0, 2)],
+            'exif6' => ['ISO 100', 'ISO 400', 'ISO 800'][$this->faker->numberBetween(0, 2)],
         ];
     }
 }

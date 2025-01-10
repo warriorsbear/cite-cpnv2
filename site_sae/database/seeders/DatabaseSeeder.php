@@ -57,7 +57,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Crée 10 photos avec un utilisateur aléatoire, un autre utilisateur aléatoire et un post aléatoire
-        Photo::factory(10)->create([
+        Photo::factory(100)->create([
             'id_utilisateur' => function () use (&$idUtilisateur) {
                 $idUtilisateur = User::all()->random()->id;
                 return $idUtilisateur;
