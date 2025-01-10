@@ -60,8 +60,10 @@ class PhotoController extends Controller
                     // Créer le post
                     $post = Post::create([
                         'Légende' => $request->input('legende'),
-                        'id_utilisateur' => $request->input('id_utilisateur')
+                        'id_utilisateur' => $request->input('id_utilisateur'),
+                        'created_at' => now()->format('Y-m-d\TH:i:sP'),
                     ]);
+
 
                     // Sauvegarder l'image redimensionnée
                     $image->save(storage_path('app/public/' . $path));
@@ -111,6 +113,7 @@ class PhotoController extends Controller
             if($photos->isEmpty()) {
                 return response()->json(['message' => 'Aucune photo trouvée pour cet utilisateur'], 200);
             }
+
 
             return PhotoResource::collection($photos);
         } catch (\Exception $e) {

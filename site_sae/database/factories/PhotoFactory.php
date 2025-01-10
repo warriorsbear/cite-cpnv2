@@ -22,7 +22,6 @@ class PhotoFactory extends Factory
             'nom' => $this->faker->word,
             'nom_min' => $this->faker->word,
             'date_prise_vue' => $this->faker->dateTime(),
-            'date_depot' => $this->faker->dateTime(),
             'legende' => $this->faker->text,
             'id_utilisateur' => $idUser,
             'id_utilisateur_1' => $idUser,

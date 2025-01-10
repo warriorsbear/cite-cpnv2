@@ -29,7 +29,7 @@ class Post extends Model
 {
 	protected $table = 'post';
 	protected $primaryKey = 'id_post';
-	public $timestamps = false;
+	public $timestamps = true;
 
     use HasFactory;
 

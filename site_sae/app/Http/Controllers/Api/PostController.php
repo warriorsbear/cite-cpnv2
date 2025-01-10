@@ -23,7 +23,8 @@ class PostController extends Controller
 
         Post::create([
             'Légende' => $request->input('Légende'),
-            'id_utilisateur' => $request->input('id_utilisateur')
+            'id_utilisateur' => $request->input('id_utilisateur'),
+            'created_at' => now()->format('Y-m-d\TH:i:sP'),
         ]);
     }
 }
