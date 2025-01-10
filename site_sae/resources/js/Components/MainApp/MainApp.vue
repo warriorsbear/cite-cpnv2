@@ -55,7 +55,8 @@ export default {
             if (this.loading || this.allLoaded) return;
             this.loading = true;
             try {
-                const newPosts = await fetchPosts(this.page);
+                const response = await axios.get(`http://127.0.0.1:8000/api/fetch-posts?page=${this.page}`);
+                const newPosts = response.data.data;
                 if (newPosts.length > 0) {
                     this.posts = [...this.posts, ...newPosts];
                     this.page++;
@@ -87,31 +88,6 @@ export default {
 * {
     font-family: 'Open Sans', sans-serif;
 }
-
-/*nav {
-    position: fixed;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    z-index: 10;
-    transition: transform 0.3s ease-in-out; /* Animation douce *//*
-}
-
-nav.hidden {
-    transform: translateY(-100%); /* Cache la navbar hors de l'écran *//*
-}
-
-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #333;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    width: 100%;
-}*/
 
 /* Styles globaux pour ton application */
 .main-app {

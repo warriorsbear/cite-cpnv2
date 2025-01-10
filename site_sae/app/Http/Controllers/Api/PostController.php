@@ -14,6 +14,12 @@ class PostController extends Controller
         return response()->json($posts);
     }
 
+    public function fetchPosts(Request $request)
+    {
+        $posts = Post::with('user', 'photos')->latest()->paginate(10);
+        return response()->json($posts);
+    }
+
     public function store(request $request)
     {
         $request->validate([
