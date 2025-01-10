@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('id_post', true);
             $table->text('Légende')->nullable();
             $table->integer('id_utilisateur')->index('id_utilisateur');
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
         });
     }
 

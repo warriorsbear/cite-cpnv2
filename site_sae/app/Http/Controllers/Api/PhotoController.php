@@ -8,7 +8,8 @@ use App\Http\Resources\PhotoResource;
 use App\Models\Photo;
 use App\Models\Post;
 use Illuminate\Http\Request;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Mckenziearts\Notify\Facades\LaravelNotify;
 
 class PhotoController extends Controller
@@ -38,49 +39,63 @@ class PhotoController extends Controller
                 'id_utilisateur' => 'required|exists:users,id'
             ]);
 
-            // Log pour déboguer
-
-
-            // Vérification que le fichier a bien été uploadé
             if ($request->hasFile('nom')) {
                 $file = $request->file('nom');
-
-                // Génération d'un nom de fichier unique
                 $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
 
-                // Stockage du fichier dans le dossier public/photos
-                $path = $file->storeAs('photos', $fileName, 'public');
-                // Création de l'entrée dans la base de données
+                // Créer une instance de l'image
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($file);
 
-                // 1. D'abord créer le post
-                $post = Post::create([
-                    'Légende' => $request->input('legende'),
-                    'id_utilisateur' => $request->input('id_utilisateur')
-                ]);
+                // Redimensionner l'image à 2048x2048 en maintenant les proportions
+                $image->scale(width: 2048, height: 2048);
 
-                $photo = Photo::create([
-                    'nom' => $path,
-                    'legende' => $request->input('legende', 'Sans légende'),
-                    'date_prise_vue' => $request->input('date_prise_vue'),
-                    'id_utilisateur' => $request->input('id_utilisateur'),
-                    'id_utilisateur_1' => 1,
-                    'chemin' => 'http://127.0.0.1:8000/storage/' .$path,
-                    'id_post' => $post->id_post
-                ]);
+                // Créer le chemin de stockage
+                $path = 'photos/' . $fileName;
+
+                // Début de la transaction
+                \DB::beginTransaction();
+
+                try {
+                    // Créer le post
+                    $post = Post::create([
+                        'Légende' => $request->input('legende'),
+                        'id_utilisateur' => $request->input('id_utilisateur'),
+                        'created_at' => now()->format('Y-m-d\TH:i:sP'),
+                    ]);
 
 
+                    // Sauvegarder l'image redimensionnée
+                    $image->save(storage_path('app/public/' . $path));
 
-//            return response()->json(['error' => 'Aucun fichier uploade'], 400);
-                LaravelNotify::success('Photo uploadée avec succès');
+                    // Créer la photo avec l'id_post
+                    $photo = Photo::create([
+                        'nom' => $path,
+                        'legende' => $request->input('legende', 'Sans légende'),
+                        'date_prise_vue' => $request->input('date_prise_vue'),
+                        'id_utilisateur' => $request->input('id_utilisateur'),
+                        'id_utilisateur_1' => 1,
+                        'chemin' => 'http://127.0.0.1:8000/storage/' . $path,
+                        'id_post' => $post->id_post
+                    ]);
+
+                    // Si tout s'est bien passé, on valide la transaction
+                    \DB::commit();
+                    LaravelNotify::success('Post et photo uploadés avec succès');
+
+                } catch (\Exception $e) {
+                    // En cas d'erreur, on annule la transaction
+                    \DB::rollback();
+                    throw $e;
+                }
 
             } else {
-                // Notification d'erreur
                 LaravelNotify::error('Aucun fichier uploadé');
             }
 
             return redirect()->back();
+
         } catch (\Exception $e) {
-            // Log de l'erreur complète
             \Log::error('Upload error: ' . $e->getMessage());
             \Log::error($e->getTraceAsString());
 
@@ -98,6 +113,7 @@ class PhotoController extends Controller
             if($photos->isEmpty()) {
                 return response()->json(['message' => 'Aucune photo trouvée pour cet utilisateur'], 200);
             }
+
 
             return PhotoResource::collection($photos);
         } catch (\Exception $e) {
