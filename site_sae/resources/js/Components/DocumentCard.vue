@@ -25,14 +25,29 @@ const extension = props.document.chemin.split('.').pop().toLowerCase()
 const nom_extension = props.document.nom+'.'+extension
 
 // Méthode pour télécharger le document
-const downloadDocument = () => {
+const downloadDocument = (e) => {
+    e.stopPropagation() // Empêcher la propagation vers le parent
     window.location.href = route('documents.download', props.document.id_document)
+}
+
+// Méthode pour supprimer le document
+const deleteDocument = async (e) => {
+    e.stopPropagation() // Empêcher la propagation vers le parent
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) {
+        try {
+            // S'assurer que l'ID est bien passé dans l'URL
+            await axios.delete(`/documents/${props.document.id_document}`)
+            window.location.reload()
+        } catch (error) {
+            console.error('Erreur lors de la suppression:', error)
+            alert('Erreur lors de la suppression du document')
+        }
+    }
 }
 
 // Nouvelle méthode pour prévisualiser
 const previewDocument = () => {
     emit('preview', props.document)
-    console.log('Prévisualisation du document', props.document)
 }
 </script>
 
@@ -55,6 +70,7 @@ const previewDocument = () => {
       <span class="text-sm text-gray-600">
         {{ document.user.pseudo }}
       </span>
+            <div class="flex gap-2">
             <button
                 @click="downloadDocument"
                 class="text-blue-500 hover:text-blue-700 flex items-center"
@@ -72,6 +88,24 @@ const previewDocument = () => {
                     />
                 </svg>
             </button>
+            <button
+                @click="deleteDocument"
+                class="text-red-500 hover:text-red-700 flex items-center"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+            </button>
+        </div>
         </div>
 
         <div v-if="document.event" class="text-sm text-gray-500 mt-2">

@@ -85,12 +85,7 @@ class EvenementController extends Controller
             'officiel' => $request->officiel,
             'id_utilisateur' => $request->id_utilisateur
         ]);
-
-        // Retourner une réponse appropriée
-        return response()->json([
-            'message' => 'Événement créé avec succès',
-            'data'=> new EvenementResource($evenement),
-        ],200);
+        
     }
 
     /**

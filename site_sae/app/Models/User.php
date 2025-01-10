@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -33,6 +34,11 @@ class User extends Authenticatable
         'photo_de_profil',
     ];
 
+    protected $attributes = [
+        'statut' => 0,
+        'statut_cotisation' => 0,
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -59,5 +65,32 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class, 'id_utilisateur');
+    }
+
+    /**
+     * Gestion de la "suppression' d'un utilisateur
+     */
+    use SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            // Update related data to null or "utilisateur supprimé"
+            //$user->posts()->update(['id_utilisateur' => null]);
+            //$user->comments()->update(['user_id' => null, 'content' => 'utilisateur supprimé']);
+            // Update user attributes to "Supprimer"
+            $user->update([
+                'nom' => 'Supprimer',
+                'cp' => 'Suppr',
+                'pseudo' => 'Supprimer',
+                'prenom' => 'Supprimer',
+                'photo_de_profil' => null,
+                'adresse' => 'Supprimer',
+                'telephone' => 'Supprimer',
+                'statut' => 0,
+            ]);
+        });
     }
 }

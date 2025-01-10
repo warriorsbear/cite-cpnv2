@@ -51,7 +51,7 @@ const addDocument = async (documentData) => {
         window.location.reload()
     } catch (err) {
         error.value = "Erreur lors de l'ajout du document"
-        console.error(err) // Pour le débogage
+        //console.error(err) // Pour le débogage
     }
 }
 
@@ -131,7 +131,10 @@ const user = usePage().props.auth.user
         />
 
         <Footer />
+
     </AuthenticatedLayout>
+
+
 </template>
 
 <style scoped>
@@ -144,4 +147,6 @@ const user = usePage().props.auth.user
     background-color: rgb(255, 255, 255);
 
 }
+
+
 </style>

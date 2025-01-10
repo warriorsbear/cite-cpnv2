@@ -72,6 +72,7 @@ onMounted(() => {
                 :Lieu_even="evenement.lieu"
                 :Type_even="evenement.type"
                 :Officiel_even="evenement.officiel"
+                :participe_deja="false"
                 :id_createur_even="evenement.id_utilisateur"
             />
         </div>

@@ -37,7 +37,8 @@ class UserFactory extends Factory
             'telephone' => fake()->phoneNumber(),
             'adresse' => fake()->address(),
             'pseudo' => fake()->userName(),
-            // 'photo_de_profil' => fake()->imageUrl(),
+            'statut' => fake()->randomElement([1, 0]),
+            'photo_de_profil' => 'http://127.0.0.1:8000/storage/photo_profile/avatar.jpg'
         ];
     }
 

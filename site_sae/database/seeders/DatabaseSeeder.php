@@ -34,12 +34,14 @@ class DatabaseSeeder extends Seeder
                 'prenom'=>'admin',
                 'pseudo' => 'admin',
                 'email' => 'admin@admin.com',
-                'password'=> Hash::make('admin')
+                'password'=> Hash::make('admin'),
+                'statut' => 1,
+                'role' => 'admin'
             ]);
         }
 
         User::factory(10)->create([
-            'photo_de_profil' => 'http://127.0.0.1:8000/storage/photo_profile/avatar.jpg'
+            'role' => 'user'
         ]);
         User::factory(2)->create(['role' => 'admin']);
 

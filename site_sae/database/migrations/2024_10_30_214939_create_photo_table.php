@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nom', 200);
             $table->string('nom_min', 200)->nullable();
             $table->date('date_prise_vue')->nullable();
-            $table->date('date_depot')->nullable();
+            $table->timestamp('created_at')->nullable();
             $table->text('legende')->nullable();
             $table->string('chemin', 200)->nullable();
             $table->string('exif1', 50)->nullable();

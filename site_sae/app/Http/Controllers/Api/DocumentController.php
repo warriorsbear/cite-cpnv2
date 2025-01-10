@@ -112,15 +112,17 @@ class DocumentController extends Controller
         $document = Document::findOrFail($id);
 
         // Vérification des permissions
-        if ($document->id_utilisateur !== Auth::id() ) {
-            abort(403, 'Vous ne pouvez pas supprimer ce document');
+        if(Auth::user()->role == 'admin' or $document->id_utilisateur == Auth::id() ){
+            // Suppression du fichier physique
+            Storage::delete($document->chemin);
+            $document->delete();
+
+            return response()->json(['message' => 'Document supprimé avec succès'], 200);
+        }
+        else{
+            return response()->json(['message' => 'Vous n\'avez pas les permissions nécessaires'], 403);
         }
 
-        // Suppression du fichier physique
-        Storage::delete($document->chemin);
-        $document->delete();
 
-        return redirect()->route('documents.index')
-            ->with('success', 'Document supprimé avec succès');
     }
 }

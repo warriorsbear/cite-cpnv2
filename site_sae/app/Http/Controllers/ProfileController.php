@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
@@ -23,6 +24,26 @@ class ProfileController extends Controller
             'status' => session('status'),
         ]);
     }
+
+    /**
+     * Permet l'affichage de la page ProfileModification
+     */
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return Inertia::render('ProfileModification', ['user' => $user]);
+    }
+
+    /**
+     * Permet la mise à jour de la page ProfileModification
+     */
+    public function updateModif(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return redirect()->route('AdminGestion');
+    }
+
 
     /**
      * Update the user's profile information.

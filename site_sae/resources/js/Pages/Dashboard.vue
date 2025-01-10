@@ -4,6 +4,8 @@ import { Head } from '@inertiajs/vue3';
 import ModalPhoto from '@/Components/MainApp/ModalPhoto.vue';
 import MainApp from '@/Components/MainApp/MainApp.vue';
 import Footer from "@/Components/Footer.vue";
+import ModalPost from "@/Components/MainApp/ModalPost.vue";
+import ModalPhotoV1 from "@/Components/MainApp/ModalPhotoV1.vue";
 </script>
 
 <template>
@@ -20,7 +22,8 @@ import Footer from "@/Components/Footer.vue";
         </template>
 
         <MainApp/>
-        <ModalPhoto/>
+        <ModalPost/>
+<!--        <modal-photo-v1/> // This line is commented out because it is not used in the Dashboard.vue file-->
         <Footer />
     </AuthenticatedLayout>
 </template>
