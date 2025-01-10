@@ -3,3 +3,5 @@ db_dev_data/
 ./site_sae/.scannerwork/
 
 site_sae/package-lock.json
+
+site_sae/composer.lock
