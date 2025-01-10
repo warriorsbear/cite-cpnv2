@@ -36,6 +36,8 @@ Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);
 
 Route::post('/posts', [PostController::class, 'store']);
 Route::get('/posts', [PostController::class, 'index']);
+Route::get('/fetch-posts', [PostController::class, 'fetchPosts'])->name('posts.fetch');
+
 Route::get('/commentaires', [CommentairePostController::class, 'index']);
 Route::post('/commentaires', [CommentairePostController::class, 'store']);//->middleware('auth:sanctum');
 

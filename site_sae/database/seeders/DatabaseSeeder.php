@@ -46,12 +46,12 @@ class DatabaseSeeder extends Seeder
         User::factory(2)->create(['role' => 'admin']);
 
         // Crée 10 posts avec un utilisateur aléatoire
-        Post::factory()->count(10)->create([
+        Post::factory()->count(50)->create([
             'id_utilisateur' => fn() => User::all()->random()->id
         ]);
 
         // Crée 15 commentaires de post avec un utilisateur aléatoire et un post spécifique
-        CommentairePost::factory()->count(15)->create([
+        CommentairePost::factory()->count(100)->create([
             'id_utilisateur' => fn() => User::all()->random()->id,
             'id_post' => fn() => Post::all()->random()->id_post
         ]);
