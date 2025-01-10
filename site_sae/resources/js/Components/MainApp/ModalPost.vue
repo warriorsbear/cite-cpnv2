@@ -226,7 +226,7 @@ const showSuccessNotification = () => {
     Swal.fire({
         icon: 'success',
         title: 'Success',
-        text: 'Photo uploaded successfully!',
+        text: 'Post crée avec succès',
     });
 };
 
@@ -242,7 +242,6 @@ const uploadPhoto = async () => {
     try {
         // Your photo upload logic
         // On success:
-        showSuccessNotification();
     } catch (error) {
         // On error:
         showErrorNotification(error.message);
