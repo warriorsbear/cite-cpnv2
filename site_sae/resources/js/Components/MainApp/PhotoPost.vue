@@ -10,8 +10,23 @@
                     <p class="post-time">{{ postTime }}</p>
                 </div>
             </div>
-            <img :src="imageUrl[0] ? imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg'" alt="Photo du photographe" class="post-image"/>
-            <div class="post-caption">
+            <div class="post-images">
+                <div v-if="imageUrl && imageUrl.length > 0" class="image-grid" :class="'grid-' + imageUrl.length">
+                    <img
+                        v-for="(photo, index) in imageUrl"
+                        :key="index"
+                        :src="photo.chemin"
+                        :alt="'Photo ' + (index + 1)"
+                        class="post-image"
+                    />
+                </div>
+                <img
+                    v-else
+                    src="http://127.0.0.1:8000/storage/photos/renault.jpg"
+                    alt="Photo par défaut"
+                    class="post-image"
+                />
+            </div><div class="post-caption">
                 <p>{{ caption }}</p>
                 <div class="tags">
                     <span v-for="tag in tags" :key="tag" class="tag">{{ tag }}</span>
@@ -69,7 +84,8 @@ export default {
             } else {
                 console.error("L'élément avec la classe .post n'existe pas.");
             }
-        }
+        },
+
     }
 };
 
@@ -169,6 +185,53 @@ export default {
     min-height: 100%;
     width: 25rem;
 }
+
+.post-images {
+    width: 100%;
+    overflow: hidden;
+}
+
+.image-grid {
+    display: grid;
+    gap: 2px;
+    width: 100%;
+}
+
+/* Styles pour différents nombres de photos */
+.grid-1 {
+    grid-template-columns: 1fr;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 img:first-child {
+    grid-column: span 2;
+}
+
+.grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-5 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-5 img:first-child {
+    grid-column: span 2;
+}
+
+.post-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
 
 @media (max-width: 1090px) {
     .photo-post {
