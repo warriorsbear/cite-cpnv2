@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $nom
  * @property string|null $nom_min
  * @property Carbon|null $date_prise_vue
- * @property Carbon|null $date_depot
+ * @property Carbon|null $created_at
  * @property string|null $legende
  * @property string|null $exif1
  * @property string|null $exif2
@@ -51,7 +51,7 @@ class Photo extends Model
 
 	protected $casts = [
 		'date_prise_vue' => 'datetime',
-		'date_depot' => 'datetime',
+		'created_at' => 'datetime',
 		'id_evenement' => 'int',
 		'id_post' => 'int',
 		'id_utilisateur' => 'int',
@@ -63,7 +63,7 @@ class Photo extends Model
 		'nom',
 		'nom_min',
 		'date_prise_vue',
-		'date_depot',
+		'created_at',
 		'legende',
         'chemin',
 		'exif1',
