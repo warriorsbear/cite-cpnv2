@@ -342,6 +342,53 @@ export default {
     width: 25rem;
 }
 
+.post-images {
+    width: 100%;
+    overflow: hidden;
+}
+
+.image-grid {
+    display: grid;
+    gap: 2px;
+    width: 100%;
+}
+
+/* Styles pour différents nombres de photos */
+.grid-1 {
+    grid-template-columns: 1fr;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 img:first-child {
+    grid-column: span 2;
+}
+
+.grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-5 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-5 img:first-child {
+    grid-column: span 2;
+}
+
+.post-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+
 @media (max-width: 1090px) {
     .photo-post {
         flex-direction: column;
