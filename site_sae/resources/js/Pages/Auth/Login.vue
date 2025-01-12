@@ -6,6 +6,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import TextInput_email from "@/Components/TextInput_email.vue";
+import TextInput_special_char from "@/Components/TextInput_special_char.vue";
 
 defineProps({
     canResetPassword: {
@@ -41,13 +43,14 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <TextInput_email
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
                     required
                     autofocus
+                    placeholder="pseudo@mail.com"
                     autocomplete="username"
                 />
 
@@ -57,12 +60,13 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="password" value="Mot de passe" />
 
-                <TextInput
+                <TextInput_special_char
                     id="password"
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
                     required
+                    placeholder="password"
                     autocomplete="current-password"
                 />
 

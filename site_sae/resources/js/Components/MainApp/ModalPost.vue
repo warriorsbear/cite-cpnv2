@@ -75,7 +75,7 @@
                     <div class="grid grid-cols-1 gap-4">
                         <div>
                             <label class="block text-gray-700 mb-2">Légende du post</label>
-                            <input
+                            <text-input
                                 type="text"
                                 v-model="form.legende"
                                 class="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -121,6 +121,7 @@
 import { ref, computed } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import Swal from 'sweetalert2';
+import TextInput from "@/Components/TextInput.vue";
 
 // Récupérer l'utilisateur connecté
 const user = usePage().props.auth.user
@@ -202,13 +203,7 @@ const dragLeave = () => {
     isDragging.value = false
 }
 
-const clearFile = () => {
-    selectedFile.value = null
-    form.nom = null
-    if (fileInput.value) {
-        fileInput.value.value = null
-    }
-}
+
 
 const submitPhoto = () => {
     const formData = new FormData()
