@@ -24,7 +24,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="S'identifier" />
 
         <form @submit.prevent="submit">
             <div>
