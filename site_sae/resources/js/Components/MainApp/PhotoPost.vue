@@ -18,12 +18,12 @@
                     <div v-if="isEXIFOpen && isDropdownOpen" class="dropdown-menu exif-menu">
                         <button @click="toggleDropdown">Fermer</button>
                         <div>
-                            <p>Boitier : {{ imageUrl[0].exif1 }}</p>
-                            <p>Objectif : {{ imageUrl[0].exif2 }}</p>
-                            <p>Distance focale : {{ imageUrl[0].exif3 }}</p>
-                            <p>Ouverture : {{ imageUrl[0].exif4 }}</p>
-                            <p>Vitesse d'obturation : {{ imageUrl[0].exif5 }}</p>
-                            <p>ISO : {{ imageUrl[0].exif6 }}</p>
+                            <p>Boitier : {{ imageUrl[currentImageIndex].exif1 }}</p>
+                            <p>Objectif : {{ imageUrl[currentImageIndex].exif2 }}</p>
+                            <p>Distance focale : {{ imageUrl[currentImageIndex].exif3 }}</p>
+                            <p>Ouverture : {{ imageUrl[currentImageIndex].exif4 }}</p>
+                            <p>Vitesse d'obturation : {{ imageUrl[currentImageIndex].exif5 }}</p>
+                            <p>ISO : {{ imageUrl[currentImageIndex].exif6 }}</p>
                         </div>
                     </div>
                 </div>
