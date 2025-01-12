@@ -36,7 +36,8 @@ class PhotoController extends Controller
                 'nom' => 'required|file|image|mimes:jpeg,png,jpg,gif|max:40000000',
                 'date_prise_vue' => 'required|date',
                 'legende' => 'nullable|string|max:255',
-                'id_utilisateur' => 'required|exists:users,id'
+                'id_utilisateur' => 'required|exists:users,id',
+                'id_visionnage' => 'nullable|exists:visionnage,id_visionnage'
             ]);
 
             if ($request->hasFile('nom')) {
@@ -76,7 +77,8 @@ class PhotoController extends Controller
                         'id_utilisateur' => $request->input('id_utilisateur'),
                         'id_utilisateur_1' => 1,
                         'chemin' => 'http://127.0.0.1:8000/storage/' . $path,
-                        'id_post' => $post->id_post
+                        'id_post' => $post->id_post,
+                        'id_visionnage' => $request->input('id_visionnage')
                     ]);
 
                     // Si tout s'est bien passé, on valide la transaction
@@ -101,6 +103,43 @@ class PhotoController extends Controller
 
             return response()->json([
                 'error' => 'Erreur lors de l\'upload',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+    public function getPhotosByUserAndVisionnage($userId, $idVisionnage)
+    {
+        try {
+            $photos = Photo::where('id_utilisateur', $userId)
+                ->where('id_visionnage', $idVisionnage)
+                ->get();
+
+            if ($photos->isEmpty()) {
+                return response()->json(['message' => 'Aucune photo trouvée pour cet utilisateur et cet id de visionnage'], 200);
+            }
+
+            return PhotoResource::collection($photos);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erreur lors de la récupération des photos',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getPhotosByVisionnage($idVisionnage)
+    {
+        try {
+            $photos = Photo::where('id_visionnage', $idVisionnage)->get();
+
+            if ($photos->isEmpty()) {
+                return response()->json(['message' => 'Aucune photo trouvée pour cet id de visionnage'], 200);
+            }
+
+            return PhotoResource::collection($photos);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Erreur lors de la récupération des photos',
                 'message' => $e->getMessage()
             ], 500);
         }

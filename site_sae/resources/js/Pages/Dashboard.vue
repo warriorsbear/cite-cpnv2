@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import ModalPhoto from '@/Components/MainApp/ModalPhoto.vue';
+import ModalPhoto from '@/Components/ModalPhoto.vue';
 import MainApp from '@/Components/MainApp/MainApp.vue';
 import Footer from "@/Components/Footer.vue";
 import ModalPost from "@/Components/MainApp/ModalPost.vue";

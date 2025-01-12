@@ -32,7 +32,8 @@ Route::delete('/evenements', [EvenementController::class, 'destroy']);
 Route::get('/photos/', [PhotoController::class, 'index']);
 Route::post('/photos', [PhotoController::class, 'store']);
 Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);
-
+Route::get('photos/visionnage/{idVisionnage}', [PhotoController::class, 'getPhotosByVisionnage']);
+Route::get('photos/user/{userId}/visionnage/{idVisionnage}', [PhotoController::class, 'getPhotosByUserAndVisionnage']);
 
 Route::post('/posts', [PostController::class, 'store']);
 Route::get('/posts', [PostController::class, 'index']);
