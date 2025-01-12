@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import TextInput_special_char from "@/Components/TextInput_special_char.vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -65,9 +66,9 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password" value="Nouveau mot de passe" />
+                <InputLabel for="password" value="Nouveau mot de passe ( @ & ! # ^ * acceptés )" />
 
-                <TextInput
+                <TextInput_special_char
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
@@ -85,7 +86,7 @@ const updatePassword = () => {
                     value="Confirmation du nouveau mot de passe"
                 />
 
-                <TextInput
+                <TextInput_special_char
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"

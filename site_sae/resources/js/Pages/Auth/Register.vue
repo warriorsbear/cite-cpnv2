@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import TextInput_email from "@/Components/TextInput_email.vue";
+import TextInput_special_char from "@/Components/TextInput_special_char.vue";
 
 const form = useForm({
     nom: '',
@@ -76,7 +78,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <TextInput_email
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
@@ -89,9 +91,9 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Mot de passe" />
+                <InputLabel for="password" value="Mot de passe ( @ & ! # ^ * acceptés )" />
 
-                <TextInput
+                <TextInput_special_char
                     id="password"
                     type="password"
                     class="mt-1 block w-full"
@@ -109,7 +111,7 @@ const submit = () => {
                     value="Confirmation du mot de passe"
                 />
 
-                <TextInput
+                <TextInput_special_char
                     id="password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
