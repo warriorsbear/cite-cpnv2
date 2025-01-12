@@ -347,36 +347,12 @@ export default {
     overflow: hidden;
 }
 
-.image-grid {
-    display: grid;
-    gap: 2px;
-    width: 100%;
-}
 
-/* Styles pour différents nombres de photos */
-.grid-1 {
-    grid-template-columns: 1fr;
-}
-
-.grid-2 {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-3 {
-    grid-template-columns: repeat(2, 1fr);
-}
 
 .grid-3 img:first-child {
     grid-column: span 2;
 }
 
-.grid-4 {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-5 {
-    grid-template-columns: repeat(2, 1fr);
-}
 
 .grid-5 img:first-child {
     grid-column: span 2;

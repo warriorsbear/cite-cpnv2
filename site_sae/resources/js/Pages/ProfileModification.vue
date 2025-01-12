@@ -53,7 +53,7 @@ onMounted(() => {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Profile de {{ utilisateur?.pseudo }}
+                Profil de {{ user?.pseudo }}
             </h2>
         </template>
 

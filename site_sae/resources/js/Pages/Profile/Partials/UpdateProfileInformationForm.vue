@@ -28,11 +28,11 @@ const form = useForm({
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
-                Profile Information
+                Informations de l'utilisateur
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Update your account's profile information and email address.
+                Mettez à jour les informations de profil et l'adresse e-mail de votre compte.
             </p>
         </header>
 
@@ -125,7 +125,7 @@ const form = useForm({
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <PrimaryButton :disabled="form.processing">Sauvegarder les modifications</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -137,7 +137,7 @@ const form = useForm({
                         v-if="form.recentlySuccessful"
                         class="text-sm text-gray-600"
                     >
-                        Saved.
+                        Sauvegardé.
                     </p>
                 </Transition>
             </div>
