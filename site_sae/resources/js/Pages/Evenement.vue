@@ -74,6 +74,7 @@ onMounted(() => {
                 :Officiel_even="evenement.officiel"
                 :participe_deja="false"
                 :id_createur_even="evenement.id_utilisateur"
+                :id_visionnage="evenement.id_visionnage"
             />
         </div>
         <Footer />

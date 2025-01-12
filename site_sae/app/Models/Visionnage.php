@@ -41,8 +41,14 @@ class Visionnage extends Model
 	protected $fillable = [
 		'date_visibilite',
 		'date_diffusion',
-		'id_evenement'
+        'id_evenement'
 	];
+
+    public static function
+    create(array $data)
+    {
+        return self::query()->create($data);
+    }
 
 	public function evenement()
 	{
