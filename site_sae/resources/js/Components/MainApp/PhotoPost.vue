@@ -28,25 +28,50 @@
                     </div>
                 </div>
             </div>
-            <img v-if="processedImages.length === 0" :src="imageUrl[0] ? imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg'"
-                 alt="Photo du photographe" class="post-image"/>
-            <div class="post-images" v-if="processedImages.length > 0">
-                <img
-                    :src="processedImages[currentImageIndex]"
-                    :alt="`Photo ${currentImageIndex + 1}`"
-                    class="post-image"
-                />
-                <button
-                    v-if="processedImages.length > 1"
-                    class="nav-arrow left"
-                    @click="prevImage"
-                >&#9664;</button>
-                <button
-                    v-if="processedImages.length > 1"
-                    class="nav-arrow right"
-                    @click="nextImage"
-                >&#9654;</button>
+
+            <div class="image-container">
+                <div class="post-images" v-if="processedImages.length > 0">
+                    <img
+                        :src="processedImages[currentImageIndex]"
+                        :alt="`Photo ${currentImageIndex + 1}`"
+                        class="post-image"
+                    />
+                    <button
+                        v-if="processedImages.length > 1"
+                        class="nav-arrow left"
+                        @click="prevImage"
+                    >&#9664;</button>
+                    <button
+                        v-if="processedImages.length > 1"
+                        class="nav-arrow right"
+                        @click="nextImage"
+                    >&#9654;</button>
+                </div>
             </div>
+
+
+<!--            <img v-if="processedImages.length === 0" :src="imageUrl[0] ? imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg'"-->
+<!--                 alt="Photo du photographe" class="post-image"/>-->
+<!--            <div class="post-images" v-if="processedImages.length > 0">-->
+<!--                <img-->
+<!--                    :src="processedImages[currentImageIndex]"-->
+<!--                    :alt="`Photo ${currentImageIndex + 1}`"-->
+<!--                    class="post-image"-->
+<!--                />-->
+<!--                <button-->
+<!--                    v-if="processedImages.length > 1"-->
+<!--                    class="nav-arrow left"-->
+<!--                    @click="prevImage"-->
+<!--                >&#9664;</button>-->
+<!--                <button-->
+<!--                    v-if="processedImages.length > 1"-->
+<!--                    class="nav-arrow right"-->
+<!--                    @click="nextImage"-->
+<!--                >&#9654;</button>-->
+<!--            </div>-->
+
+
+
             <div class="post-caption">
                 <p>{{ caption }}</p>
                 <div class="tags">
@@ -86,6 +111,7 @@ export default {
         return {
             isDropdownOpen: false,
             isEXIFOpen: false,
+            maxImageHeight: 0,
         };
     },
     async mounted() {
@@ -286,13 +312,15 @@ export default {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    height: 100%; /* Ensure the images container takes up the remaining height */
+    max-height: 80vh; /* Limite la hauteur maximale à 80% de la hauteur de la fenêtre */
+    width: 100%; /* Ensure the images container takes up the remaining height */
 }
 
 .post-image {
     width: 100%;
     height: auto;
-    object-fit: cover; /* Ensures the image covers the container */
+    max-height: 80vh; /* Limite la hauteur maximale à 80% de la hauteur de la fenêtre */
+    object-fit: contain; /* Ensures the image covers the container */
 }
 
 .nav-arrow {
@@ -343,8 +371,19 @@ export default {
 }
 
 .post-images {
+    position: relative;
     width: 100%;
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f5f5;
 }
 
 
@@ -359,9 +398,12 @@ export default {
 }
 
 .post-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    max-height: 600px; /* Hauteur maximale ajustable selon vos besoins */
+    display: block;
+    margin: 0 auto;
 }
 
 
