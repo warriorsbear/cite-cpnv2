@@ -42,7 +42,7 @@ Route::get('/doc', function () {
 
 Route::get('/contact', function () {
     return Inertia::render('NousContacter');
-})->middleware(['auth', 'verified'])->name('contact');
+})->name('contact');
 
 Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
     ->middleware('auth')
@@ -94,7 +94,7 @@ Route::get('/MentionsLegales', function () {
 
 Route::get('/NousContacter', function () {
     return Inertia::render('NousContacter');
-})->middleware(['auth', 'verified'])->name('NousContacter');
+})->name('NousContacter');
 
 
 Route::get('/user/photos', [PhotoController::class, 'getUserPhotos'])
