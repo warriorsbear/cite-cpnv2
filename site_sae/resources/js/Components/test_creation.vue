@@ -5,6 +5,9 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import { defineEmits } from 'vue';
+
+defineEmits(['submit', 'close']);
 
 const user = usePage().props.auth.user;
 
@@ -49,7 +52,6 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.titre"
                     required
-                    autofocus
                     autocomplete="nom"
                 />
                 <InputError class="mt-2" :message="form.errors.titre" />
