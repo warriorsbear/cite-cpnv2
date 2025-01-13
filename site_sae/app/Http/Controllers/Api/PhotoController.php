@@ -58,12 +58,6 @@ class PhotoController extends Controller
                 \DB::beginTransaction();
 
                 try {
-                    // Créer le post
-                    $post = Post::create([
-                        'Légende' => $request->input('legende'),
-                        'id_utilisateur' => $request->input('id_utilisateur'),
-                        'created_at' => now()->format('Y-m-d\TH:i:sP'),
-                    ]);
 
 
                     // Sauvegarder l'image redimensionnée
@@ -77,7 +71,6 @@ class PhotoController extends Controller
                         'id_utilisateur' => $request->input('id_utilisateur'),
                         'id_utilisateur_1' => 1,
                         'chemin' => 'http://127.0.0.1:8000/storage/' . $path,
-                        'id_post' => $post->id_post,
                         'id_visionnage' => $request->input('id_visionnage')
                     ]);
 

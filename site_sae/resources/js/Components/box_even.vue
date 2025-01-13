@@ -6,7 +6,7 @@ import ModalPhoto from "@/Components/ModalPhoto.vue";
 
 export default defineComponent({
     name: "box_even",
-    components: {ModalPhoto},
+    components: { ModalPhoto },
     setup(props) {
         const montrerPopup = ref(false);
         const showUpload = ref(false);
@@ -24,12 +24,18 @@ export default defineComponent({
             const user = usePage().props.auth.user;
             return user && user.role === 'admin';
         });
+
         const isCreateur = computed(() => {
             const user = usePage().props.auth.user;
             return user && user.id === props.id_createur_even;
         });
+
         const officielStatus = computed(() => {
             return props.Officiel_even ? 'officiel (créer par un admin)' : 'non officiel';
+        });
+
+        const sortedEvenements = computed(() => {
+            return props.evenements.sort((a, b) => new Date(a.Date_even).getTime() - new Date(b.Date_even).getTime());
         });
 
         return {
@@ -40,233 +46,229 @@ export default defineComponent({
             path,
             isAdmin,
             isCreateur,
-            officielStatus
+            officielStatus,
+            sortedEvenements
         };
     },
-  props: {
-      id: {
-          type: Number,
-          required: true
-      },
-    titre_even: {
-      type: String,
-      required: true
-    },
-    description_even: {
-      type: String,
-      required: true
-    },
-    Date_even: {
-      type: String,
-      required: true
-    },
-    Type_even: {
-      type: String,
-      required: true
-    },
-    Lieu_even: {
-      type: String,
-      required: true
-    },
-    Officiel_even: {
-      type: Boolean,
-      required: true
-    },
-      participe_deja: {
-          type: Boolean,
-          required: true,
-          default: false
-      },
-      id_createur_even:{
+    props: {
+        evenements: {
+            type: Array,
+            required: true
+        },
+        id: {
             type: Number,
             required: true
-      },
-      id_visionnage: {
-          type: Number,
-          required: false
-      }
-
-  },
-
-  methods: {
-      showSuccessNotification () {
-          Swal.fire({
-              icon: 'success',
-              title: 'Evenement rejoins',
-              text: 'Tu as bien rejoins l\'evenement'
-          });
-      },
-
-      showErrorNotification (message) {
-          Swal.fire({
-              icon: 'error',
-              title: 'Tu participe deja a cet evenement !',
-              text: message,
-          });
-      },
-    returnimagePath(type: string): string {
-      const basePath = '../public/images/evenement/';
-      switch (type.toLowerCase()) {
-        case 'collaboration':
-          return `../public/images/evenement/collaboration.jpeg`;
-        case 'cours':
-          return `../public/images/evenement/cours.PNG`;
-        case 'exposition':
-          return `${basePath}exposition.jpg`;
-        case 'information':
-          return `${basePath}information.jpg`;
-        case 'reunion':
-          return `${basePath}reunion.jpg`;
-        case 'sortie_a_theme':
-          return `${basePath}sortie_a_theme.jpg`;
-        case 'visionnage':
-          return `${basePath}Visionnage.jpg`;
-        default:
-          return `${basePath}cours.PNG`;
-      }
+        },
+        titre_even: {
+            type: String,
+            required: true
+        },
+        description_even: {
+            type: String,
+            required: true
+        },
+        Date_even: {
+            type: String,
+            required: true
+        },
+        Type_even: {
+            type: String,
+            required: true
+        },
+        Lieu_even: {
+            type: String,
+            required: true
+        },
+        Officiel_even: {
+            type: Boolean,
+            required: true
+        },
+        participe_deja: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        id_createur_even: {
+            type: Number,
+            required: true
+        },
+        id_visionnage: {
+            type: Number,
+            required: false
+        }
     },
-    formatDate(dateString: string): string {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('fr-FR'); // Format de la date en français
-    },
-    formatTime(dateString: string): string {
-      const date = new Date(dateString);
-      return date.toLocaleTimeString('fr-FR'); // Format de l'heure en français
-    },
-      async joinEvent() {
-          const user = usePage().props.auth.user;
-          const eventId = this.$props.id;
-          console.log('id utilisateur :',user );
-          console.log('id evenement:', eventId);
-          // Assurez-vous que l'ID de l'événement est passé en tant que prop
-          try {
-              const response = await fetch('http://127.0.0.1:8000/api/participations', {
-                  method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                      id_utilisateur: user.id,
-                      id_evenement: eventId
-                  })
-              });
+    methods: {
+        showSuccessNotification() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Evenement rejoins',
+                text: 'Tu as bien rejoins l\'evenement'
+            });
+        },
+        showErrorNotification(message) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Tu participe deja a cet evenement !',
+                text: message,
+            });
+        },
+        returnimagePath(type: string): string {
+            const basePath = '../public/images/evenement/';
+            switch (type.toLowerCase()) {
+                case 'collaboration':
+                    return `../public/images/evenement/collaboration.jpeg`;
+                case 'cours':
+                    return `../public/images/evenement/cours.PNG`;
+                case 'exposition':
+                    return `${basePath}exposition.jpg`;
+                case 'information':
+                    return `${basePath}information.jpg`;
+                case 'reunion':
+                    return `${basePath}reunion.jpg`;
+                case 'sortie_a_theme':
+                    return `${basePath}sortie_a_theme.jpg`;
+                case 'visionnage':
+                    return `${basePath}Visionnage.jpg`;
+                default:
+                    return `${basePath}cours.PNG`;
+            }
+        },
+        formatDate(dateString: string): string {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR'); // Format de la date en français
+        },
+        formatTime(dateString: string): string {
+            const date = new Date(dateString);
+            return date.toLocaleTimeString('fr-FR'); // Format de l'heure en français
+        },
+        async joinEvent() {
+            const user = usePage().props.auth.user;
+            const eventId = this.$props.id;
+            console.log('id utilisateur :', user);
+            console.log('id evenement:', eventId);
+            // Assurez-vous que l'ID de l'événement est passé en tant que prop
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/participations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_utilisateur: user.id,
+                        id_evenement: eventId
+                    })
+                });
 
-              if (!response.ok) {
-                  if (response.status === 409) {
-                      const errorData = await response.json();
-                      console.error('Error response data:', errorData);
-                      this.showErrorNotification(errorData.message);
-                      this.togglePopup();
-                  } else {
-                      throw new Error('Network response was not ok');
-                  }
-              } else {
-                  const data = await response.json();
-                  console.log('Join event response:', data);
-                  this.showSuccessNotification();
+                if (!response.ok) {
+                    if (response.status === 409) {
+                        const errorData = await response.json();
+                        console.error('Error response data:', errorData);
+                        this.showErrorNotification(errorData.message);
+                        this.togglePopup();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } else {
+                    const data = await response.json();
+                    console.log('Join event response:', data);
+                    this.showSuccessNotification();
                     this.togglePopup();
-              }
-          } catch (error) {
-              console.error('Error joining event:', error.message);
-          }
-      },
-      async SupprEvent() {
-          const eventId = this.$props.id;
-          try {
-              const response = await fetch('http://127.0.0.1:8000/api/evenements', {
-                  method: 'DELETE',
-                  headers: {
-                      'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                  id_evenement: eventId
-                  })
-              });
+                }
+            } catch (error) {
+                console.error('Error joining event:', error.message);
+            }
+        },
+        async SupprEvent() {
+            const eventId = this.$props.id;
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/evenements', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_evenement: eventId
+                    })
+                });
 
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              } else {
-                  Swal.fire({
-                      icon: 'success',
-                      title: 'Evenement supprimé',
-                      text: 'L\'événement a été supprimé avec succès'
-                  }).then(() => {
-                      window.location.reload();
-                  });
-              }
-          } catch (error) {
-              console.error('Error deleting event:', error.message);
-          }
-      },
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Evenement supprimé',
+                        text: 'L\'événement a été supprimé avec succès'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                }
+            } catch (error) {
+                console.error('Error deleting event:', error.message);
+            }
+        },
+        async leaveEvent() {
+            const user = usePage().props.auth.user;
+            const eventId = this.$props.id;
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/participations', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_utilisateur: user.id,
+                        id_evenement: eventId
+                    })
+                });
 
-
-      async leaveEvent() {
-          const user = usePage().props.auth.user;
-          const eventId = this.$props.id;
-          try {
-              const response = await fetch('http://127.0.0.1:8000/api/participations', {
-                  method: 'DELETE',
-                  headers: {
-                      'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                      id_utilisateur: user.id,
-                      id_evenement: eventId
-                  })
-              });
-
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              } else {
-                  Swal.fire({
-                      icon: 'success',
-                      title: 'Evenement quitté',
-                      text: 'Tu as bien quitté l\'événement'
-                  }).then(() => {
-                      window.location.reload();
-                  });
-              }
-          } catch (error) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Evenement quitté',
+                        text: 'Tu as bien quitté l\'événement'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                }
+            } catch (error) {
                 console.error('Error leaving event:', error.message);
-          }
-      }
-      },
-
+            }
+        }
+    },
     mounted() {
-      this.path = this.returnimagePath(this.Type_even);
+        this.path = this.returnimagePath(this.Type_even);
     }
 });
-
 </script>
 
 <template>
-  <div class="main_box" @click="togglePopup">
-    <img v-if="Type_even=='collaboration'" src="../public/images/evenement/collaboration.jpeg" alt="image" class="event_image">
+    <div class="main_box" @click="togglePopup">
+        <img v-if="Type_even=='collaboration'" src="../public/images/evenement/collaboration.jpeg" alt="image" class="event_image">
 
-      <img v-if="Type_even=='cours'" src="../public/images/evenement/cours.PNG" alt="image" class="event_image">
+        <img v-if="Type_even=='cours'" src="../public/images/evenement/cours.PNG" alt="image" class="event_image">
 
         <img v-if="Type_even=='exposition'" src="../public/images/evenement/exposition.jpg" alt="image" class="event_image">
 
-            <img v-if="Type_even=='information'" src="../public/images/evenement/information.jpg" alt="image" class="event_image">
+        <img v-if="Type_even=='information'" src="../public/images/evenement/information.jpg" alt="image" class="event_image">
 
-                <img v-if="Type_even=='reunion'" src="../public/images/evenement/reunion.jpg" alt="image" class="event_image">
+        <img v-if="Type_even=='reunion'" src="../public/images/evenement/reunion.jpg" alt="image" class="event_image">
 
-                <img v-if="Type_even=='sortie_a_theme'" src="../public/images/evenement/sortie_a_theme.jpg" alt="image" class="event_image">
+        <img v-if="Type_even=='sortie_a_theme'" src="../public/images/evenement/sortie_a_theme.jpg" alt="image" class="event_image">
 
-                    <img v-if="Type_even=='visionnage'" src="../public/images/evenement/Visionnage.jpg" alt="image" class="event_image">
+        <img v-if="Type_even=='visionnage'" src="../public/images/evenement/Visionnage.jpg" alt="image" class="event_image">
 
+        <div class="event_titre">
+            <h4> {{ titre_even }} </h4>
+            <span v-if="Type_even=='visionnage'" class="badge">Visionnage</span>
+        </div>
 
-
-    <div class="event_titre">
-      <h4> {{titre_even}} </h4>
-        <span v-if="Type_even=='visionnage'" class="badge">Visionnage</span>
+        <div class="event_details">
+            <p class="event_date">{{ formatDate(Date_even) }}</p>
+            <p class="event_time">{{ formatTime(Date_even) }}</p>
+        </div>
     </div>
-
-      <div class="event_details">
-          <p class="event_date">{{ formatDate(Date_even) }}</p>
-          <p class="event_time">{{ formatTime(Date_even) }}</p>
-      </div>
-  </div>
 
     <div v-if="montrerPopup" class="modal" @click.self="togglePopup">
         <div class="popup_content">
@@ -295,17 +297,13 @@ export default defineComponent({
                 <button v-if="!participe_deja" class="button_rejoindre" @click="joinEvent">Rejoindre</button>
                 <button v-if="participe_deja" class="button_quitter" @click="leaveEvent">Quitter</button>
                 <button v-if="isAdmin || isCreateur" class="button_quitter" @click="SupprEvent">Supprimer</button>
-                <button v-if="Type_even=='visionnage'" class="button_upload" @click="showUploadPopup">Déposer des photos {{id_visionnage}}</button>
+                <button v-if="Type_even=='visionnage'" class="button_upload" @click="showUploadPopup">Déposer des photos</button>
 
                 <ModalPhoto v-if="showUpload" :id_visionnage="id_visionnage" :isModalOpen="showUpload" @close="showUpload = false" />
             </div>
         </div>
     </div>
-
-
 </template>
-
-
 
 <style scoped>
 .main_box {
