@@ -2,15 +2,22 @@
 import { defineComponent, ref, computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
+import ModalPhoto from "@/Components/ModalPhoto.vue";
 
 export default defineComponent({
     name: "box_even",
+    components: {ModalPhoto},
     setup(props) {
         const montrerPopup = ref(false);
+        const showUpload = ref(false);
         const path = ref('');
 
         const togglePopup = () => {
             montrerPopup.value = !montrerPopup.value;
+        };
+
+        const showUploadPopup = () => {
+            showUpload.value = true;
         };
 
         const isAdmin = computed(() => {
@@ -28,6 +35,8 @@ export default defineComponent({
         return {
             montrerPopup,
             togglePopup,
+            showUpload,
+            showUploadPopup,
             path,
             isAdmin,
             isCreateur,
@@ -71,6 +80,10 @@ export default defineComponent({
       id_createur_even:{
             type: Number,
             required: true
+      },
+      id_visionnage: {
+          type: Number,
+          required: false
       }
 
   },
@@ -246,6 +259,7 @@ export default defineComponent({
 
     <div class="event_titre">
       <h4> {{titre_even}} </h4>
+        <span v-if="Type_even=='visionnage'" class="badge">Visionnage</span>
     </div>
 
       <div class="event_details">
@@ -281,10 +295,13 @@ export default defineComponent({
                 <button v-if="!participe_deja" class="button_rejoindre" @click="joinEvent">Rejoindre</button>
                 <button v-if="participe_deja" class="button_quitter" @click="leaveEvent">Quitter</button>
                 <button v-if="isAdmin || isCreateur" class="button_quitter" @click="SupprEvent">Supprimer</button>
-                <button class="button_commentaire">Voir les commentaire</button>
+                <button v-if="Type_even=='visionnage'" class="button_upload" @click="showUploadPopup">Déposer des photos {{id_visionnage}}</button>
+
+                <ModalPhoto v-if="showUpload" :id_visionnage="id_visionnage" :isModalOpen="showUpload" @close="showUpload = false" />
             </div>
         </div>
     </div>
+
 
 </template>
 
@@ -334,6 +351,14 @@ export default defineComponent({
 
 .button_quitter:hover {
     background-color: #c9302c; /* Darker red on hover */
+}
+.badge {
+    background-color: #ff9900;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    margin-left: 10px;
 }
 
 .event_titre {

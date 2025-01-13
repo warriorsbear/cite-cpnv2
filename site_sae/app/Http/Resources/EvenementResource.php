@@ -25,6 +25,7 @@ class EvenementResource extends JsonResource
             'officiel' => $this->officiel,
             'id_utilisateur' => $this->id_utilisateur,
             'date_heure' => $this->date_heure,
+            'id_visionnage' => $this->when(isset($this->id_visionnage), $this->id_visionnage),
         ];
     }
 }

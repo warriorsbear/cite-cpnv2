@@ -19,11 +19,12 @@ Route::get('/test', function () {
 })->middleware(['auth', 'verified']);
 
 
+
 Route::apiResource('evenements', EvenementController::class);
 Route::apiResource('utilisateurs', UserController::class);
 
 
-Route::get('/participations',[ParticipationController::class, 'index']);
+Route::get('/participations', [ParticipationController::class, 'index']);
 Route::post('/participations', [ParticipationController::class, 'store']);
 Route::delete('/participations', [ParticipationController::class, 'destroy']);
 
@@ -32,7 +33,8 @@ Route::delete('/evenements', [EvenementController::class, 'destroy']);
 Route::get('/photos/', [PhotoController::class, 'index']);
 Route::post('/photos', [PhotoController::class, 'store']);
 Route::get('/photos/{id}', [PhotoController::class, 'getUserPhotos']);
-
+Route::get('photos/visionnage/{idVisionnage}', [PhotoController::class, 'getPhotosByVisionnage']);
+Route::get('photos/user/{userId}/visionnage/{idVisionnage}', [PhotoController::class, 'getPhotosByUserAndVisionnage']);
 
 Route::post('/posts', [PostController::class, 'store']);
 Route::get('/posts', [PostController::class, 'index']);
@@ -42,3 +44,4 @@ Route::get('/commentaires', [CommentairePostController::class, 'index']);
 Route::post('/commentaires', [CommentairePostController::class, 'store']);//->middleware('auth:sanctum');
 
 Route::put('/utilisateurs/{id}/accepter', [UserController::class, 'accepter'])->name('utilisateurs.accepter');
+

@@ -1,11 +1,9 @@
 <script setup>
-import {Head, Link, useForm} from "@inertiajs/vue3";
+import {Head, Link, usePage} from "@inertiajs/vue3";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import Footer from "@/Components/Footer.vue";
-import {usePage} from "@inertiajs/vue3";
 import {onMounted, ref} from "vue";
 import Box_even from "@/Components/box_even.vue";
-import PhotoPost from "@/Components/MainApp/PhotoPost.vue";
 import Post_account from "@/Components/Post_account.vue";
 
 const userDemanderId = usePage().props.id ? usePage().props.id : null;
@@ -17,18 +15,8 @@ const posts = ref([]);
 const loading = ref(true);
 let utilisateur = usePage().props.auth.user;
 
-const form = useForm({
-    id: utilisateur.id,
-    nom: utilisateur.nom,
-    prenom: utilisateur.prenom,
-    pseudo: utilisateur.pseudo,
-    email: utilisateur.email,
-    photo: utilisateur.photo_de_profil,
-});
+
 const activeMenu = ref('photos');
-const showDescriptionInput= ref(false);
-const newDescription= ref('');
-const description = ref('Ceci est la description du profil.');
 
 const fetchEvenements = async () => {
     try {
@@ -69,9 +57,8 @@ const fetchUser = async (id) => {
             let response;
             const utilisateurId = parseInt(id, 10); // Transforme id en integer
             response = await fetch(`http://127.0.0.1:8000/api/utilisateurs/${utilisateurId}`);
-            const fetchedUser = await response.json();
             //Object.assign(utilisateur, fetchedUser);
-            utilisateur = fetchedUser;
+            utilisateur = await response.json();
             console.log("Les informations de l'utilisateur ont été récupérées :", utilisateur);
         }catch (error){
             console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error);
@@ -106,8 +93,7 @@ const fetchPost = async () => {
         }
 
         // Filter the posts to only include those posted by the connected user
-        const userPosts = postsData.filter(post => post.id_utilisateur === utilisateur.id);
-        posts.value = userPosts;
+        posts.value = postsData.filter(post => post.id_utilisateur === utilisateur.id);
         console.log("Les posts de l'utilisateur ont été récupérés :", posts.value);
     } catch (error) {
         console.error('Erreur lors de la récupération des posts:', error);
@@ -118,15 +104,7 @@ const toggleMenu = (menu) => {
     activeMenu.value = menu;
 };
 
-const changeDescription = (newDescription) => {
-    description.value = newDescription;
-};
 
-const updateDescription = () => {
-    changeDescription(newDescription);
-    showDescriptionInput.value = false;
-    newDescription.value = '';
-};
 
 onMounted(async () => {
     await Promise.all([fetchPhotos(), fetchEvenements(), fetchPost(),fetchUser(userDemanderId)]);
@@ -149,34 +127,33 @@ onMounted(async () => {
             </h2>
         </template>
 
-        <body>
+
         <div class="mon-compte">
+
             <!-- Banner -->
-            <div class="banner">
-                <!--<img :src="utilisateur.banner" alt="Banner Image" /> -->
+            <div class="banner-container">
+                <div class="banner"></div>
+                <div class="banner-overlay"></div>
             </div>
 
-            <!-- Profile Picture and Name -->
-
-            <div class="profile-header">
-                <img src="../public/images/avatar.jpg" alt="Profile Picture" class="profile-picture"/>
-                <h1>{{ utilisateur.nom }} {{ utilisateur.prenom }} </h1>
-
-            </div>
-
-
-
-
-            <!-- Profile Description -->
-            <div class="profile-description">
-                <p>{{ description }}</p> <br>
-
-                <Link :href="route('profile.edit')" class="edit-button" >Modifier les informations</Link>
-
-                <button class="edit-button" @click="showDescriptionInput = true">Changer votre description</button>
-                <div v-if="showDescriptionInput" class="description-input">
-                    <textarea v-model="newDescription" placeholder="Entrez une nouvelle description"></textarea>
-                    <button class="edit-button" @click="updateDescription">Valider</button>
+            <!-- Section profil avec les informations de l'utilisateur -->
+            <div class="profile-container">
+                <div class="profile-content">
+                    <img
+                        :src= "utilisateur.photo_de_profil"
+                        alt="Photo de profil"
+                        class="profile-picture"
+                    />
+                    <div class="profile-info">
+                        <h1 class="profile-name">{{ utilisateur.nom }} {{ utilisateur.prenom }}</h1>
+                        <p class="profile-username">@{{ utilisateur.pseudo }}</p>
+                        <Link
+                            :href="route('profile.edit')"
+                            class="edit-profile-button"
+                        >
+                            Modifier le profil
+                        </Link>
+                    </div>
                 </div>
             </div>
 
@@ -236,7 +213,6 @@ onMounted(async () => {
 
 
         </div>
-        </body>
         <Footer />
     </AuthenticatedLayout>
 </template>
@@ -261,8 +237,19 @@ html, body {
     font-family: 'Poppins', sans-serif;
 }
 
-.description-input {
-    margin-top: 10px;
+.banner-container {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.banner-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
 }
 
 .description-input textarea {
@@ -288,23 +275,72 @@ html, body {
 }
 
 .banner {
-    background-color: #838383;
-    width: 60%;
-    height: 200px;
-    object-fit: cover;
-    align-self: flex-start;
-    border-bottom-right-radius: 1500px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #b8762a; /* Bleu profond */
+    background-image: linear-gradient(135deg, #ffffff 0%, #4c390f 100%);
 }
 
-.profile-header {
-    display: flex;
-    align-items: center;
-    align-self: flex-start;
-    justify-content: space-between;
-    width: 30%;
-    margin-top: -50px;
-    padding: 20px;
+.profile-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    margin-top: -80px;
+    z-index: 10;
+}
 
+.profile-content {
+    display: flex;
+    align-items: flex-end;
+    gap: 30px;
+    padding-bottom: 30px;
+}
+
+.profile-picture {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    object-fit: cover;
+}
+
+.profile-info {
+    padding-bottom: 10px;
+}
+
+.profile-name {
+    color: #1a202c;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.profile-username {
+    color: #4a5568;
+    font-size: 1.1rem;
+    margin: 5px 0 15px 0;
+}
+
+.edit-profile-button {
+    display: inline-block;
+    padding: 8px 20px;
+    background-color: #ccc;
+    color: #2a2a2a;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.edit-profile-button:hover {
+    background-color: #b8762a;
+    transform: translateY(-1px);
 }
 
 
@@ -322,16 +358,6 @@ html, body {
 
 
 
-.profile-description {
-    margin-left: 10px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    margin-top: 20px;
-    width: 60%;
-    align-self: flex-start;
-    border: 1px solid black;
-}
 
 .toggle-bar {
     display: flex;
@@ -340,7 +366,7 @@ html, body {
 }
 
 .toggle-bar button.active {
-    background-color: #426580;
+    background-color: #b8762a;
     color: white;
 }
 
@@ -381,18 +407,7 @@ h2 {
 }
 
 
-.edit-button {
-    padding: 10px 15px;
-    margin: 5px;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: background-color 0.5s;
-}
 
-.edit-button:hover {
-    background-color: #ff9900;
-}
 
 
 .conteuneur{

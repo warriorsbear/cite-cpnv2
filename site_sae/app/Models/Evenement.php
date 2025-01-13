@@ -72,6 +72,9 @@ class Evenement extends Model
         // Supprimer les commentaires associés �� l'événement
         \DB::table('commentaire_event')->where('id_evenement', $eventId)->delete();
 
+        // Supprimer l'enregistrement dans la table visionnage si l'événement est de type visionnage
+        \DB::table('visionnage')->where('id_evenement', $eventId)->delete();
+
         // Supprimer l'événement
         return self::where('id_evenement', $eventId)->delete();
     }
