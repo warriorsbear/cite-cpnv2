@@ -13,7 +13,7 @@ class EvenementController extends Controller
 {
     public function index()
     {
-        $evenements = Evenement::all();
+        $evenements = Evenement::orderBy('date_heure', 'asc')->get();
 
         $evenements = $evenements->map(function ($evenement) {
             if ($evenement->type === 'visionnage') {
