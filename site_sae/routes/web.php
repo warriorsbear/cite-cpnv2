@@ -57,7 +57,7 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
     ->name('verification.send');
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -110,9 +110,9 @@ Route::post('/ProfileModification/{id}', function ($id) {
     return Inertia::render('ProfileModification', ['id' => $id]);
 })->middleware(['auth', 'verified'])->name('ProfileModification');
 
-Route::get('/ProfileModification/{id}', [ProfileController::class, 'show'])->name('profile.show');
-Route::post('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
-Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->name('profile.updateModif');
+Route::get('/ProfileModification/{id}', [ProfileController::class, 'show'])->middleware(['auth', 'verified'])->name('profile.show');
+Route::post('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->middleware(['auth', 'verified'])->name('profile.updateModif');
+Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->middleware(['auth', 'verified'])->name('profile.updateModif');
 
 //ajout de la route pour la page monCompte avec un paramètre
 Route::get('/monCompte/{id}', function ($id) {

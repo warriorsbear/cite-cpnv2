@@ -140,7 +140,7 @@ onMounted(async () => {
             <div class="profile-container">
                 <div class="profile-content">
                     <img
-                        src="../public/images/avatar.jpg"
+                        :src= "utilisateur.photo_de_profil"
                         alt="Photo de profil"
                         class="profile-picture"
                     />

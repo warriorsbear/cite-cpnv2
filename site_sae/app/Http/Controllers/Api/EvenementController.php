@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EvenementResource;
 use App\Models\Evenement;
+use App\Models\Visionnage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -12,18 +13,25 @@ class EvenementController extends Controller
 {
     public function index()
     {
+        $evenements = Evenement::all();
 
-        $evenements = Evenement::get();
-        if($evenements)
-        {
+        $evenements = $evenements->map(function ($evenement) {
+            if ($evenement->type === 'visionnage') {
+                $visionnage = Visionnage::where('id_evenement', $evenement->id_evenement)->first();
+                if ($visionnage) {
+                    $evenement->id_visionnage = $visionnage->id_visionnage;
+                }
+            }
+            return $evenement;
+        });
+
+        if ($evenements->isNotEmpty()) {
             return EvenementResource::collection($evenements);
+        } else {
+            return response()->json(['message' => 'Aucun événement trouvé'], 200);
         }
-        else
-        {
-            return response()->json(['message' => 'Aucun événement trouvé'],200);
-        }
-
     }
+
     public function getEvenementById(Request $request)
     {
         $eventId = $request->query('id_evenement');
@@ -73,8 +81,6 @@ class EvenementController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-
-
         // Créer un nouvel événement
         $evenement = Evenement::create([
             'titre' => $request->titre,
@@ -85,7 +91,16 @@ class EvenementController extends Controller
             'officiel' => $request->officiel,
             'id_utilisateur' => $request->id_utilisateur
         ]);
-        
+
+        // Si le type est "visionnage", ajouter à la table visionnage
+        if ($request->type === 'visionnage') {
+            $visionnage=Visionnage::create([
+                'date_visibilte' => $request->date_heure,
+                'date_diffusion' => $request->date_heure,
+                'id_evenement' => $evenement->id_evenement
+            ]);
+        }
+
     }
 
     /**
