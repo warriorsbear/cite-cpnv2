@@ -19,11 +19,12 @@ Route::get('/test', function () {
 })->middleware(['auth', 'verified']);
 
 
+
 Route::apiResource('evenements', EvenementController::class);
 Route::apiResource('utilisateurs', UserController::class);
 
 
-Route::get('/participations',[ParticipationController::class, 'index']);
+Route::get('/participations', [ParticipationController::class, 'index']);
 Route::post('/participations', [ParticipationController::class, 'store']);
 Route::delete('/participations', [ParticipationController::class, 'destroy']);
 
@@ -43,3 +44,4 @@ Route::get('/commentaires', [CommentairePostController::class, 'index']);
 Route::post('/commentaires', [CommentairePostController::class, 'store']);//->middleware('auth:sanctum');
 
 Route::put('/utilisateurs/{id}/accepter', [UserController::class, 'accepter'])->name('utilisateurs.accepter');
+

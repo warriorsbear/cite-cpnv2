@@ -46,6 +46,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'user',
             'statut' => 0,
+            'photo_de_profil' => 'http://127.0.0.1:8000/storage/photo_profile/user.png',
             'statut_cotisation' => 0,
         ]);
 
