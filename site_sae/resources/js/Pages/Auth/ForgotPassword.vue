@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import TextInput_email from "@/Components/TextInput_email.vue";
 
 defineProps({
     status: {
@@ -43,7 +44,7 @@ const submit = () => {
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <TextInput_email
                     id="email"
                     type="email"
                     class="mt-1 block w-full"

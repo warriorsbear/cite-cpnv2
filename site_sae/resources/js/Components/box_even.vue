@@ -51,10 +51,6 @@ export default defineComponent({
         };
     },
     props: {
-        evenements: {
-            type: Array,
-            required: true
-        },
         id: {
             type: Number,
             required: true
