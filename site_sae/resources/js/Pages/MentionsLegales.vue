@@ -1,20 +1,13 @@
 <script setup>
 import {Head, Link} from '@inertiajs/vue3';
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import Header from "@/Components/Header.vue";
 
 </script>
 
 <template>
-    <authenticated-layout>
     <Head title="Mentions légales"/>
-    <template #header>
-        <h2
-            class="text-xl font-semibold leading-tight text-gray-800"
-        >
-            Mentions Légales
-        </h2>
-    </template>
-
+    <Header logo-url="../public/images/logo.png" :est-connecte="false" />
     <div class="mentions-legales">
         <h1>Mentions légales</h1>
 
@@ -136,8 +129,6 @@ import GuestLayout from "@/Layouts/GuestLayout.vue";
         </section>
     </div>
     <Footer/>
-    </authenticated-layout>
-
 </template>
 
 <script>

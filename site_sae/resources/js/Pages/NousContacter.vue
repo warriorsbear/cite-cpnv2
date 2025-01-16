@@ -1,14 +1,7 @@
 <template>
-    <Head title="Nous contacter"/>
-    <authenticated-layout>
-        <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
-                Nous contacter
-            </h2>
-        </template>
-
+    <div>
+        <Head title="Nous contacter" />
+        <Header logo-url="../public/images/logo.png" :est-connecte="false" />
         <div class="contact-page">
             <div class="contact-form">
                 <h2>Contactez-nous par email</h2>
@@ -31,7 +24,7 @@
                         ></textarea>
                     </div>
                     <div class="consent-group">
-                        <input id="ok" type="checkbox" v-model="contactForm.consent"/>
+                        <input id="consent-checkbox" type="checkbox" v-model="contactForm.consent"/>
                         <label for="consent-checkbox">
                             En cochant cette case et en soumettant ce formulaire, j'accepte que mes données
                             personnelles soient utilisées pour me recontacter.
@@ -40,7 +33,6 @@
                     <button type="submit">Envoyez !</button>
                 </form>
             </div>
-
             <div class="contact-cord">
                 <h2>Nous rencontrer</h2>
                 <p>Adresse : 1 Rue de la République, 31560 Nailloux</p>
@@ -59,18 +51,17 @@
             </div>
         </div>
         <Footer/>
-    </authenticated-layout>
-
+    </div>
 </template>
 
 <script>
-import {Head} from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 import Footer from "@/Components/Footer.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import Header from "@/Components/Header.vue";
 
 export default {
-    components: {GuestLayout, Footer, AuthenticatedLayout, Head},
+    components: {Header, GuestLayout, Footer, Head},
     data() {
         return {
             contactForm: {
