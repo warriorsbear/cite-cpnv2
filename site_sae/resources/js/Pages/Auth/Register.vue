@@ -5,6 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import TextInput_email from "@/Components/TextInput_email.vue";
+import TextInput_special_char from "@/Components/TextInput_special_char.vue";
 
 const form = useForm({
     nom: '',
@@ -24,7 +26,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <Head title="S'identifier" />
 
         <form @submit.prevent="submit">
             <div>
@@ -76,7 +78,7 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
+                <TextInput_email
                     id="email"
                     type="email"
                     class="mt-1 block w-full"
@@ -89,9 +91,9 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Mot de passe ( @ & ! # ^ * acceptés )" />
 
-                <TextInput
+                <TextInput_special_char
                     id="password"
                     type="password"
                     class="mt-1 block w-full"
@@ -106,10 +108,10 @@ const submit = () => {
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Confirmation du mot de passe"
                 />
 
-                <TextInput
+                <TextInput_special_char
                     id="password_confirmation"
                     type="password"
                     class="mt-1 block w-full"
@@ -129,7 +131,7 @@ const submit = () => {
                     :href="route('login')"
                     class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                    Already registered?
+                    Déjà inscrit ?
                 </Link>
 
                 <PrimaryButton
@@ -137,7 +139,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Register
+                    S'inscrire
                 </PrimaryButton>
             </div>
         </form>

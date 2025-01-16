@@ -76,7 +76,7 @@ class PhotoController extends Controller
 
                     // Si tout s'est bien passé, on valide la transaction
                     \DB::commit();
-                    LaravelNotify::success('Post et photo uploadés avec succès');
+                    LaravelNotify::success('photo uploadés avec succès');
 
                 } catch (\Exception $e) {
                     // En cas d'erreur, on annule la transaction

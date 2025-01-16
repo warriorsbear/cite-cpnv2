@@ -101,7 +101,6 @@ class EvenementController extends Controller
             ]);
         }
 
-        return response()->json(['message' => 'Événement créé avec succès'], 201);
     }
 
     /**

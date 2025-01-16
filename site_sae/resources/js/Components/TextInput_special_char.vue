@@ -15,7 +15,7 @@ onMounted(() => {
 });
 
 const filterSpecialCharacters = (event) => {
-    const regex = /[^a-zA-Z0-9\séàèçù:-]/g;
+    const regex = /[^a-zA-Z0-9\s@&!#^*]/g;
     event.target.value = event.target.value.replace(regex, '');
     model.value = event.target.value;
 };

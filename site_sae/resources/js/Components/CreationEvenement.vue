@@ -1,7 +1,9 @@
 <script>
 import { defineComponent, ref } from 'vue';
+import TextInput from "@/Components/TextInput.vue";
 export default defineComponent( {
   name: "CreationEvenement",
+    components: {TextInput},
   props: {
     visible: {
       type: Boolean,
@@ -63,7 +65,7 @@ export default defineComponent( {
       <form @submit.prevent="submitForm">
         <div class="form-group">
           <label for="name">Titre de l'événement :</label>
-          <input type="text" id="name" v-model="event.titre_even" required />
+          <text-input type="text" id="name" v-model="event.titre_even" required />
         </div>
 
         <div class="form-group">

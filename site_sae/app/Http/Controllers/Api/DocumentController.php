@@ -48,34 +48,6 @@ class DocumentController extends Controller
 
     }
 
-//    public function download($id)
-//    {
-//        $document = Document::findOrFail($id);
-//
-//        // Vérification des permissions si nécessaire
-//        // Par exemple :
-//        // if (!$this->canAccessDocument($document)) {
-//        //     abort(403, 'Accès non autorisé');
-//        // }
-//        $path = storage_path('app/public/' . $document->chemin);
-//
-//        if (!file_exists($path)) {
-//            abort(404, 'Fichier introuvable');
-//        }
-//        // Récupérer l'extension originale du fichier
-//        $originalExtension = pathinfo($document->nom, PATHINFO_EXTENSION);
-//
-//        // Si l'extension n'est pas présente dans le nom, utilisez l'extension du fichier stocké
-//        if (empty($originalExtension)) {
-//            $originalExtension = pathinfo($path, PATHINFO_EXTENSION);
-//        }
-//
-//        // Construire le nom de fichier avec l'extension
-//        $filename = $document->nom . ($originalExtension ? '.' . $originalExtension : '');
-//
-//        return response()->download($path, $filename);
-//
-//    }
     public function download($id)
     {
         $document = Document::findOrFail($id);

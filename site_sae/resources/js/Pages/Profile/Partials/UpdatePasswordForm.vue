@@ -5,6 +5,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import TextInput_special_char from "@/Components/TextInput_special_char.vue";
 
 const passwordInput = ref(null);
 const currentPasswordInput = ref(null);
@@ -37,18 +38,17 @@ const updatePassword = () => {
     <section>
         <header>
             <h2 class="text-lg font-medium text-gray-900">
-                Update Password
+                Changer votre mot de passe
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Ensure your account is using a long, random password to stay
-                secure.
+                faites en sorte que votre compte reste sécurisé avec un mot de passe robuste.
             </p>
         </header>
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Current Password" />
+                <InputLabel for="current_password" value="Mot de passe actuel" />
 
                 <TextInput
                     id="current_password"
@@ -66,9 +66,9 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel for="password" value="New Password" />
+                <InputLabel for="password" value="Nouveau mot de passe ( @ & ! # ^ * acceptés )" />
 
-                <TextInput
+                <TextInput_special_char
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
@@ -83,10 +83,10 @@ const updatePassword = () => {
             <div>
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Confirmation du nouveau mot de passe"
                 />
 
-                <TextInput
+                <TextInput_special_char
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
@@ -101,7 +101,7 @@ const updatePassword = () => {
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <PrimaryButton :disabled="form.processing">Sauvegarder</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -113,7 +113,7 @@ const updatePassword = () => {
                         v-if="form.recentlySuccessful"
                         class="text-sm text-gray-600"
                     >
-                        Saved.
+                        Sauvegardé.
                     </p>
                 </Transition>
             </div>
