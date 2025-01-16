@@ -47,7 +47,7 @@ onMounted(() => {
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Evenement
+                Événement
             </h2>
         </template>
 
@@ -78,8 +78,6 @@ onMounted(() => {
             />
         </div>
         <Footer />
-
-
     </AuthenticatedLayout>
 </template>
 

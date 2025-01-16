@@ -29,7 +29,7 @@ export default defineComponent({
             return user && user.id === props.id_createur_even;
         });
         const officielStatus = computed(() => {
-            return props.Officiel_even ? 'officiel (créer par un admin)' : 'non officiel';
+            return props.Officiel_even ? 'Officiel (créé par un administrateur)' : 'Non officiel';
         });
 
         return {
@@ -92,15 +92,15 @@ export default defineComponent({
       showSuccessNotification () {
           Swal.fire({
               icon: 'success',
-              title: 'Evenement rejoins',
-              text: 'Tu as bien rejoins l\'evenement'
+              title: 'Événement rejoint',
+              text: 'Tu as bien rejoint l\'événement'
           });
       },
 
       showErrorNotification (message) {
           Swal.fire({
               icon: 'error',
-              title: 'Tu participe deja a cet evenement !',
+              title: 'Tu participes déjà à cet événement !',
               text: message,
           });
       },
@@ -188,7 +188,7 @@ export default defineComponent({
               } else {
                   Swal.fire({
                       icon: 'success',
-                      title: 'Evenement supprimé',
+                      title: 'Événement supprimé',
                       text: 'L\'événement a été supprimé avec succès'
                   }).then(() => {
                       window.location.reload();
@@ -220,7 +220,7 @@ export default defineComponent({
               } else {
                   Swal.fire({
                       icon: 'success',
-                      title: 'Evenement quitté',
+                      title: 'Événement quitté',
                       text: 'Tu as bien quitté l\'événement'
                   }).then(() => {
                       window.location.reload();

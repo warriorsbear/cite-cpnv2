@@ -26,10 +26,11 @@ const verificationLinkSent = computed(
         <Head title="Email Verification" />
 
         <div class="mb-4 text-sm text-gray-600">
-            Merci de vous être inscrit! Avant de commencer, pourriez-vous
+            Merci de vous être inscrit ! Avant de commencer, veuillez
             vérifier votre adresse e-mail en cliquant sur le lien que nous
-            venons de vous envoyer? Si vous n'avez pas reçu l'e-mail, nous
-            vous en enverrons un autre volontiers.
+            venons de vous envoyer. <br>
+            Si vous n'avez pas reçu l'e-mail, cliquez sur le bouton
+            "Renvoyer l'e-mail de vérification".
         </div>
 
         <div
@@ -37,7 +38,7 @@ const verificationLinkSent = computed(
             v-if="verificationLinkSent"
         >
             Un nouveau lien de vérification a été envoyé à l'adresse e-mail que
-            vous avez fournie lors de l'inscription.
+            vous avez fourni lors de l'inscription.
         </div>
 
         <form @submit.prevent="submit">

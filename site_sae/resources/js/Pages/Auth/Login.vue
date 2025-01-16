@@ -66,7 +66,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.password"
                     required
-                    placeholder="password"
+                    placeholder="********"
                     autocomplete="current-password"
                 />
 

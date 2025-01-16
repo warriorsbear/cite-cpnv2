@@ -12,7 +12,7 @@
         </button>
         <div v-if="estConnecte" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
             <NavLink :href="route('dashboard')" :active="route().current('dashboard')">Accueil</NavLink>
-            <NavLink :href="route('evenement')" :active="route().current('evenement')">Événement</NavLink>
+            <NavLink :href="route('evenement')" :active="route().current('evenement')">Évènement</NavLink>
             <NavLink :href="route('messagerie')" :active="route().current('messagerie')">Messagerie</NavLink>
             <NavLink :href="route('profile.edit')" :active="route().current('profile.edit')">Mon compte</NavLink>
         </div>
