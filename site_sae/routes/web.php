@@ -90,7 +90,7 @@ Route::get('/monCompte', function () {
 
 Route::get('/MentionsLegales', function () {
     return Inertia::render('MentionsLegales');
-})->middleware(['auth', 'verified'])->name('MentionsLegales');
+})->name('MentionsLegales');
 
 Route::get('/NousContacter', function () {
     return Inertia::render('NousContacter');
