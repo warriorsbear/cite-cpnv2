@@ -114,6 +114,14 @@
                 </form>
             </div>
         </div>
+
+        <!-- Loading screen -->
+        <div v-if="isLoading" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 flex flex-col items-center">
+                <img src="../../public/images/loading.gif" alt="Loading..." class="w-16 h-16 mb-4" />
+                <p class="text-center text-gray-700">Publication en cours...</p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -131,6 +139,7 @@ const isModalOpen = ref(false)
 const selectedFiles = ref([])
 const isDragging = ref(false)
 const fileInput = ref(null)
+const isLoading = ref(false) // New loading state
 
 // Formulaire
 const form = useForm({
@@ -203,9 +212,8 @@ const dragLeave = () => {
     isDragging.value = false
 }
 
-
-
 const submitPhoto = () => {
+    isLoading.value = true // Set loading state to true
     const formData = new FormData()
     formData.append('legende', form.legende)
     formData.append('date_prise_vue', form.date_prise_vue)
@@ -218,11 +226,13 @@ const submitPhoto = () => {
     form.post(route('posts.create'), {
         forceFormData: true,
         onSuccess: () => {
+            isLoading.value = false // Set loading state to false
             closeModal()
             showSuccessNotification()
             console.log('Post créé avec succès')
         },
         onError: (errors) => {
+            isLoading.value = false // Set loading state to false
             showErrorNotification(errors.message)
             console.error('Erreurs de validation :', errors)
         }
