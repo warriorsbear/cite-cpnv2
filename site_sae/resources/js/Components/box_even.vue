@@ -293,7 +293,7 @@ export default defineComponent({
                 <button v-if="!participe_deja" class="button_rejoindre" @click="joinEvent">Rejoindre</button>
                 <button v-if="participe_deja" class="button_quitter" @click="leaveEvent">Quitter</button>
                 <button v-if="isAdmin || isCreateur" class="button_quitter" @click="SupprEvent">Supprimer</button>
-                <button v-if="Type_even=='visionnage' || participe_deja" class="button_upload" @click="showUploadPopup">Déposer des photos</button>
+                <button v-if="Type_even=='visionnage' && participe_deja" class="button_upload" @click="showUploadPopup">Déposer des photos</button>
 
                 <ModalPhoto v-if="showUpload" :id_visionnage="id_visionnage" :isModalOpen="showUpload" @close="showUpload = false" />
             </div>
