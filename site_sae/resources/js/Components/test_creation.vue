@@ -31,8 +31,6 @@ const submit = () => {
                 text: 'Événement créé avec succès',
                 icon: 'success',
                 confirmButtonText: 'OK'
-            }).then(() => {
-                window.location.reload();
             });
         }
     });
