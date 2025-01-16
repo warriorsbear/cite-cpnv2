@@ -108,8 +108,8 @@ export default defineComponent({
         showErrorNotification(message) {
             Swal.fire({
                 icon: 'error',
-                title: 'Tu participe deja a cet evenement !',
-                text: message,
+                title: 'Tu participe deja a cet evenement',
+                text: 'Si tu souhaite quitter l\'evenement, rends toi sur ton profil',
             });
         },
         returnimagePath(type: string): string {
@@ -393,21 +393,21 @@ export default defineComponent({
     color: #777;
 }
 
-.button_commentaire {
+.button_upload {
     display: inline-block;
     padding: 10px 20px;
     margin: 10px;
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
-    background-color: #000000; /* Black background */
+    background-color: #5bc0de; /* Light blue background */
     color: white;
     border: none;
     transition: background-color 0.3s ease;
 }
 
-.button_commentaire:hover {
-    background-color: #333333; /* Darker black on hover */
+.button_upload:hover {
+    background-color: #31b0d5; /* Darker blue on hover */
 }
 
 .modal {
