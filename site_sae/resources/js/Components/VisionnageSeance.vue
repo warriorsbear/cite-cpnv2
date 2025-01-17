@@ -2,44 +2,56 @@
     <div v-if="isModalOpen" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Séance de Visionnage</h2>
-                <button @click="closeModal" class="close-button">&times;</button>
+                <h2 class="title">Séance de Visionnage</h2>
+                <button @click="closeModal" class="close-button">
+                    <span>&times;</span>
+                </button>
             </div>
 
             <div v-if="photos.length > 0" class="photo-display">
-                <img :src="currentPhoto.url" alt="Photo" class="main-photo">
-                <p>Date de prise: {{ formatDate(currentPhoto.date_prise) }}</p>
+                <div class="photo-container">
+                    <img :src="currentPhoto.url" alt="Photo" class="main-photo">
+                </div>
 
-                <div v-if="isAuthorRevealed" class="author-info">
-                    <p>Auteur: {{ currentPhoto.auteur.prenom }} {{ currentPhoto.auteur.nom }}</p>
+                <div class="info-section">
+                    <p class="date">{{ formatDate(currentPhoto.date_prise) }}</p>
+
+                    <div v-if="isAuthorRevealed" class="author-info">
+                        <p>Par {{ currentPhoto.auteur.prenom }} {{ currentPhoto.auteur.nom }}</p>
+                    </div>
+
+                    <div class="progress">
+                        {{ currentIndex + 1 }} / {{ photos.length }}
+                    </div>
                 </div>
 
                 <div class="controls">
-                    <button v-if="!isAuthorRevealed" @click="revealAuthor" class="reveal-button">
+                    <button v-if="!isAuthorRevealed"
+                            @click="revealAuthor"
+                            class="button reveal-button">
                         Révéler l'auteur
                     </button>
-                    <button v-if="currentIndex+1 < photos.length" @click="nextPhoto" class="next-button">
-                        Photo suivante
+                    <button v-if="currentIndex+1 < photos.length"
+                            @click="nextPhoto"
+                            class="button next-button">
+                        Suivante
                     </button>
-
-                    <button @click="closeModal" class="fermer-button">
-                        Fermer
+                    <button @click="closeModal"
+                            class="button close-modal-button">
+                        Terminer
                     </button>
-                </div>
-
-                <div class="progress">
-                    Photo {{ currentIndex + 1 }} sur {{ photos.length }}
                 </div>
             </div>
 
             <div v-else class="no-photos">
-                Aucune photo disponible pour ce visionnage.
+                <p>Aucune photo disponible pour ce visionnage.</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+// Le script reste identique
 export default {
     props: {
         isModalOpen: {
@@ -112,7 +124,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -121,40 +133,112 @@ export default {
 
 .modal-content {
     background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 800px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
+    border-radius: 12px;
+    width: 90%;  /* Réduit de 95% à 90% */
+    height: 90vh; /* Hauteur fixe de 90% de la hauteur de la fenêtre */
+    max-width: 900px; /* Réduit de 1000px à 900px */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    padding: 15px 20px; /* Réduit le padding */
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.title {
+    font-size: 1.3rem; /* Réduit de 1.5rem */
+    color: #333;
+    margin: 0;
+    font-weight: 600;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px; /* Réduit de 28px */
+    color: #666;
+    cursor: pointer;
+    padding: 0 8px;
+    transition: color 0.2s;
+}
+
+.close-button:hover {
+    color: #333;
 }
 
 .photo-display {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.photo-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 20px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 0; /* Important pour le flex */
 }
 
 .main-photo {
     max-width: 100%;
-    max-height: 60vh;
+    max-height: 100%;
     object-fit: contain;
+}
+
+.info-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.date {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.author-info {
+    text-align: center;
+    font-weight: 500;
+}
+
+.progress {
+    font-size: 0.9rem;
+    color: #999;
 }
 
 .controls {
     display: flex;
     gap: 10px;
-    margin-top: 20px;
+    justify-content: center;
+    padding: 10px;
+    flex-shrink: 0;
 }
 
-.reveal-button, .next-button, .fermer-button {
-    padding: 10px 20px;
+.button {
+    padding: 8px 20px; /* Réduit de 10px 24px */
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s;
+    font-size: 0.9rem; /* Réduit de 0.95rem */
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .reveal-button {
@@ -162,28 +246,54 @@ export default {
     color: white;
 }
 
+.reveal-button:hover {
+    background-color: #c48322;
+}
+
 .next-button {
-    background-color: #5bc0de;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.next-button:hover {
+    background-color: #e5e5e5;
+}
+
+.close-modal-button {
+    background-color: #dc2626;
     color: white;
 }
 
-.fermer-button {
-    background-color: #ed2a2a;
-    color: white;
+.close-modal-button:hover {
+    background-color: #c72121;
 }
 
-.progress {
-    margin-top: 20px;
+.no-photos {
+    padding: 30px;
+    text-align: center;
     color: #666;
 }
 
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    border: none;
-    background: none;
-    cursor: pointer;
+@media (max-width: 640px) {
+    .modal-content {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .controls {
+        flex-direction: column;
+        padding: 10px 15px;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .info-section {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
 }
 </style>
