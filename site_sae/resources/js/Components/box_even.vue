@@ -3,14 +3,16 @@ import { defineComponent, ref, computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
 import ModalPhoto from "@/Components/ModalPhoto.vue";
+import VisionnageSeance from "@/Components/VisionnageSeance.vue";
 
 export default defineComponent({
     name: "box_even",
-    components: { ModalPhoto },
+    components: { ModalPhoto,VisionnageSeance},
     setup(props) {
         const montrerPopup = ref(false);
         const showUpload = ref(false);
         const path = ref('');
+        const showVisionnage = ref(false);
 
         const togglePopup = () => {
             montrerPopup.value = !montrerPopup.value;
@@ -43,6 +45,7 @@ export default defineComponent({
             togglePopup,
             showUpload,
             showUploadPopup,
+            showVisionnage,
             path,
             isAdmin,
             isCreateur,
@@ -294,6 +297,14 @@ export default defineComponent({
                 <button v-if="participe_deja" class="button_quitter" @click="leaveEvent">Quitter</button>
                 <button v-if="isAdmin || isCreateur" class="button_quitter" @click="SupprEvent">Supprimer</button>
                 <button v-if="Type_even=='visionnage' && participe_deja" class="button_upload" @click="showUploadPopup">Déposer des photos</button>
+                <button v-if="Type_even=='visionnage' && isAdmin" class="button_rejoindre" @click="showVisionnage = true">Démarrer</button>
+
+                <VisionnageSeance
+                    v-if="showVisionnage"
+                    :id_visionnage="id_visionnage"
+                    :isModalOpen="showVisionnage"
+                    @close="showVisionnage = false"
+                />
 
                 <ModalPhoto v-if="showUpload" :id_visionnage="id_visionnage" :isModalOpen="showUpload" @close="showUpload = false" />
             </div>
@@ -493,5 +504,22 @@ export default defineComponent({
 
 .mid {
     text-align: center;
+}
+
+.button_visionnage {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.button_visionnage:hover {
+    background-color: #218838;
 }
 </style>
