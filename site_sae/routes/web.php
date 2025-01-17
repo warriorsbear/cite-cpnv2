@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ParticipationController;
 use App\Http\Controllers\Api\PhotoController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VisionnageController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\VerifyEmailController;
@@ -70,6 +71,9 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');
     Route::get('/documents/download/{id}', [DocumentController::class, 'download'])->name('documents.download');
     Route::delete('/documents/{id}', [DocumentController::class, 'delete'])->name('documents.destroy');
+
+    Route::get('/api/visionnage/start/{id_visionnage}', [VisionnageController::class, 'startVisionnage']);
+    Route::get('/api/visionnage/status/{id_visionnage}', [VisionnageController::class, 'getVisionnageStatus']);
 
     Route::get('/events/list', [EvenementController::class, 'index'])->name('events.list');
 
