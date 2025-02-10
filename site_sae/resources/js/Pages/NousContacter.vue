@@ -1,25 +1,18 @@
 <template>
-    <Head title="Nous contacter" />
-    <AuthenticatedLayout>
-        <template #header>
-            <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
-                Nous contacter
-            </h2>
-        </template>
-
+    <div>
+        <Head title="Nous contacter" />
+        <Header logo-url="../public/images/logo.png" :est-connecte="false" />
         <div class="contact-page">
             <div class="contact-form">
                 <h2>Contactez-nous par email</h2>
                 <form @submit.prevent="submitContactForm">
                     <div class="form-group">
                         <label>Prénom - Nom *</label>
-                        <input type="text" v-model="contactForm.fullName" required />
+                        <input type="text" v-model="contactForm.fullName" required/>
                     </div>
                     <div class="form-group">
                         <label>Adresse e-mail *</label>
-                        <input type="email" v-model="contactForm.email" required />
+                        <input type="email" v-model="contactForm.email" required/>
                     </div>
                     <div class="form-group">
                         <label>Votre message *</label>
@@ -31,7 +24,7 @@
                         ></textarea>
                     </div>
                     <div class="consent-group">
-                        <input id="ok" type="checkbox" v-model="contactForm.consent" />
+                        <input id="consent-checkbox" type="checkbox" v-model="contactForm.consent"/>
                         <label for="consent-checkbox">
                             En cochant cette case et en soumettant ce formulaire, j'accepte que mes données
                             personnelles soient utilisées pour me recontacter.
@@ -40,7 +33,6 @@
                     <button type="submit">Envoyez !</button>
                 </form>
             </div>
-
             <div class="contact-cord">
                 <h2>Nous rencontrer</h2>
                 <p>Adresse : 1 Rue de la République, 31560 Nailloux</p>
@@ -58,202 +50,202 @@
                 </div>
             </div>
         </div>
-        <Footer />
-    </AuthenticatedLayout>
-
+        <Footer/>
+    </div>
 </template>
 
 <script>
-import {Head} from "@inertiajs/vue3";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 import Footer from "@/Components/Footer.vue";
+import GuestLayout from "@/Layouts/GuestLayout.vue";
+import Header from "@/Components/Header.vue";
 
 export default {
-    components: {Footer, AuthenticatedLayout, Head},
-  data() {
-    return {
-      contactForm: {
-        fullName: '',
-        email: '',
-        message: '',
-        consent: false
-      }
-    };
-  },
-  methods: {
-    async submitContactForm() {
-      if (this.contactForm.consent) {
-        try {
-          await this.$axios.post('/api/contact', this.contactForm);
-          alert('Message envoyé avec succès');
-        } catch (error) {
-          alert('Erreur lors de l\'envoi du message');
+    components: {Header, GuestLayout, Footer, Head},
+    data() {
+        return {
+            contactForm: {
+                fullName: '',
+                email: '',
+                message: '',
+                consent: false
+            }
+        };
+    },
+    methods: {
+        async submitContactForm() {
+            if (this.contactForm.consent) {
+                try {
+                    await this.$axios.post('/api/contact', this.contactForm);
+                    alert('Message envoyé avec succès');
+                } catch (error) {
+                    alert('Erreur lors de l\'envoi du message');
+                }
+            } else {
+                alert('Vous devez accepter les conditions');
+            }
         }
-      } else {
-        alert('Vous devez accepter les conditions');
-      }
     }
-  }
 };
 </script>
 
 <style scoped>
 /* Structure principale */
 .contact-page {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 20px;
-  background-color: #ffffff;
-  padding: 20px;
-  font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 20px;
+    background-color: #ffffff;
+    padding: 20px;
+    font-family: 'Poppins', sans-serif;
 }
 
 /* Zone "Contactez-nous par email" */
 .contact-form, .contact-cord {
-  width: 48%;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
+    width: 48%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 .contact-form h2, .contact-cord h2 {
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    color: #333;
 }
 
 /* Champs du formulaire */
 .form-group {
-  margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #333;
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
 }
 
 input, textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f9f9f9;
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
 }
 
 textarea {
-  resize: vertical;
-  min-height: 80px;
-  max-height: 300px;
+    resize: vertical;
+    min-height: 80px;
+    max-height: 300px;
 }
 
 input:focus, textarea:focus {
-  border-color: #d68f26;
-  box-shadow: 0 0 5px rgba(214, 143, 38, 0.5);
-  outline: none;
+    border-color: #d68f26;
+    box-shadow: 0 0 5px rgba(214, 143, 38, 0.5);
+    outline: none;
 }
 
 /* Checkbox */
 .consent-group {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 5px;
-  margin: 10px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    margin: 10px 0;
 }
 
 .consent-group input {
-  width: fit-content;
-  margin-right: 5px;
+    width: fit-content;
+    margin-right: 5px;
 }
 
 .consent-group label {
-  font-size: 14px;
-  font-weight: normal;
-  color: #333;
-  line-height: 1.5;
+    font-size: 14px;
+    font-weight: normal;
+    color: #333;
+    line-height: 1.5;
 }
 
 /* Bouton */
 button {
-  background-color: #d68f26;
-  color: #fff;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  align-self: flex-start;
+    background-color: #d68f26;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    align-self: flex-start;
 }
 
 button:hover {
-  background-color: #af7824;
+    background-color: #af7824;
 }
 
 /* Zone "Nous rencontrer" */
 .contact-cord p {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #333;
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
 }
 
 /* Carte Google Maps */
 .map-container {
-  margin-top: 20px;
-  width: 100%;
+    margin-top: 20px;
+    width: 100%;
 }
 
 /* MEDIA QUERIES POUR RESPONSIVE */
 @media (max-width: 768px) {
-  .contact-page {
-    flex-direction: column;
-    align-items: center;
-  }
+    .contact-page {
+        flex-direction: column;
+        align-items: center;
+    }
 
-  .contact-form, .contact-cord {
-    width: 90%;
-    margin-bottom: 20px;
-  }
+    .contact-form, .contact-cord {
+        width: 90%;
+        margin-bottom: 20px;
+    }
 
-  .contact-form h2, .contact-cord h2 {
-    font-size: 1.2rem;
-  }
+    .contact-form h2, .contact-cord h2 {
+        font-size: 1.2rem;
+    }
 
-  label {
-    font-size: 14px;
-  }
+    label {
+        font-size: 14px;
+    }
 
-  button {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-  }
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
 }
 
 @media (max-width: 480px) {
-  .contact-form, .contact-cord {
-    width: 100%;
-    margin-bottom: 10px;
-  }
+    .contact-form, .contact-cord {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 
-  .contact-form h2, .contact-cord h2 {
-    font-size: 1.1rem;
-  }
+    .contact-form h2, .contact-cord h2 {
+        font-size: 1.1rem;
+    }
 
-  label {
-    font-size: 13px;
-  }
+    label {
+        font-size: 13px;
+    }
 
-  button {
-    font-size: 14px;
-  }
+    button {
+        font-size: 14px;
+    }
 }
 </style>

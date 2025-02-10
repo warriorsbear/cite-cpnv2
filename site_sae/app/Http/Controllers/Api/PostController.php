@@ -19,6 +19,8 @@ class PostController extends Controller
     {
         $this->exifHandler = $exifHandler;
     }
+
+    // Stocker un post
     public function store(Request $request)
     {
         try {

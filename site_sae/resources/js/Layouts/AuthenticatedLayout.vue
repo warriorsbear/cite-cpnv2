@@ -43,7 +43,7 @@ const showingNavigationDropdown = ref(false);
                                     :href="route('evenement')"
                                     :active="route().current('evenement')"
                                 >
-                                    Evenement
+                                    Événement
                                 </NavLink>
                                 <NavLink
                                     :href="route('messagerie')"

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ParticipationController;
 use App\Http\Controllers\Api\PhotoController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VisionnageController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\VerifyEmailController;
@@ -22,7 +23,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('bienvenue');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -42,7 +43,7 @@ Route::get('/doc', function () {
 
 Route::get('/contact', function () {
     return Inertia::render('NousContacter');
-})->middleware(['auth', 'verified'])->name('contact');
+})->name('contact');
 
 Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
     ->middleware('auth')
@@ -71,6 +72,9 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::get('/documents/download/{id}', [DocumentController::class, 'download'])->name('documents.download');
     Route::delete('/documents/{id}', [DocumentController::class, 'delete'])->name('documents.destroy');
 
+    Route::get('/api/visionnage/start/{id_visionnage}', [VisionnageController::class, 'startVisionnage']);
+    Route::get('/api/visionnage/status/{id_visionnage}', [VisionnageController::class, 'getVisionnageStatus']);
+
     Route::get('/events/list', [EvenementController::class, 'index'])->name('events.list');
 
 
@@ -90,11 +94,11 @@ Route::get('/monCompte', function () {
 
 Route::get('/MentionsLegales', function () {
     return Inertia::render('MentionsLegales');
-})->middleware(['auth', 'verified'])->name('MentionsLegales');
+})->name('MentionsLegales');
 
 Route::get('/NousContacter', function () {
     return Inertia::render('NousContacter');
-})->middleware(['auth', 'verified'])->name('NousContacter');
+})->name('NousContacter');
 
 
 Route::get('/user/photos', [PhotoController::class, 'getUserPhotos'])

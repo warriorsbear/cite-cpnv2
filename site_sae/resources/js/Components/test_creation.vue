@@ -3,9 +3,9 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import Swal from 'sweetalert2';
-import { defineEmits } from 'vue';
+import { defineEmits, computed } from 'vue';
 
 const emit = defineEmits(['submit', 'close']);
 
@@ -31,12 +31,15 @@ const submit = () => {
                 text: 'Événement créé avec succès',
                 icon: 'success',
                 confirmButtonText: 'OK'
-            }).then(() => {
-                window.location.reload();
             });
         }
     });
 };
+
+const currentDateTime = computed(() => {
+    const now = new Date();
+    return now.toISOString().slice(0, 16);
+});
 </script>
 
 <template>
@@ -52,7 +55,6 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.titre"
                     required
-                    autocomplete="nom"
                 />
                 <InputError class="mt-2" :message="form.errors.titre" />
             </div>
@@ -65,7 +67,6 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.descriptif"
                     required
-                    autocomplete="prenom"
                 />
                 <InputError class="mt-2" :message="form.errors.descriptif" />
             </div>
@@ -78,7 +79,6 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.lieu"
                     required
-                    autocomplete="pseudo"
                 />
                 <InputError class="mt-2" :message="form.errors.lieu" />
             </div>
@@ -109,8 +109,8 @@ const submit = () => {
                     type="datetime-local"
                     class="mt-1 block w-full"
                     v-model="form.date_heure"
+                    :min="currentDateTime"
                     required
-                    autocomplete="new-password"
                 />
                 <InputError class="mt-2" :message="form.errors.date_heure" />
             </div>

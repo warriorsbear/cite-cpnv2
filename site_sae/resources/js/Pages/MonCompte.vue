@@ -204,6 +204,7 @@ onMounted(async () => {
                             :Type_even="evenement.type"
                             :Officiel_even="evenement.officiel"
                             :participe_deja="true"
+                            :id_visionnage="evenement.id_visionnage"
                             :id_createur_even="evenement.id_utilisateur"
                         />
                     </div>

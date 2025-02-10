@@ -4,6 +4,8 @@ import { Head } from '@inertiajs/vue3';
 import MainApp from '@/Components/MainApp/MainApp.vue';
 import Footer from "@/Components/Footer.vue";
 import ModalPost from "@/Components/MainApp/ModalPost.vue";
+import BoutonPlus from "@/Components/MainApp/BoutonPlus.vue";
+import ModalPhotoV1 from "@/Components/MainApp/ModalPhotoV1.vue";
 </script>
 
 <template>

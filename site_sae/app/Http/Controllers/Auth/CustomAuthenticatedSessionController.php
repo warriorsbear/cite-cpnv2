@@ -42,7 +42,7 @@ class CustomAuthenticatedSessionController extends Controller
             if ($user->statut == 0) {
                 Auth::logout();
                 throw ValidationException::withMessages([
-                    'email' => 'Votre compte n\'a pas encore était validé par les administrateurs.',
+                    'email' => 'Votre compte n\'a pas encore été validé par les administrateurs.',
                 ]);
             }
 
@@ -52,7 +52,7 @@ class CustomAuthenticatedSessionController extends Controller
         }
 
         throw ValidationException::withMessages([
-            'email' => 'Les informations ne correspondent pas à nos enregistrements.',
+            'email' => 'Identifiant ou mot de passe invalides.',
         ]);
     }
 

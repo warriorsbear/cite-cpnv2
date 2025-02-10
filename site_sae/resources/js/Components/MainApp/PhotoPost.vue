@@ -12,7 +12,7 @@
                 <div>
                     <button @click="toggleDropdown">...</button>
                     <div v-if="isDropdownOpen" class="dropdown-menu">
-                        <button @click="downloadPhoto">Télécharger la photo</button>
+                        <button @click="downloadPhoto(currentImageIndex)">Télécharger la photo</button>
                         <button @click="viewExifData">Voir les données EXIF</button>
                     </div>
                     <div v-if="isEXIFOpen && isDropdownOpen" class="dropdown-menu exif-menu">
@@ -40,38 +40,20 @@
                         v-if="processedImages.length > 1"
                         class="nav-arrow left"
                         @click="prevImage"
-                    >&#9664;</button>
+                    >&#9664;
+                    </button>
                     <button
                         v-if="processedImages.length > 1"
                         class="nav-arrow right"
                         @click="nextImage"
-                    >&#9654;</button>
+                    >&#9654;
+                    </button>
+                </div>
+                <div v-else class="post-images">
+                    <img :src="imageUrl[0] ? imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg'"
+                         alt="Photo du photographe" class="post-image"/>
                 </div>
             </div>
-
-
-<!--            <img v-if="processedImages.length === 0" :src="imageUrl[0] ? imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg'"-->
-<!--                 alt="Photo du photographe" class="post-image"/>-->
-<!--            <div class="post-images" v-if="processedImages.length > 0">-->
-<!--                <img-->
-<!--                    :src="processedImages[currentImageIndex]"-->
-<!--                    :alt="`Photo ${currentImageIndex + 1}`"-->
-<!--                    class="post-image"-->
-<!--                />-->
-<!--                <button-->
-<!--                    v-if="processedImages.length > 1"-->
-<!--                    class="nav-arrow left"-->
-<!--                    @click="prevImage"-->
-<!--                >&#9664;</button>-->
-<!--                <button-->
-<!--                    v-if="processedImages.length > 1"-->
-<!--                    class="nav-arrow right"-->
-<!--                    @click="nextImage"-->
-<!--                >&#9654;</button>-->
-<!--            </div>-->
-
-
-
             <div class="post-caption">
                 <p>{{ caption }}</p>
                 <div class="tags">
@@ -171,9 +153,9 @@ export default {
             this.isDropdownOpen = !this.isDropdownOpen;
             this.isEXIFOpen = false;
         },
-        downloadPhoto() {
+        downloadPhoto(c) {
             const link = document.createElement('a');
-            link.href = this.imageUrl[0] ? this.imageUrl[0].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg';
+            link.href = this.imageUrl[c] ? this.imageUrl[c].chemin : 'http://127.0.0.1:8000/storage/photos/renault.jpg';
             link.download = 'photo.jpg';
             link.click();
         },
@@ -385,7 +367,6 @@ export default {
     align-items: center;
     background-color: #f5f5f5;
 }
-
 
 
 .grid-3 img:first-child {

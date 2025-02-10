@@ -47,7 +47,7 @@ const closeModal = () => {
             <div class="container">
                 <div class="main-content">
                     <div class="main-image">
-                        <img src="../public/images/_DSC3514.JPG" alt="Présentation du club photo" @click="openModal('../public/images/_DSC3514.JPG', 'Présentation du club photo')" />
+                        <img src="../public/images/Moulin_nailloux.jpeg" alt="Présentation du club photo" @click="openModal('../public/images/Moulin_nailloux.jpeg', 'Présentation du club photo')" />
                     </div>
                     <div class="main-text">
                         <h2>Bienvenue au Club Photo Nailloux</h2>
@@ -84,15 +84,15 @@ const closeModal = () => {
                 <h3>Nos Activités en Images</h3>
                 <div class="gallery-grid">
                     <div class="gallery-item" @click="openModal('../public/images/_DSC3283.JPG', 'Sortie Photo Nature')">
-                        <img src="../public/images/_DSC3283.JPG" alt="Sortie photo nature" />
+                        <img src="../public/images/sortie_nature.jpg" alt="Sortie photo nature" />
                         <p>Sortie Photo Nature</p>
                     </div>
                     <div class="gallery-item" @click="openModal('../public/images/_DSC3497.JPG', 'Atelier Studio')">
-                        <img src="../public/images/_DSC3497.JPG" alt="Atelier studio photo" />
+                        <img src="../public/images/photo_studio.jpg" alt="Atelier studio photo" />
                         <p>Atelier Studio</p>
                     </div>
                     <div class="gallery-item" @click="openModal('../public/images/_DSC3514.JPG', 'Événements')">
-                        <img src="../public/images/_DSC3514.JPG" alt="Évènement photo de groupe" />
+                        <img src="../public/images/musee.jpg" alt="Évènement photo de groupe" />
                         <p>Événements</p>
                     </div>
                 </div>
@@ -254,6 +254,7 @@ section {
 
 .gallery-item img {
     width: 100%;
+    height: 225px;
     border-radius: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;

@@ -42,7 +42,7 @@ const updatePassword = () => {
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                faites en sorte que votre compte reste sécurisé avec un mot de passe robuste.
+                Faites en sorte que votre compte reste bien sécurisé avec un mot de passe robuste.
             </p>
         </header>
 

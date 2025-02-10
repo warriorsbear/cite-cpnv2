@@ -42,7 +42,7 @@ const form = useForm({
             class="mt-6 space-y-6"
         >
             <div>
-                <InputLabel for="name" value="nom" />
+                <InputLabel for="name" value="Nom" />
 
                 <TextInput
                     id="nom"
@@ -58,7 +58,7 @@ const form = useForm({
             </div>
 
             <div>
-                <InputLabel for="prenom" value="prenom" />
+                <InputLabel for="prenom" value="Prenom" />
 
                 <TextInput
                     id="prenom"
@@ -74,7 +74,7 @@ const form = useForm({
             </div>
 
             <div>
-                <InputLabel for="pseudo" value="pseudo" />
+                <InputLabel for="pseudo" value="Pseudo" />
 
                 <TextInput
                     id="pseudo"
@@ -113,7 +113,7 @@ const form = useForm({
                         as="button"
                         class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
-                        Cliquer ici pour renvoyer le lien de vérification.
+                        Cliquez ici pour renvoyer le lien de vérification.
                     </Link>
                 </p>
 

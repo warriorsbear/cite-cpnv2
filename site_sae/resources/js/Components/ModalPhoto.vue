@@ -66,14 +66,13 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <input
-                                    type="text"
-                                    v-model="photosData[index].legende"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500"
-                                    placeholder="Ajouter une légende (optionnel)"
-                                />
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Message de chargement -->
+                    <div v-if="isLoading" class="text-center text-orange-500">
+                        Chargement en cours, veuillez patienter...
                     </div>
 
                     <!-- Boutons d'action -->
@@ -87,7 +86,7 @@
                         </button>
                         <button
                             type="submit"
-                            :disabled="!isFormValid"
+                            :disabled="!isFormValid || isLoading"
                             class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-colors disabled:opacity-50"
                         >
                             Publier
@@ -129,6 +128,7 @@ const isDragging = ref(false)
 const fileInput = ref(null)
 const existingPhotos = ref([])
 const photosData = ref([])
+const isLoading = ref(false) // Loading state
 
 // Méthodes
 const closeModal = () => {
@@ -182,7 +182,7 @@ watch(selectedFiles, (newFiles) => {
 })
 
 const submitPhotos = async () => {
-
+    isLoading.value = true // Set loading state to true
     try {
         console.log('ID Visionnage:', props.id_visionnage, typeof props.id_visionnage);
         const promises = selectedFiles.value.map(async (file, index) => {
@@ -207,6 +207,8 @@ const submitPhotos = async () => {
     } catch (error) {
         console.error('Erreur lors de l\'upload:', error)
         showErrorNotification(error.response?.data?.message || 'Erreur lors de l\'upload des photos')
+    } finally {
+        isLoading.value = false // Set loading state to false
     }
 }
 

@@ -1,14 +1,15 @@
 <template>
     <div>
         <!-- Bouton d'ouverture du modal -->
-        <button
-            @click="openModal"
-            class="fixed bottom-6 right-6 bg-orange-500 text-white rounded-full p-4 shadow-lg hover:bg-orange-600 transition-colors"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-        </button>
+        <BoutonPlus class="btn btn-primary" @click="openModal" />
+<!--        <button-->
+<!--            @click="openModal"-->
+<!--            class="fixed bottom-6 right-6 bg-orange-500 text-white rounded-full p-4 shadow-lg hover:bg-orange-600 transition-colors"-->
+<!--        >-->
+<!--            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">-->
+<!--                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />-->
+<!--            </svg>-->
+<!--        </button>-->
 
         <!-- Modal d'upload de photo -->
         <div v-if="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
@@ -114,6 +115,14 @@
                 </form>
             </div>
         </div>
+
+        <!-- Loading screen -->
+        <div v-if="isLoading" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+            <div class="bg-white rounded-lg p-6 flex flex-col items-center">
+                <img src="../../public/images/loading.gif" alt="Loading..." class="w-16 h-16 mb-4" />
+                <p class="text-center text-gray-700">Publication en cours...</p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -122,6 +131,7 @@ import { ref, computed } from 'vue'
 import { useForm, usePage } from '@inertiajs/vue3'
 import Swal from 'sweetalert2';
 import TextInput from "@/Components/TextInput.vue";
+import BoutonPlus from "@/Components/MainApp/BoutonPlus.vue";
 
 // Récupérer l'utilisateur connecté
 const user = usePage().props.auth.user
@@ -131,6 +141,7 @@ const isModalOpen = ref(false)
 const selectedFiles = ref([])
 const isDragging = ref(false)
 const fileInput = ref(null)
+const isLoading = ref(false) // New loading state
 
 // Formulaire
 const form = useForm({
@@ -203,9 +214,8 @@ const dragLeave = () => {
     isDragging.value = false
 }
 
-
-
 const submitPhoto = () => {
+    isLoading.value = true // Set loading state to true
     const formData = new FormData()
     formData.append('legende', form.legende)
     formData.append('date_prise_vue', form.date_prise_vue)
@@ -218,11 +228,13 @@ const submitPhoto = () => {
     form.post(route('posts.create'), {
         forceFormData: true,
         onSuccess: () => {
+            isLoading.value = false // Set loading state to false
             closeModal()
             showSuccessNotification()
             console.log('Post créé avec succès')
         },
         onError: (errors) => {
+            isLoading.value = false // Set loading state to false
             showErrorNotification(errors.message)
             console.error('Erreurs de validation :', errors)
         }
@@ -264,3 +276,21 @@ const uploadPhoto = async () => {
     }
 };
 </script>
+
+<style scoped>
+.btn {
+    cursor: pointer;
+    background-color: #ffffff;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: large;
+}
+
+.btn-primary {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+</style>

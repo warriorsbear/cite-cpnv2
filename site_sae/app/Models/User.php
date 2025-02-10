@@ -87,7 +87,6 @@ class User extends Authenticatable implements MustVerifyEmail
                 'cp' => 'Suppr',
                 'pseudo' => 'Supprimer',
                 'prenom' => 'Supprimer',
-                'email' => 'Supprimer',
                 'password' => 'Supprimer',
                 'role' => 'Supprimer',
                 'photo_de_profil' => null,
