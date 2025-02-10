@@ -18,7 +18,7 @@ const showModal = ref(false)
 const fetchDocuments = async () => {
     try {
         const response = await axios.get(route('documents.index'))
-        documents.value = response.data.documents
+        documents.value = response.data.documents;
         isLoading.value = false
     } catch (err) {
         error.value = "Impossible de charger les documents"

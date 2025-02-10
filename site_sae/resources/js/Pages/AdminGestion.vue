@@ -22,7 +22,7 @@ const verificationAdmin = () => {
 };
 const RecuperationUtilisateurs = async () => {
     try {
-        let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
+        let response = await fetch('http://192.168.10.57/api/utilisateurs');
         utilisateurs.value = await response.json(); // Lit le corps en tant que JSON et le stocke dans `users`
     } catch (error) {
         console.error('Erreur lors de la récupération des utilisateurs:', error);

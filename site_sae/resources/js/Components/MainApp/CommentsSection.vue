@@ -63,7 +63,7 @@ export default {
             if (this.newComment.trim() !== '') {
                 try {
                     const response = await axios({
-                        url: 'http://127.0.0.1:8000/api/commentaires',
+                        url: 'http://192.168.10.57/api/commentaires',
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

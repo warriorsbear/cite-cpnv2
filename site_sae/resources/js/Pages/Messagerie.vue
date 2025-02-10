@@ -39,7 +39,7 @@ const entrainDeCharger = ref(true);
  */
 const creationBalisesUtilisateurs = async () => {
     try {
-        let response = await fetch('http://127.0.0.1:8000/api/utilisateurs');
+        let response = await fetch('http://192.168.10.57/api/utilisateurs');
         utilisateurs.value = await response.json(); // Lit le corps en tant que JSON et le stocke dans `users`
         console.log("Les utilisateurs ont été récupérés :", utilisateurs.value);
     } catch (error) {

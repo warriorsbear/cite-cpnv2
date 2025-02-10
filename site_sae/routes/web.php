@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CommentairePostController;
 use App\Http\Controllers\Api\DocumentController;
 use App\Http\Controllers\Api\EvenementController;
 use App\Http\Controllers\Api\FileUploadController;
@@ -63,9 +64,12 @@ Route::middleware(['auth','verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/evenement', [EvenementController::class, 'store'])->name('evenement.create');
+    Route::get('/evenements', [EvenementController::class, 'index'])->name('evenement.index');
     Route::post('participation', [ParticipationController::class, 'store'])->name('participation.create');
     Route::post('/photo', [PhotoController::class, 'store'])->name('photo.create');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.create');
+    Route::get('/commentairespost', [CommentairePostController::class, 'index'])->name('commentairespost.index');
+    Route::post('/commentairespost', [CommentairePostController::class, 'store'])->name('commentairespost.create');
 
     Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
     Route::post('/documents/upload', [DocumentController::class, 'upload'])->name('documents.upload');

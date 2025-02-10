@@ -14,8 +14,8 @@ const user = usePage().props.auth.user;
 
 const fetchEvenements = async () => {
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/evenements');
-        evenements.value = await response.json();
+        const response = await axios.get(route('evenements.index'));
+        evenements.value = await response.data;
         console.log("Les evenements ont été récupérés :", evenements.value);
     } catch (error) {
         console.error('Erreur lors de la récupération des événements:', error);
@@ -27,6 +27,7 @@ const fetchEvenements = async () => {
 const handleFormSubmit = () => {
     montrerTestCreation.value = false;
     fetchEvenements();
+
 };
 
 onMounted(() => {
@@ -36,7 +37,7 @@ onMounted(() => {
 const currentDate = new Date();
 
 const filteredEvenements = computed(() => {
-    return evenements.value.data.filter(event => new Date(event.date_heure) >= currentDate);
+    return evenements.value.data;
 });
 </script>
 

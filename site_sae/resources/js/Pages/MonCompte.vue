@@ -21,7 +21,7 @@ const activeMenu = ref('photos');
 const fetchEvenements = async () => {
     try {
         // Fetch all events
-        const eventsResponse = await fetch(`http://127.0.0.1:8000/api/evenements`);
+        const eventsResponse = await fetch(`http://192.168.10.57/api/evenements`);
         const eventsData = await eventsResponse.json();
         if (!Array.isArray(eventsData.data)) {
             throw new TypeError('Expected an array of events');
@@ -30,7 +30,7 @@ const fetchEvenements = async () => {
         console.log("Les événements ont été récupérés :", allEvents.value);
 
          // Fetch user participations
-        const participationsResponse = await fetch(`http://127.0.0.1:8000/api/participations?user_id=${utilisateur.id}`);
+        const participationsResponse = await fetch(`http://192.168.10.57/api/participations?user_id=${utilisateur.id}`);
         const participationsData = await participationsResponse.json();
         if (!Array.isArray(participationsData)) {
             throw new TypeError('Expected an array of participations');
@@ -56,7 +56,7 @@ const fetchUser = async (id) => {
         try{
             let response;
             const utilisateurId = parseInt(id, 10); // Transforme id en integer
-            response = await fetch(`http://127.0.0.1:8000/api/utilisateurs/${utilisateurId}`);
+            response = await fetch(`http://192.168.10.57/api/utilisateurs/${utilisateurId}`);
             //Object.assign(utilisateur, fetchedUser);
             utilisateur = await response.json();
             console.log("Les informations de l'utilisateur ont été récupérées :", utilisateur);
@@ -73,7 +73,7 @@ const fetchUser = async (id) => {
 const fetchPhotos = async () => {
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/photos/', {
+        const response = await fetch('http://192.168.10.57/api/photos/', {
         });
         photos.value = await response.json();
         console.log("Les photos ont été récupérés :", photos.value);
@@ -84,7 +84,7 @@ const fetchPhotos = async () => {
 const fetchPost = async () => {
 
     try {
-        const response = await fetch('http://127.0.0.1:8000/api/posts/');
+        const response = await fetch('http://192.168.10.57/api/posts/');
         const postsData = await response.json();
         console.log(postsData);
         // Check if the response has a data property and if it's an array

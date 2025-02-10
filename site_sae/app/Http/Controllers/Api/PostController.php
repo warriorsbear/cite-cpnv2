@@ -69,7 +69,7 @@ class PostController extends Controller
                     'id_utilisateur' => $request->input('id_utilisateur'),
                     'id_utilisateur_1' => 1,
                     'created_at' => now()->format('Y-m-d\TH:i:sP'),
-                    'chemin' => 'http://127.0.0.1:8000/storage/' . $path,
+                    'chemin' =>  $path,
                     'id_post' => $post->id_post,
                     'exif1' => $exifData['exif1'],
                     'exif2' => $exifData['exif2'],

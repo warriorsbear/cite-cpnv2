@@ -55,7 +55,7 @@ export default {
             if (this.loading || this.allLoaded) return;
             this.loading = true;
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/fetch-posts?page=${this.page}`);
+                const response = await axios.get(`http://192.168.10.57/api/fetch-posts?page=${this.page}`);
                 const newPosts = response.data.data;
                 if (newPosts.length > 0) {
                     this.posts = [...this.posts, ...newPosts];
