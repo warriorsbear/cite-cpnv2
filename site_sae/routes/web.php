@@ -45,17 +45,17 @@ Route::get('/contact', function () {
     return Inertia::render('NousContacter');
 })->name('contact');
 
-Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
-    ->middleware('auth')
-    ->name('verification.notice');
-
-Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-    ->middleware(['auth', 'signed', 'throttle:6,1'])
-    ->name('verification.verify');
-
-Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-    ->middleware(['auth', 'throttle:6,1'])
-    ->name('verification.send');
+//Route::get('/email/verify', [EmailVerificationPromptController::class, '__invoke'])
+//    ->middleware('auth')
+//    ->name('verification.notice');
+//
+//Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+//    ->middleware(['auth', 'signed', 'throttle:6,1'])
+//    ->name('verification.verify');
+//
+//Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+//    ->middleware(['auth', 'throttle:6,1'])
+//    ->name('verification.send');
 
 
 Route::middleware(['auth','verified'])->group(function () {
@@ -116,7 +116,7 @@ Route::post('/ProfileModification/{id}', function ($id) {
 
 Route::get('/ProfileModification/{id}', [ProfileController::class, 'show'])->middleware(['auth', 'verified'])->name('profile.show');
 Route::post('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->middleware(['auth', 'verified'])->name('profile.updateModif');
-Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->middleware(['auth', 'verified'])->name('profile.updateModif');
+Route::patch('/ProfileModification/{id}', [ProfileController::class, 'updateModif'])->middleware(['auth', 'verified'])->name('profile.updateModif2');
 
 //ajout de la route pour la page monCompte avec un paramètre
 Route::get('/monCompte/{id}', function ($id) {
