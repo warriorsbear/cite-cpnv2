@@ -1,26 +1,54 @@
-
-
 services:
-  backend:
+  site:
     build: ./site_sae
+    container_name: site_cpn_prod
+    restart: always
     ports:
       - "8000:8000"
     environment:
-      - DB_HOST=db
-      - DB_USERNAME=${{ secrets.DB_USERNAME }}
-      - DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+      - DB_HOST=db_cpn_prod
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    networks:
+      - cpn_network
     depends_on:
       - db
 
-
   db:
-    image: mysql:5.7
+    image: mariadb:latest
+    container_name: db_cpn_prod
+    restart: always
+    tty: true
     environment:
       MYSQL_DATABASE: db_cpn_prod
-      MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
-      MYSQL_USER: ${{ secrets.DB_USERNAME }}
-      MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - ./db_prod_data:/var/lib/mysql
+      - db_cpn_data:/var/lib/mysql
+    user: "${UID}:${GID}" # NE PAS OUBLIER DE DEFINIR UID ET GID DANS LE .env
+    networks:
+      - cpn_network
+    # NE PAS EXPOSER LE PORT 3306 SUR LE RESEAU PUBLIC
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_cpn_prod
+    restart: always
+    environment:
+      PMA_HOST: db_cpn_prod
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - cpn_network
+
+
+volumes:
+  db_cpn_data:
+
+networks:
+  cpn_network:
+

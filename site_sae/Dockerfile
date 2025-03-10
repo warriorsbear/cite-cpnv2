@@ -44,7 +44,7 @@ RUN apt-get update && apt-get install -y default-mysql-client
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Installez les dépendances PHP
-RUN composer install
+RUN composer install --ignore-platform-req=ext-exif
 
 # Expose le port 80
 EXPOSE 80
