@@ -44,7 +44,36 @@ RUN apt-get update && apt-get install -y default-mysql-client
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Installez les dépendances PHP
-RUN composer install --ignore-platform-req=ext-exif
+RUN composer install --ignore-platform-req=ext-exif --no-dev --optimize-autoloader
+
+# Configuration de l’environnement
+RUN cp .env.example .env
+RUN sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_NAME/" .env
+RUN sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USER/" .env
+RUN sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASS/" .env
+RUN sed -i "s/APP_ENV=.*/APP_ENV=production/" .env
+RUN sed -i "s/APP_DEBUG=.*/APP_DEBUG=false/" .env
+RUN sed -i "s/APP_URL=.*/APP_URL=http:\/\/$DOMAIN/" .env
+
+# Générer une clé d'application
+RUN php artisan key:generate
+
+# Exécutez les migrations et les seeders
+RUN php artisan migrate --seed
+
+RUN php artisan cache:clear
+RUN php artisan config:clear
+RUN php artisan route:clear
+RUN php artisan view:clear
+
+# Mise en mode production
+RUN php artisan config:cache
+RUN php artisan route:cache
+RUN php artisan view:cache
+RUN php artisan optimize
+RUN npm install --production
+RUN npm install -D vite
+RUN npm run build
 
 # Expose le port 80
 EXPOSE 80
