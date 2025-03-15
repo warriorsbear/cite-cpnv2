@@ -2,6 +2,15 @@ FROM php:8.3-fpm
 
 WORKDIR /var/www
 
+ENV DB_CONNECTION=mysql
+ENV DB_HOST=localhost
+ENV DB_PORT=3306
+ENV DB_NAME=db_cpn_prod
+ENV DB_USER=laravel
+ENV DB_PASS=laravel
+ENV DOMAIN=site-cpn.com
+
+
 RUN apt-get update && apt-get install -y nginx \
     && apt-get install -y libzip-dev \
     && apt-get install -y zip \
@@ -26,6 +35,7 @@ RUN apt-get update && apt-get install -y nginx \
     && apt-get install -y libpspell-dev \
     && apt-get install -y libsnmp-dev \
     && apt-get install -y libpcre3-dev \
+   # && apt-get install -y wait-for-it \
     && docker-php-ext-install pdo pdo_mysql
 
 COPY . /var/www
@@ -49,6 +59,7 @@ RUN composer install --ignore-platform-req=ext-exif --no-dev --optimize-autoload
 # Configuration de l’environnement
 RUN cp .env.example .env
 RUN sed -i "s/DB_DATABASE=.*/DB_DATABASE=$DB_NAME/" .env
+RUN sed -i "s/DB_HOST=.*/DB_HOST=$DB_HOST/" .env
 RUN sed -i "s/DB_USERNAME=.*/DB_USERNAME=$DB_USER/" .env
 RUN sed -i "s/DB_PASSWORD=.*/DB_PASSWORD=$DB_PASS/" .env
 RUN sed -i "s/APP_ENV=.*/APP_ENV=production/" .env
@@ -59,7 +70,7 @@ RUN sed -i "s/APP_URL=.*/APP_URL=http:\/\/$DOMAIN/" .env
 RUN php artisan key:generate
 
 # Exécutez les migrations et les seeders
-RUN php artisan migrate --seed
+RUN php artisan migrate --seed --force
 
 RUN php artisan cache:clear
 RUN php artisan config:clear
