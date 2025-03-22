@@ -1,7 +1,7 @@
 .idea/
 db_dev_data/
 ./site_sae/.scannerwork/
-
+.env
 site_sae/package-lock.json
 
 site_sae/composer.lock
