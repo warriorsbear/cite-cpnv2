@@ -5,10 +5,12 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
 import { createPinia } from 'pinia';
-import { ZiggyVue } from 'ziggy-js';
+// import { route } from 'ziggy-js';
+import { Ziggy } from './ziggy';
 
 const pinia = createPinia(); // Initialisation de Pinia
 const appName = 'Club Photo Nailloux'; // Nom de l'application
+// window.route = (name, params, absolute) => route(name, params, absolute, Ziggy);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -23,7 +25,7 @@ createInertiaApp({
         return app
             .use(plugin) // Utilisation correcte du plugin Inertia.js
             .use(pinia) // Ajout de Pinia
-            .use(ZiggyVue) // Ajout de ZiggyVue
+            .use(Ziggy) // Ajout de ZiggyVue
             .mount(el); // Montage de l'application
     },
     progress: {
