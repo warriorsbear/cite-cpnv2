@@ -101,6 +101,20 @@ services:
       timeout: 5s
       retries: 3
 
+  phpMyAdmin:
+    image: phpmyadmin:latest
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql # The hostname of the MySQL server
+      PMA_USER: ${DB_USERNAME} # The username for MySQL
+      PMA_PASSWORD: ${DB_PASSWORD} # The password for MySQL
+    ports:
+      - "${PHPMYADMIN_PORT:-8080}:80" # Map port 80 inside the container to the port specified by 'PHPMYADMIN_PORT' on the host machine.
+    networks:
+      - laravel-production
+    depends_on:
+      - mysql
+
 networks:
   # Attach the service to the 'laravel-production' network.
   # -----------------------------------------------------------
