@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ParticipationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use Tighten\Ziggy\Ziggy;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,6 +18,9 @@ Route::get('/test', function () {
     return response()->json(['message' => 'API fonctionne correctement']);
 })->middleware(['auth', 'verified']);
 
+Route::get('/ziggy', function () {
+    return response()->json(new Ziggy);
+});
 
 
 Route::apiResource('evenements', EvenementController::class);
