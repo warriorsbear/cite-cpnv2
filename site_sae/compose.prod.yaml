@@ -13,6 +13,7 @@ services:
       # -----------------------------------------------------------
       - laravel-storage-production:/var/www/storage:ro
       - ./public:/var/www/public:ro
+      - laravel-photos-production:/var/www/public:ro
     networks:
       - laravel-production
     ports:
@@ -35,6 +36,7 @@ services:
     restart: unless-stopped
     volumes:
       - laravel-storage-production:/var/www/storage # Mount the storage volume
+      - laravel-photos-production:/var/www/public/storage # Mount the photos volume
     env_file:
       - .env
     networks:
@@ -126,3 +128,4 @@ networks:
 volumes:
   mysql-data-production:
   laravel-storage-production:
+  laravel-photos-production:
