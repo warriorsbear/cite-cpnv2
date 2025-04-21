@@ -32,9 +32,9 @@ export default defineConfig({
         },
     },
     build: {
+        manifest: true,
         outDir: 'public/build',
         emptyOutDir: true,
-        manifest: true,
         manifestFileName: 'manifest.json',
         rollupOptions: {
             input: 'resources/js/app.js'

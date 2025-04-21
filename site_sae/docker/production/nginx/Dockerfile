@@ -49,6 +49,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # Install Node.js dependencies and build assets
 RUN npm install && npm run build
 
+# Clear Laravel caches
+RUN php artisan config:clear \
+ && php artisan route:clear \
+ && php artisan view:clear
+
 # Stage 2: Nginx production image
 FROM nginx:alpine
 

@@ -44,8 +44,15 @@ php artisan storage:link
 # -----------------------------------------------------------
 # Improves performance by caching config and routes.
 # -----------------------------------------------------------
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
+php artisan optimize:clear
+# Cache the configuration and routes
 php artisan config:cache
 php artisan route:cache
+php artisan view:cache
+php artisan optimize
 
 # Run the default command
 exec "$@"
