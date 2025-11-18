@@ -1,5 +1,96 @@
-const Ziggy = {"url":"http:\/\/localhost","port":null,"defaults":{},"routes":{"sanctum.csrf-cookie":{"uri":"sanctum\/csrf-cookie","methods":["GET","HEAD"]},"evenements.index":{"uri":"api\/evenements","methods":["GET","HEAD"]},"evenements.show":{"uri":"api\/evenements\/{evenement}","methods":["GET","HEAD"],"parameters":["evenement"]},"evenements.update":{"uri":"api\/evenements\/{evenement}","methods":["PUT","PATCH"],"parameters":["evenement"],"bindings":{"evenement":"id_evenement"}},"evenements.destroy":{"uri":"api\/evenements\/{evenement}","methods":["DELETE"],"parameters":["evenement"],"bindings":{"evenement":"id_evenement"}},"utilisateurs.index":{"uri":"api\/utilisateurs","methods":["GET","HEAD"]},"utilisateurs.store":{"uri":"api\/utilisateurs","methods":["POST"]},"utilisateurs.show":{"uri":"api\/utilisateurs\/{utilisateur}","methods":["GET","HEAD"],"parameters":["utilisateur"]},"utilisateurs.update":{"uri":"api\/utilisateurs\/{utilisateur}","methods":["PUT","PATCH"],"parameters":["utilisateur"]},"utilisateurs.destroy":{"uri":"api\/utilisateurs\/{utilisateur}","methods":["DELETE"],"parameters":["utilisateur"]},"dashboard":{"uri":"dashboard","methods":["GET","HEAD"]},"evenement":{"uri":"evenement","methods":["GET","HEAD"]},"messagerie":{"uri":"messagerie","methods":["GET","HEAD"]},"documents":{"uri":"doc","methods":["GET","HEAD"]},"profile.edit":{"uri":"profile","methods":["GET","HEAD"]},"profile.update":{"uri":"profile","methods":["PATCH"]},"profile.destroy":{"uri":"profile","methods":["DELETE"]},"evenement.create":{"uri":"evenement","methods":["POST"]},"photo.create":{"uri":"photo","methods":["POST"]},"documents.index":{"uri":"documents","methods":["GET","HEAD"]},"documents.upload":{"uri":"documents\/upload","methods":["POST"]},"documents.download":{"uri":"documents\/download\/{id}","methods":["GET","HEAD"],"parameters":["id"]},"events.list":{"uri":"events\/list","methods":["GET","HEAD"]},"register":{"uri":"register","methods":["GET","HEAD"]},"login":{"uri":"login","methods":["GET","HEAD"]},"password.request":{"uri":"forgot-password","methods":["GET","HEAD"]},"password.email":{"uri":"forgot-password","methods":["POST"]},"password.reset":{"uri":"reset-password\/{token}","methods":["GET","HEAD"],"parameters":["token"]},"password.store":{"uri":"reset-password","methods":["POST"]},"verification.notice":{"uri":"verify-email","methods":["GET","HEAD"]},"verification.verify":{"uri":"verify-email\/{id}\/{hash}","methods":["GET","HEAD"],"parameters":["id","hash"]},"verification.send":{"uri":"email\/verification-notification","methods":["POST"]},"password.confirm":{"uri":"confirm-password","methods":["GET","HEAD"]},"password.update":{"uri":"password","methods":["PUT"]},"logout":{"uri":"logout","methods":["POST"]},"monCompte":{"uri":"monCompte","methods":["GET","HEAD"]},"MentionsLegales":{"uri":"MentionsLegales","methods":["GET","HEAD"]},"NousContacter":{"uri":"NousContacter","methods":["GET","HEAD"]},"user.photos":{"uri":"user\/photos","methods":["GET","HEAD"]},"AdminGestion":{"uri":"AdminGestion","methods":["GET","HEAD"]},"storage.local":{"uri":"storage\/{path}","methods":["GET","HEAD"],"wheres":{"path":".*"},"parameters":["path"]}}};
+const Ziggy = {
+    "url": "http:\/\/localhost:8000", "port": 8000, "defaults": {},
+    "routes": {
+        "sanctum.csrf-cookie": {"uri": "sanctum\/csrf-cookie", "methods": ["GET", "HEAD"]},
+        "evenements.index": {"uri": "api\/evenements", "methods": ["GET", "HEAD"]},
+        "evenements.show": {
+            "uri": "api\/evenements\/{evenement}",
+            "methods": ["GET", "HEAD"],
+            "parameters": ["evenement"]
+        },
+        "evenements.update": {
+            "uri": "api\/evenements\/{evenement}",
+            "methods": ["PUT", "PATCH"],
+            "parameters": ["evenement"],
+            "bindings": {"evenement": "id_evenement"}
+        },
+        "evenements.destroy": {
+            "uri": "api\/evenements\/{evenement}",
+            "methods": ["DELETE"],
+            "parameters": ["evenement"]
+        },
+        "utilisateurs.index": {"uri": "api\/utilisateurs", "methods": ["GET", "HEAD"]},
+        "utilisateurs.store": {"uri": "api\/utilisateurs", "methods": ["POST"]},
+        "utilisateurs.show": {
+            "uri": "api\/utilisateurs\/{utilisateur}",
+            "methods": ["GET", "HEAD"],
+            "parameters": ["utilisateur"]
+        },
+        "utilisateurs.update": {
+            "uri": "api\/utilisateurs\/{utilisateur}",
+            "methods": ["PUT", "PATCH"],
+            "parameters": ["utilisateur"]
+        },
+        "utilisateurs.destroy": {
+            "uri": "api\/utilisateurs\/{utilisateur}",
+            "methods": ["DELETE"],
+            "parameters": ["utilisateur"]
+        },
+        "posts.fetch": {"uri": "api\/fetch-posts", "methods": ["GET", "HEAD"]},
+        "utilisateurs.accepter": {"uri": "api\/utilisateurs\/{id}\/accepter", "methods": ["PUT"], "parameters": ["id"]},
+        "bienvenue": {"uri": "\/", "methods": ["GET", "HEAD"]},
+        "dashboard": {"uri": "dashboard", "methods": ["GET", "HEAD"]},
+        "evenement": {"uri": "evenement", "methods": ["GET", "HEAD"]},
+        "messagerie": {"uri": "messagerie", "methods": ["GET", "HEAD"]},
+        "documents": {"uri": "doc", "methods": ["GET", "HEAD"]},
+        "contact": {"uri": "contact", "methods": ["GET", "HEAD"]},
+        "profile.edit": {"uri": "profile", "methods": ["GET", "HEAD"]},
+        "profile.update": {"uri": "profile", "methods": ["PATCH"]},
+        "profile.destroy": {"uri": "profile", "methods": ["DELETE"]},
+        "evenement.create": {"uri": "evenement", "methods": ["POST"]},
+        "participation.create": {"uri": "participation", "methods": ["POST"]},
+        "photo.create": {"uri": "photo", "methods": ["POST"]},
+        "posts.create": {"uri": "posts", "methods": ["POST"]},
+        "documents.index": {"uri": "documents", "methods": ["GET", "HEAD"]},
+        "documents.upload": {"uri": "documents\/upload", "methods": ["POST"]},
+        "documents.download": {"uri": "documents\/download\/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"]},
+        "documents.destroy": {"uri": "documents\/{id}", "methods": ["DELETE"], "parameters": ["id"]},
+        "events.list": {"uri": "events\/list", "methods": ["GET", "HEAD"]},
+        "users.suprimerUser": {"uri": "users\/{id}", "methods": ["DELETE"], "parameters": ["id"]},
+        "register": {"uri": "register", "methods": ["GET", "HEAD"]},
+        "login": {"uri": "login", "methods": ["GET", "HEAD"]},
+        "password.request": {"uri": "forgot-password", "methods": ["GET", "HEAD"]},
+        "password.email": {"uri": "forgot-password", "methods": ["POST"]},
+        "password.reset": {"uri": "reset-password\/{token}", "methods": ["GET", "HEAD"], "parameters": ["token"]},
+        "password.store": {"uri": "reset-password", "methods": ["POST"]},
+        "verification.notice": {"uri": "verify-email", "methods": ["GET", "HEAD"]},
+        "verification.verify": {
+            "uri": "verify-email\/{id}\/{hash}",
+            "methods": ["GET", "HEAD"],
+            "parameters": ["id", "hash"]
+        },
+        "verification.send": {"uri": "email\/verification-notification", "methods": ["POST"]},
+        "password.confirm": {"uri": "confirm-password", "methods": ["GET", "HEAD"]},
+        "password.update": {"uri": "password", "methods": ["PUT"]},
+        "logout": {"uri": "logout", "methods": ["POST"]},
+        "monCompte": {"uri": "monCompte", "methods": ["GET", "HEAD"]},
+        "MentionsLegales": {"uri": "MentionsLegales", "methods": ["GET", "HEAD"]},
+        "NousContacter": {"uri": "NousContacter", "methods": ["GET", "HEAD"]},
+        "user.photos": {"uri": "user\/photos", "methods": ["GET", "HEAD"]},
+        "AdminGestion": {"uri": "AdminGestion", "methods": ["GET", "HEAD"]},
+        "profile.updateModif": {"uri": "ProfileModification\/{id}", "methods": ["POST"], "parameters": ["id"]},
+        "profile.show": {"uri": "ProfileModification\/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"]},
+        "profile.updateModif2": {"uri": "ProfileModification\/{id}", "methods": ["PATCH"], "parameters": ["id"]},
+        "monCompte.show": {"uri": "monCompte\/{id}", "methods": ["GET", "HEAD"], "parameters": ["id"]},
+        "storage.local": {
+            "uri": "storage\/{path}",
+            "methods": ["GET", "HEAD"],
+            "wheres": {"path": ".*"},
+            "parameters": ["path"]
+        }
+    }
+};
 if (typeof window !== 'undefined' && typeof window.Ziggy !== 'undefined') {
-  Object.assign(Ziggy.routes, window.Ziggy.routes);
+    Object.assign(Ziggy.routes, window.Ziggy.routes);
 }
-export { Ziggy };
+export {Ziggy};

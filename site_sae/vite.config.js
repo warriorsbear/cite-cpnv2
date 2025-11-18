@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import ziggy from 'vite-plugin-ziggy';
 
 export default defineConfig({
     plugins: [
@@ -9,6 +10,7 @@ export default defineConfig({
             input: 'resources/js/app.js',
             refresh: true,
         }),
+        ziggy(),
         vue({
             template: {
                 transformAssetUrls: {
@@ -29,4 +31,13 @@ export default defineConfig({
             'ziggy-js': path.resolve('vendor/tightenco/ziggy'),
         },
     },
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        emptyOutDir: true,
+        manifestFileName: 'manifest.json',
+        rollupOptions: {
+            input: 'resources/js/app.js'
+        }
+    }
 });
